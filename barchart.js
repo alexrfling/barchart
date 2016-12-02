@@ -165,8 +165,4 @@ function barchart(id, height, data) {
     barLabels.updateNames(labels);
     barLabels.updateVis(1000);
   }
-
-  function round(number, decimals) {
-    return Number(Math.round(number + 'e' + decimals) + 'e-' + decimals);
-  }
 }
