@@ -1,0 +1,55 @@
+.barchart {
+  /*border: solid 1px;*/
+  font-size: 10px;
+  margin: 0px; /* set margin/border/padding to 0 so that */
+  border: 0px; /* the size of the entire widget is just */
+  padding: 0px; /* the size of the SVG */
+  font-family: sans-serif;
+}
+
+.d3-tip td:nth-child(1) {
+  text-align: right;
+}
+.d3-tip td:nth-child(2) {
+  padding-left: 5px;
+}
+
+.barchart rect:hover { /* bars */
+  filter: url("#shadow");
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.barchartSVG {
+  shape-rendering: crispEdges;
+}
+
+.axis .tick {
+  stroke: lightgrey;
+  stroke-width: 2px;
+}
+
+.axis line {
+  stroke: lightgrey;
+}
+
+.axis text {
+  stroke: gray;
+  stroke-width: 0.5px;
+}
+
+#xticks path {
+  stroke-width: 0px;
+}
+
+#labels path {
+  stroke: lightgrey;
+  stroke-width: 2px;
+}
+
+#labels .domain {
+  stroke: lightgrey;
+  stroke-width: 0px;
+}

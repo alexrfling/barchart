@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="barchart.css">
+	<script src="d3/d3.min.js"></script>
+  <script src="d3-helpers/functions.js"></script>
+  <script src="d3-helpers/html-elements.js"></script>
+  <script src="d3-helpers/smalls.js"></script>
+  <script src="d3-helpers/svg-effects.js"></script>
+  <script src="d3-helpers/svg-elements.js"></script>
+  <script src="d3-helpers/tools.js"></script>
+	<script src="barchart.js"></script>
+	<script src="example-data.js"></script>
+	<script src="d3-tip/index.js"></script>
+	<link rel="stylesheet" type="text/css" href="d3-tip/examples/example-styles.css">
+</head>
+<body>
+  <div id="parent"></div>
+  <script>
+    barchart("parent", 550, data);
+  </script>
+</body>
+</html>
