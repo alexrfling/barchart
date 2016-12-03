@@ -1,14 +1,15 @@
 function barchart(id, height, data) {
-  const MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
+  const SVG_MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
   const AXIS_OFFSET = 5;
   const DATA_MAX = Math.max(...data.map(function(d) { return Math.abs(d.value); }));
+  const BAR_COLORS = interpolateColors("#dc3912", "lightgrey", "#109618", 256);
+  var BY_NAME = true;
+  var DESCENDING = true;
 
   // clear out old DOM elements
   flushContents(id);
 
-  var container = new SVGContainer(id, "barchart", "barchartSVG", resize, MARGINS, height);
-  var byName = true;
-  var descending = true;
+  var container = new SVGContainer(id, "barchart", "barchartSVG", resize, SVG_MARGINS, height);
   addDropShadowFilter(container.SVG, "shadow");
 
   container.resize();
@@ -17,7 +18,6 @@ function barchart(id, height, data) {
   var w = container.svgWidth;
   var h = container.svgHeight;
   var svg = container.svg;
-  var colors = interpolateColors("#dc3912", "lightgrey", "#109618", 256);
 
   // margins
   var xLabelsMargin = AXIS_OFFSET * 2;
@@ -37,7 +37,7 @@ function barchart(id, height, data) {
   var yScale = d3.scaleBand().domain(labels)
                 	           .range([0, yBarsMargin]);
   var colorScale = d3.scaleQuantize().domain([-DATA_MAX, DATA_MAX])
-                                     .range(colors);
+                                     .range(BAR_COLORS);
 
   // axes for rows/columns (note that these ARE NOT yet added to the svg)
   var xAxis = d3.axisTop(xScale);
@@ -58,6 +58,7 @@ function barchart(id, height, data) {
   var barLabels = new Labels(svg, "labels", "axis", labels, function() { return yBarsMargin; },
                             barHeightScale.step, false, 10, "left");
 
+  // tooltip for bars
   var tip = d3.tip().attr("class", "d3-tip")
                     .direction(function(d) { return d.value < 0 ? 'e' : 'w'; })
                     .offset(function(d) { return d.value < 0 ? [0, 10] : [0, -10]; })
@@ -67,9 +68,14 @@ function barchart(id, height, data) {
                               "<tr><td>Coefficient</td><td>" + round(d.value, 7) + "</td></tr>" +
                              "</table>";
                     });
+
+  // invoke tooltip
   svg.call(tip);
 
+  // add ids to labels so they can be bolded on hover
   barLabels.group.selectAll("text").attr("id", function() { return htmlEscape(this.innerHTML); });
+
+  // bind event listeners
   bars.addListener("mouseover", function(d) {
     barLabels.group.select("#" + htmlEscape(d.key)).classed("bold", true);
     tip.show(d);
@@ -80,15 +86,17 @@ function barchart(id, height, data) {
   });
   bars.addListener("click", sortBars);
 
+  // last setup before initial bar transition
   marginsSetup(w, h);
   anchorsSetup(w, h);
   scalesSetup(w, h);
   positionAllElements();
+
+  // vertical line next to textual lables at left
   svg.append("g")
-    .attr("class", "axis")
     .attr("id", "labels")
-    .append("path")//.attr("class", "domain")
-    .attr("stroke", "#000")
+    .attr("class", "axis")
+    .append("path")
     .attr("d", "M " + barLabels.anchor[0] + " " + barLabels.anchor[1] + " L " + barLabels.anchor[0] + " " + h);
 
   // custom initialization + transition
@@ -134,7 +142,6 @@ function barchart(id, height, data) {
     bars.updateVis(["x", "y", "width", "height", "fill"]);
     xLabels.call(xAxis.tickSize(-yBarsMargin - AXIS_OFFSET, 0, 0));
     barLabels.updateVisNT();
-    //barLabels.selectAll(".domain").attr("d", function() { return "M-6,10.23434H0.5V570.234234H-6"});
   }
 
   function resize() {
@@ -151,13 +158,13 @@ function barchart(id, height, data) {
     tip.hide();
 
     // switch ordering
-    byName = !byName;
-    if (byName) descending = !descending;
+    BY_NAME = !BY_NAME;
+    if (BY_NAME) DESCENDING = !DESCENDING;
     data = data.sort(function(a, b) {
-      if (byName) {
-        return descending ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key);
+      if (BY_NAME) {
+        return DESCENDING ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key);
       } else {
-        return descending ? a.value - b.value : b.value - a.value;
+        return DESCENDING ? a.value - b.value : b.value - a.value;
       }
     });
 
