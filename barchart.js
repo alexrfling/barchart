@@ -1,10 +1,12 @@
 function barchart(id, height, data) {
+  const MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
+  const AXIS_OFFSET = 5;
+  const DATA_MAX = Math.max(...data.map(function(d) { return Math.abs(d.value); }));
 
   // clear out old DOM elements
   flushContents(id);
 
-  var container = new SVGContainer(id, "barchart", "barchartSVG", resize,
-                                  { top: 10, bottom: 10, left: 10, right: 10 }, height);
+  var container = new SVGContainer(id, "barchart", "barchartSVG", resize, MARGINS, height);
   var byName = true;
   var descending = true;
   addDropShadowFilter(container.SVG, "shadow");
@@ -12,39 +14,39 @@ function barchart(id, height, data) {
   container.resize();
 
   var labels = data.map(key);
-  var axisOffset = 5;
   var w = container.svgWidth;
   var h = container.svgHeight;
-  var datamax = Math.max(...data.map(function(d) { return Math.abs(d.value); }));
   var svg = container.svg;
   var colors = interpolateColors("#dc3912", "lightgrey", "#109618", 256);
 
-  var xLabelsMargin = axisOffset * 2;
-  var yLabelsMargin = axisOffset * 2;
-  var xBarsMargin = w - xLabelsMargin - axisOffset;
-  var yBarsMargin = h - yLabelsMargin - axisOffset;
+  // margins
+  var xLabelsMargin = AXIS_OFFSET * 2;
+  var yLabelsMargin = AXIS_OFFSET * 2;
+  var xBarsMargin = w - xLabelsMargin - AXIS_OFFSET;
+  var yBarsMargin = h - yLabelsMargin - AXIS_OFFSET;
 
   // scales for bar width/height and x/y axes
   var barHeightScale = d3.scaleBand().domain(labels)
                                      .range([0, yBarsMargin])
                                      .paddingInner(0.1)
                                      .paddingOuter(0.05);
-  var barWidthScale = d3.scaleLinear().domain([0, datamax])
+  var barWidthScale = d3.scaleLinear().domain([0, DATA_MAX])
                                       .range([0, xBarsMargin / 2]);
-  var xScale = d3.scaleLinear().domain([-datamax, datamax])
+  var xScale = d3.scaleLinear().domain([-DATA_MAX, DATA_MAX])
                 	             .range([0, xBarsMargin]);
   var yScale = d3.scaleBand().domain(labels)
                 	           .range([0, yBarsMargin]);
-  var colorScale = d3.scaleQuantize().domain([-datamax, datamax]).range(colors);
+  var colorScale = d3.scaleQuantize().domain([-DATA_MAX, DATA_MAX])
+                                     .range(colors);
 
   // axes for rows/columns (note that these ARE NOT yet added to the svg)
   var xAxis = d3.axisTop(xScale);
 
   // add the axes to the svg (add these before the bars so the bars will be on top)
   var xLabels = svg.append("g")
-  		.attr("class", "axis").attr("id", "xticks")
-      .attr("transform", "translate(" + xLabelsMargin + "," + yLabelsMargin + ")")
-      .call(xAxis.tickSize(-yBarsMargin - axisOffset, 0, 0));
+              		.attr("class", "axis").attr("id", "xticks")
+                  .attr("transform", "translate(" + xLabelsMargin + "," + yLabelsMargin + ")")
+                  .call(xAxis.tickSize(-yBarsMargin - AXIS_OFFSET, 0, 0));
 
   var bars = new Cells(svg, "bars", data, key,
     // -1 for pos bars -> no overlap on "0" center tick
@@ -105,13 +107,13 @@ function barchart(id, height, data) {
   function marginsSetup(w, h) {
     xLabelsMargin = Math.ceil(barLabels.getBox().width);
     yLabelsMargin = 10;
-    xBarsMargin = w - xLabelsMargin - axisOffset;
-    yBarsMargin = h - yLabelsMargin - axisOffset;
+    xBarsMargin = w - xLabelsMargin - AXIS_OFFSET;
+    yBarsMargin = h - yLabelsMargin - AXIS_OFFSET;
   }
 
   function anchorsSetup(w, h) {
-    bars.anchor = [xLabelsMargin + axisOffset, yLabelsMargin + axisOffset];
-    barLabels.anchor = [xLabelsMargin, yLabelsMargin + axisOffset];
+    bars.anchor = [xLabelsMargin + AXIS_OFFSET, yLabelsMargin + AXIS_OFFSET];
+    barLabels.anchor = [xLabelsMargin, yLabelsMargin + AXIS_OFFSET];
   }
 
   function scalesSetup(w, h) {
@@ -124,13 +126,13 @@ function barchart(id, height, data) {
   function positionAllElements() {
     bars.position();
     barLabels.position();
-    xLabels.attr("transform", "translate(" + (xLabelsMargin + axisOffset) + "," + yLabelsMargin + ")")
-          .call(xAxis.tickSize(-yBarsMargin - axisOffset, 0, 0));
+    xLabels.attr("transform", "translate(" + (xLabelsMargin + AXIS_OFFSET) + "," + yLabelsMargin + ")")
+          .call(xAxis.tickSize(-yBarsMargin - AXIS_OFFSET, 0, 0));
   }
 
   function updateVisAllElements() {
     bars.updateVis(["x", "y", "width", "height", "fill"]);
-    xLabels.call(xAxis.tickSize(-yBarsMargin - axisOffset, 0, 0));
+    xLabels.call(xAxis.tickSize(-yBarsMargin - AXIS_OFFSET, 0, 0));
     barLabels.updateVisNT();
     //barLabels.selectAll(".domain").attr("d", function() { return "M-6,10.23434H0.5V570.234234H-6"});
   }
@@ -167,7 +169,7 @@ function barchart(id, height, data) {
     yScale.domain(labels);
     bars.selection.transition()
                   .duration(1000)
-                  .delay(function(d) { return 500 * Math.abs(d.value) / datamax; })
+                  .delay(function(d) { return 500 * Math.abs(d.value) / DATA_MAX; })
                   .attr("y", bars.attrs.y);
     barLabels.updateNames(labels);
     barLabels.updateVis(1000);
