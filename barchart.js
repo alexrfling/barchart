@@ -71,13 +71,13 @@ function barchart(id, height, data) {
                     });
   container.svg.call(tip);
 
-  barLabels.group.selectAll("text").attr("id", function() { return parensToUnders(dotsToUnders(this.innerHTML)); });
+  barLabels.group.selectAll("text").attr("id", function() { return htmlEscape(this.innerHTML); });
   bars.addListener("mouseover", function(d) {
-    barLabels.group.select("#" + parensToUnders(dotsToUnders(d.key))).classed("bold", true);
+    barLabels.group.select("#" + htmlEscape(d.key)).classed("bold", true);
     tip.show(d);
   });
   bars.addListener("mouseout", function(d) {
-    barLabels.group.select("#" + parensToUnders(dotsToUnders(d.key))).classed("bold", false);
+    barLabels.group.select("#" + htmlEscape(d.key)).classed("bold", false);
     tip.hide();
   });
   bars.addListener("click", sortBars);
