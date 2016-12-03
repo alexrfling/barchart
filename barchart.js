@@ -1,9 +1,9 @@
 function barchart(id, height, data) {
-  var myNode = document.getElementById(id);
-  while (myNode.firstChild) {
-      myNode.removeChild(myNode.firstChild);
-  }
-  var container = new SVGContainer(id, "barchart", "barchartSVG", resizeCallback,
+
+  // clear out old DOM elements
+  flushContents(id);
+
+  var container = new SVGContainer(id, "barchart", "barchartSVG", resize,
                                   { top: 10, bottom: 10, left: 10, right: 10 }, height);
   var byName = true;
   var descending = true;
@@ -19,8 +19,8 @@ function barchart(id, height, data) {
   var svg = container.svg;
   var colors = interpolateColors("#dc3912", "lightgrey", "#109618", 256);
 
-  var xLabelsMargin = axisOffset * 2;// = 30;
-  var yLabelsMargin = axisOffset * 2;// = 30;
+  var xLabelsMargin = axisOffset * 2;
+  var yLabelsMargin = axisOffset * 2;
   var xBarsMargin = w - xLabelsMargin - axisOffset;
   var yBarsMargin = h - yLabelsMargin - axisOffset;
 
@@ -31,7 +31,7 @@ function barchart(id, height, data) {
                                      .paddingOuter(0.05);
   var barWidthScale = d3.scaleLinear().domain([0, datamax])
                                       .range([0, xBarsMargin / 2]);
-  var xScale = d3.scaleLinear().domain([-1 * datamax, datamax])
+  var xScale = d3.scaleLinear().domain([-datamax, datamax])
                 	             .range([0, xBarsMargin]);
   var yScale = d3.scaleBand().domain(labels)
                 	           .range([0, yBarsMargin]);
@@ -44,7 +44,7 @@ function barchart(id, height, data) {
   var xLabels = svg.append("g")
   		.attr("class", "axis").attr("id", "xticks")
       .attr("transform", "translate(" + xLabelsMargin + "," + yLabelsMargin + ")")
-      .call(xAxis.tickSize(-1 * yBarsMargin - axisOffset, 0, 0));
+      .call(xAxis.tickSize(-yBarsMargin - axisOffset, 0, 0));
 
   var bars = new Cells(svg, "bars", data, key,
     // -1 for pos bars -> no overlap on "0" center tick
@@ -57,19 +57,15 @@ function barchart(id, height, data) {
                             barHeightScale.step, false, 10, "left");
 
   var tip = d3.tip().attr("class", "d3-tip")
-                    .style("font-family", "sans-serif")
-                    .style("font-size", "12px")
-                    .direction(function(d) {
-                      return d.value < 0 ? 'e' : 'w';
-                    })
-                    .offset(function(d) {
-                      return d.value < 0 ? [0, 10] : [0, -10];
-                    })
+                    .direction(function(d) { return d.value < 0 ? 'e' : 'w'; })
+                    .offset(function(d) { return d.value < 0 ? [0, 10] : [0, -10]; })
                     .html(function(d) {
-                      return "<table><tr><td style='color:#0099c6;padding-bottom:5px'>Variable</td><td style='padding-bottom:5px'>" + d.key + "</td></tr>"
-                              + "<tr><td style='color:#0099c6'>Coefficient</td><td>" + round(d.value, 7) + "</td></tr></table>";
+                      return "<table>" +
+                              "<tr><td>Variable</td><td>" + d.key + "</td></tr>" +
+                              "<tr><td>Coefficient</td><td>" + round(d.value, 7) + "</td></tr>" +
+                             "</table>";
                     });
-  container.svg.call(tip);
+  svg.call(tip);
 
   barLabels.group.selectAll("text").attr("id", function() { return htmlEscape(this.innerHTML); });
   bars.addListener("mouseover", function(d) {
@@ -86,13 +82,17 @@ function barchart(id, height, data) {
   anchorsSetup(w, h);
   scalesSetup(w, h);
   positionAllElements();
-  svg.append("g").attr("class", "axis").attr("id", "labels").append("path")//.attr("class", "domain")
-    .attr("stroke", "#000").attr("d", "M " + barLabels.anchor[0] + " " + barLabels.anchor[1] + " L " + barLabels.anchor[0] + " " + h);
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("id", "labels")
+    .append("path")//.attr("class", "domain")
+    .attr("stroke", "#000")
+    .attr("d", "M " + barLabels.anchor[0] + " " + barLabels.anchor[1] + " L " + barLabels.anchor[0] + " " + h);
 
   // custom initialization + transition
   bars.selection.attr("x", xScale(0))
                 .attr("y", function(d) { return yScale(d.key); })
-                .attr("height", barHeightScale.bandwidth)
+                .attr("height", bars.attrs.height)
                 .attr("width", 0)
                 .attr("fill", "white");
   bars.selection.transition()
@@ -100,7 +100,7 @@ function barchart(id, height, data) {
                 .delay(function(d, i) { return i * 25; })
                 .attr("x", bars.attrs.x)
                 .attr("width", bars.attrs.width)
-                .attr("fill", bars.attrs.fill)
+                .attr("fill", bars.attrs.fill);
 
   function marginsSetup(w, h) {
     xLabelsMargin = Math.ceil(barLabels.getBox().width);
@@ -125,17 +125,17 @@ function barchart(id, height, data) {
     bars.position();
     barLabels.position();
     xLabels.attr("transform", "translate(" + (xLabelsMargin + axisOffset) + "," + yLabelsMargin + ")")
-          .call(xAxis.tickSize(-1 * yBarsMargin - axisOffset, 0, 0));
+          .call(xAxis.tickSize(-yBarsMargin - axisOffset, 0, 0));
   }
 
   function updateVisAllElements() {
     bars.updateVis(["x", "y", "width", "height", "fill"]);
-    xLabels.call(xAxis.tickSize(-1 * yBarsMargin - axisOffset, 0, 0));
+    xLabels.call(xAxis.tickSize(-yBarsMargin - axisOffset, 0, 0));
     barLabels.updateVisNT();
     //barLabels.selectAll(".domain").attr("d", function() { return "M-6,10.23434H0.5V570.234234H-6"});
   }
 
-  function resizeCallback() {
+  function resize() {
     var updatedWidth = container.resize();
     marginsSetup(updatedWidth, h);
     anchorsSetup(updatedWidth, h);
@@ -145,7 +145,10 @@ function barchart(id, height, data) {
   }
 
   function sortBars() {
+    // hide the tooltip (visible on the bar that was clicked)
     tip.hide();
+
+    // switch ordering
     byName = !byName;
     if (byName) descending = !descending;
     data = data.sort(function(a, b) {
@@ -155,13 +158,17 @@ function barchart(id, height, data) {
         return descending ? a.value - b.value : b.value - a.value;
       }
     });
+
+    // update ordering of labels
     labels = data.map(key);
+
+    // scale/visual updates
     barHeightScale.domain(labels);
     yScale.domain(labels);
     bars.selection.transition()
-        .duration(1000)
-        .delay(function(d) { return 500 * Math.abs(d.value) / datamax; })
-        .attr("y", bars.attrs.y);
+                  .duration(1000)
+                  .delay(function(d) { return 500 * Math.abs(d.value) / datamax; })
+                  .attr("y", bars.attrs.y);
     barLabels.updateNames(labels);
     barLabels.updateVis(1000);
   }
