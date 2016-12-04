@@ -153,10 +153,10 @@ function barchart(id, height, data) {
   }
 
   function scalesSetup(w, h) {
-    scaleWidth.range([0, marginXChart / 2]);
-    scaleHeight.range([0, marginYChart]);
     scaleX.range([0, marginXChart]);
     scaleY.range([0, marginYChart]);
+    scaleWidth.range([0, marginXChart / 2]);
+    scaleHeight.range([0, marginYChart]);
   }
 
   function positionAllElements() {
@@ -200,11 +200,12 @@ function barchart(id, height, data) {
     labels = data.map(key);
 
     // scale/visual updates
-    scaleHeight.domain(labels);
     scaleY.domain(labels);
+    scaleHeight.domain(labels);
     bars.selection.transition()
                   .duration(1000)
-                  .delay(function(d) { return 500 * Math.abs(d.value) / DATA_MAX; })
+                  // TODO find a way to sync bars with labels
+                  //.delay(function(d) { return 500 * Math.abs(d.value) / DATA_MAX; })
                   .attr("y", bars.attrs.y);
     barLabels.updateNames(labels);
     barLabels.updateVis(1000);
