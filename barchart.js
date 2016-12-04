@@ -1,3 +1,21 @@
+/*
+              marginXLabel                      marginXChart
+             +------------+----------------------------------------------------+
+marginYLabel |            |                                                    |
+             +------------+----------------------------------------------------+
+             |            |                                                    |
+             |            |                                                    |
+             |            |                                                    |
+             |            |                                                    |
+             |            |                                                    |
+marginYChart |            |                                                    |
+             |            |                                                    |
+             |            |                                                    |
+             |            |                                                    |
+             |            |                                                    |
+             |            |                                                    |
+             +------------+----------------------------------------------------+
+*/
 function barchart(id, height, data) {
   const SVG_MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
   const AXIS_OFFSET = 5;
@@ -20,43 +38,52 @@ function barchart(id, height, data) {
   var svg = container.svg;
 
   // margins
-  var xLabelsMargin = AXIS_OFFSET * 2;
-  var yLabelsMargin = AXIS_OFFSET * 2;
-  var xBarsMargin = w - xLabelsMargin - AXIS_OFFSET;
-  var yBarsMargin = h - yLabelsMargin - AXIS_OFFSET;
+  var marginXLabel = AXIS_OFFSET * 2;
+  var marginYLabel = AXIS_OFFSET * 2;
+  var marginXChart = w - marginXLabel - AXIS_OFFSET;
+  var marginYChart = h - marginYLabel - AXIS_OFFSET;
 
-  // scales for bar width/height and x/y axes
-  var barHeightScale = d3.scaleBand().domain(labels)
-                                     .range([0, yBarsMargin])
-                                     .paddingInner(0.1)
-                                     .paddingOuter(0.05);
-  var barWidthScale = d3.scaleLinear().domain([0, DATA_MAX])
-                                      .range([0, xBarsMargin / 2]);
-  var xScale = d3.scaleLinear().domain([-DATA_MAX, DATA_MAX])
-                	             .range([0, xBarsMargin]);
-  var yScale = d3.scaleBand().domain(labels)
-                	           .range([0, yBarsMargin]);
-  var colorScale = d3.scaleQuantize().domain([-DATA_MAX, DATA_MAX])
-                                     .range(BAR_COLORS);
+  // scales for bar x, y, width, height, and fill
+  var scaleX      = d3.scaleLinear()
+                      .domain([-DATA_MAX, DATA_MAX])
+                	    .range([0, marginXChart]);
+  var scaleY      = d3.scaleBand()
+                      .domain(labels)
+                	    .range([0, marginYChart]);
+  var scaleWidth  = d3.scaleLinear()
+                      .domain([0, DATA_MAX])
+                      .range([0, marginXChart / 2]);
+  var scaleHeight = d3.scaleBand()
+                      .domain(labels)
+                      .range([0, marginYChart])
+                      .paddingInner(0.1)
+                      .paddingOuter(0.05);
+  var scaleFill   = d3.scaleQuantize()
+                      .domain([-DATA_MAX, DATA_MAX])
+                      .range(BAR_COLORS);
 
   // axes for rows/columns (note that these ARE NOT yet added to the svg)
-  var xAxis = d3.axisTop(xScale);
+  var xAxis = d3.axisTop(scaleX);
 
   // add the axes to the svg (add these before the bars so the bars will be on top)
   var xLabels = svg.append("g")
-              		.attr("class", "axis").attr("id", "xticks")
-                  .attr("transform", "translate(" + xLabelsMargin + "," + yLabelsMargin + ")")
-                  .call(xAxis.tickSize(-yBarsMargin - AXIS_OFFSET, 0, 0));
+                  .attr("id", "xticks")
+                  .attr("class", "axis")
+                  .attr("transform", "translate(" + marginXLabel + "," + marginYLabel + ")")
+                  .call(xAxis.tickSize(-marginYChart - AXIS_OFFSET, 0, 0));
 
+  // bars
   var bars = new Cells(svg, "bars", data, key,
     // -1 for pos bars -> no overlap on "0" center tick
-    function(d) { return xScale(0) - (d.value < 0 ? barWidthScale(Math.abs(d.value)) : -1); },
-    function(d) { return yScale(d.key); },
-    function(d) { return barWidthScale(Math.abs(d.value)); },
-    function(d) { return barHeightScale.bandwidth(); },
-    function(d) { return colorScale(d.value); });
-  var barLabels = new Labels(svg, "labels", "axis", labels, function() { return yBarsMargin; },
-                            barHeightScale.step, false, 10, "left");
+    function(d) { return scaleX(0) - (d.value < 0 ? scaleWidth(Math.abs(d.value)) : -1); },
+    function(d) { return scaleY(d.key); },
+    function(d) { return scaleWidth(Math.abs(d.value)); },
+    function(d) { return scaleHeight.bandwidth(); },
+    function(d) { return scaleFill(d.value); });
+
+  // labels at left
+  var barLabels = new Labels(svg, "labels", "axis", labels, function() { return marginYChart; },
+                            scaleHeight.step, false, 10, "left");
 
   // tooltip for bars
   var tip = d3.tip().attr("class", "d3-tip")
@@ -100,8 +127,8 @@ function barchart(id, height, data) {
     .attr("d", "M " + barLabels.anchor[0] + " " + barLabels.anchor[1] + " L " + barLabels.anchor[0] + " " + h);
 
   // custom initialization + transition
-  bars.selection.attr("x", xScale(0))
-                .attr("y", function(d) { return yScale(d.key); })
+  bars.selection.attr("x", scaleX(0))
+                .attr("y", function(d) { return scaleY(d.key); })
                 .attr("height", bars.attrs.height)
                 .attr("width", 0)
                 .attr("fill", "white");
@@ -113,34 +140,34 @@ function barchart(id, height, data) {
                 .attr("fill", bars.attrs.fill);
 
   function marginsSetup(w, h) {
-    xLabelsMargin = Math.ceil(barLabels.getBox().width);
-    yLabelsMargin = 10;
-    xBarsMargin = w - xLabelsMargin - AXIS_OFFSET;
-    yBarsMargin = h - yLabelsMargin - AXIS_OFFSET;
+    marginXLabel = Math.ceil(barLabels.getBox().width);
+    marginYLabel = 10; // approx height of text
+    marginXChart = w - marginXLabel - AXIS_OFFSET;
+    marginYChart = h - marginYLabel - AXIS_OFFSET;
   }
 
   function anchorsSetup(w, h) {
-    bars.anchor = [xLabelsMargin + AXIS_OFFSET, yLabelsMargin + AXIS_OFFSET];
-    barLabels.anchor = [xLabelsMargin, yLabelsMargin + AXIS_OFFSET];
+    bars.anchor = [marginXLabel + AXIS_OFFSET, marginYLabel + AXIS_OFFSET];
+    barLabels.anchor = [marginXLabel, marginYLabel + AXIS_OFFSET];
   }
 
   function scalesSetup(w, h) {
-    barWidthScale.range([0, xBarsMargin / 2]);
-    barHeightScale.range([0, yBarsMargin]);
-    xScale.range([0, xBarsMargin]);
-    yScale.range([0, yBarsMargin]);
+    scaleWidth.range([0, marginXChart / 2]);
+    scaleHeight.range([0, marginYChart]);
+    scaleX.range([0, marginXChart]);
+    scaleY.range([0, marginYChart]);
   }
 
   function positionAllElements() {
     bars.position();
     barLabels.position();
-    xLabels.attr("transform", "translate(" + (xLabelsMargin + AXIS_OFFSET) + "," + yLabelsMargin + ")")
-          .call(xAxis.tickSize(-yBarsMargin - AXIS_OFFSET, 0, 0));
+    xLabels.attr("transform", "translate(" + (marginXLabel + AXIS_OFFSET) + "," + marginYLabel + ")")
+          .call(xAxis.tickSize(-marginYChart - AXIS_OFFSET, 0, 0));
   }
 
   function updateVisAllElements() {
     bars.updateVis(["x", "y", "width", "height", "fill"]);
-    xLabels.call(xAxis.tickSize(-yBarsMargin - AXIS_OFFSET, 0, 0));
+    xLabels.call(xAxis.tickSize(-marginYChart - AXIS_OFFSET, 0, 0));
     barLabels.updateVisNT();
   }
 
@@ -172,8 +199,8 @@ function barchart(id, height, data) {
     labels = data.map(key);
 
     // scale/visual updates
-    barHeightScale.domain(labels);
-    yScale.domain(labels);
+    scaleHeight.domain(labels);
+    scaleY.domain(labels);
     bars.selection.transition()
                   .duration(1000)
                   .delay(function(d) { return 500 * Math.abs(d.value) / DATA_MAX; })
