@@ -76,7 +76,8 @@ function barchart(id, height, data) {
   var bars = new Cells(svg, "bars", data, key,
     // -1 for pos bars -> no overlap on "0" center tick
     function(d) { return scaleX(0) - (d.value < 0 ? scaleWidth(Math.abs(d.value)) : -1); },
-    function(d) { return scaleY(d.key); },
+    // add half of (step - bandwidth) to account for paddingInner/Outer
+    function(d) { return scaleY(d.key) + (scaleHeight.step() - scaleHeight.bandwidth()) / 2; },
     function(d) { return scaleWidth(Math.abs(d.value)); },
     function(d) { return scaleHeight.bandwidth(); },
     function(d) { return scaleFill(d.value); });
@@ -128,7 +129,7 @@ function barchart(id, height, data) {
 
   // custom initialization + transition
   bars.selection.attr("x", scaleX(0))
-                .attr("y", function(d) { return scaleY(d.key); })
+                .attr("y", bars.attrs.y)
                 .attr("height", bars.attrs.height)
                 .attr("width", 0)
                 .attr("fill", "white");
