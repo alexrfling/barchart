@@ -16,11 +16,11 @@ marginYChart |            |                                                    |
              |            |                                                    |
              +------------+----------------------------------------------------+
 */
-function barchart(id, height, data) {
+function barchart(id, height, data, negColor, posColor) {
   const SVG_MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
   const AXIS_OFFSET = 5;
   const DATA_MAX = Math.max(...data.map(function(d) { return Math.abs(d.value); }));
-  const BAR_COLORS = interpolateColors("#dc3912", "lightgrey", "#109618", 256);
+  const BAR_COLORS = interpolateColors(negColor || "#dc3912", "lightgrey", posColor || "#109618", 256);
   var BY_NAME = true;
   var DESCENDING = true;
 

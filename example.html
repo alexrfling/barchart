@@ -15,9 +15,17 @@
 	<link rel="stylesheet" type="text/css" href="d3-tip/examples/example-styles.css">
 </head>
 <body>
-  <div id="parent"></div>
+  <div id="parent1"></div>
+	<div id="parent2"></div>
+	<div id="parent3"></div>
   <script>
-    barchart("parent", 550, data);
+    barchart("parent1", 600, data); // default: red/green
+  </script>
+	<script>
+    barchart("parent2", 600, data, "#e67300", "#3366cc"); // orange/blue
+  </script>
+	<script>
+    barchart("parent3", 600, data, "#ff9900", "#990099"); // yellow/purple
   </script>
 </body>
 </html>
