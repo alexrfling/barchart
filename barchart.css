@@ -25,7 +25,7 @@
 }
 
 .barchart rect:hover { /* bars */
-  filter: url("#shadow");
+  filter: url('#shadow');
 }
 
 .bold {
