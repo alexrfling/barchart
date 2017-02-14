@@ -88,9 +88,9 @@ function barchart (id, height, data, negColor, posColor) {
 
     // tooltip for bars
     var tip = d3.tip().attr('class', 'd3-tip')
-                      .direction(function(d) { return d.value < 0 ? 'e' : 'w'; })
-                      .offset(function(d) { return d.value < 0 ? [0, 10] : [0, -10]; })
-                      .html(function(d) {
+                      .direction(function (d) { return d.value < 0 ? 'e' : 'w'; })
+                      .offset(function (d) { return d.value < 0 ? [0, 10] : [0, -10]; })
+                      .html(function (d) {
                           return '<table>' +
                                   '<tr><td>Variable</td><td>' + d.key + '</td></tr>' +
                                   '<tr><td>Coefficient</td><td>' + round(d.value, 7) + '</td></tr>' +
@@ -206,7 +206,7 @@ function barchart (id, height, data, negColor, posColor) {
         bars.selection.transition()
                       .duration(1000)
                       // TODO find a way to sync bars with labels
-                      //.delay(function(d) { return 500 * Math.abs(d.value) / DATA_MAX; })
+                      //.delay(function (d) { return 500 * Math.abs(d.value) / DATA_MAX; })
                       .attr('y', bars.attrs.y);
         barLabels.updateNames(labels);
         barLabels.updateVis(1000);
