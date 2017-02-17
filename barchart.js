@@ -92,8 +92,8 @@ class Barchart {
         // tooltip for bars
         me.tooltip = d3.tip()
             .attr('class', 'd3-tip')
-            .direction(function (d) { return d.value < 0 ? 'e' : 'w'; })
-            .offset(function (d) { return d.value < 0 ? [0, 10] : [0, -10]; })
+            .direction(function (d) { return (d.value < 0 ? 'e' : 'w'); })
+            .offset(function (d) { return (d.value < 0 ? [0, 10] : [0, -10]); })
             .html(function (d) {
                 return '<table>' +
                         '<tr><td>Variable</td><td>' + d.key + '</td></tr>' +
@@ -139,7 +139,7 @@ class Barchart {
             .attr('y', me.bars.attrs.y)
             .attr('height', me.bars.attrs.height)
             .attr('width', 0)
-            .attr('fill', 'white');
+            .attr('fill', 'white'); // NOTE 'none' also looks pretty good
         me.bars.selection
             .transition()
             .duration(1000)
@@ -209,12 +209,15 @@ class Barchart {
 
         // switch ordering
         me.BY_NAME = !me.BY_NAME;
-        if (me.BY_NAME) me.DESCENDING = !me.DESCENDING;
+        if (me.BY_NAME) {
+            me.DESCENDING = !me.DESCENDING;
+        }
+
         me.data = me.data.sort(function (a, b) {
             if (me.BY_NAME) {
-                return me.DESCENDING ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key);
+                return (me.DESCENDING ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key));
             } else {
-                return me.DESCENDING ? a.value - b.value : b.value - a.value;
+                return (me.DESCENDING ? a.value - b.value : b.value - a.value);
             }
         });
 
