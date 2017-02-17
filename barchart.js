@@ -118,7 +118,7 @@ class Barchart {
             me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', false);
             me.tooltip.hide();
         });
-        me.bars.addListener('click', function() { me.sortBars(me); });
+        me.bars.addListener('click', function () { me.sortBars(me); });
 
         // last setup before initial bar transition
         me.marginsSetup(me.width, me.height);
@@ -228,7 +228,7 @@ class Barchart {
             .transition()
             .duration(1000)
             // TODO find a way to sync bars with labels
-            //.delay(function (d) { return 500 * Math.abs(d.value) / DATA_MAX; })
+            //.delay(function (d) { return 500 * Math.abs(d.value) / me.DATA_MAX; })
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(1000);
