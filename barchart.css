@@ -50,16 +50,16 @@
     stroke-width: 0.5px;
 }
 
-#xticks path {
+.x-axis path {
     stroke-width: 0px;
 }
 
-#labels path {
+.y-axis path {
     stroke: lightgrey;
     stroke-width: 2px;
 }
 
-#labels .domain {
+.y-axis .domain {
     stroke: lightgrey;
     stroke-width: 0px;
 }

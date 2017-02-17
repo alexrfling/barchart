@@ -72,8 +72,7 @@ class Barchart {
         // add the axes to the svg (add these before the bars so the bars will be on top)
         me.xLabels = me.container.svg
             .append('g')
-            .attr('id', 'xticks')
-            .attr('class', 'axis')
+            .attr('class', 'axis x-axis')
             .attr('transform', 'translate(' + me.marginXLabel + ',' + me.marginYLabel + ')')
             .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
 
@@ -130,8 +129,7 @@ class Barchart {
         // vertical line next to textual lables at left
         me.container.svg
             .append('g')
-            .attr('id', 'labels')
-            .attr('class', 'axis')
+            .attr('class', 'axis y-axis')
             .append('path')
             .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.height);
 
