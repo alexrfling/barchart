@@ -32,7 +32,7 @@ class Barchart {
         flushContents(id);
 
         me.data = data.slice();
-        me.container = new SVGContainer(id, 'barchart', 'barchartSVG', function () { me.resize(me); }, me.SVG_MARGINS, height);
+        me.container = new SVGContainer(id, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, height);
         addDropShadowFilter(me.container.SVG, 'shadow');
 
         me.container.resize();
@@ -107,7 +107,7 @@ class Barchart {
         // add ids to labels so they can be bolded on hover
         me.barLabels.group
             .selectAll('text')
-            .attr('id', function () { return htmlEscape(this.innerHTML); });
+            .attr('id', function (d) { return htmlEscape(d); });
 
         // bind event listeners
         me.bars.addListener('mouseover', function (d) {
@@ -118,7 +118,7 @@ class Barchart {
             me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', false);
             me.tooltip.hide();
         });
-        me.bars.addListener('click', function () { me.sortBars(me); });
+        me.bars.addListener('click', function () { me.sortBars.call(me); });
 
         // last setup before initial bar transition
         me.marginsSetup(me.width, me.height);
@@ -192,7 +192,8 @@ class Barchart {
         me.barLabels.updateVisNT();
     }
 
-    resize (me) {
+    resize () {
+        var me = this;
         var updatedWidth = me.container.resize();
 
         me.marginsSetup(updatedWidth, me.height);
@@ -202,7 +203,8 @@ class Barchart {
         me.updateVisAllElements();
     }
 
-    sortBars (me) {
+    sortBars () {
+        var me = this;
 
         // hide the tooltip (visible on the bar that was clicked)
         me.tooltip.hide();
@@ -213,7 +215,7 @@ class Barchart {
             me.DESCENDING = !me.DESCENDING;
         }
 
-        me.data = me.data.sort(function (a, b) {
+        me.data.sort(function (a, b) {
             if (me.BY_NAME) {
                 return (me.DESCENDING ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key));
             } else {
