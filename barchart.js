@@ -145,6 +145,16 @@ class Barchart {
             .attr('x', me.bars.attrs.x)
             .attr('width', me.bars.attrs.width)
             .attr('fill', me.bars.attrs.fill);
+
+        // NOTE for testing
+        /*me.container.svg
+            .append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 20)
+            .attr('height', 20)
+            .attr('fill', 'green')
+            .on('click', function () { me.updateData.call(me, me.genData()); });*/
     }
 
     marginsSetup (width, height) {
@@ -202,6 +212,18 @@ class Barchart {
         me.updateVisAllElements();
     }
 
+    sortData () {
+        var me = this;
+
+        me.data.sort(function (a, b) {
+            if (me.BY_NAME) {
+                return (me.DESCENDING ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key));
+            } else {
+                return (me.DESCENDING ? a.value - b.value : b.value - a.value);
+            }
+        });
+    }
+
     sortBars () {
         var me = this;
 
@@ -213,14 +235,7 @@ class Barchart {
         if (me.BY_NAME) {
             me.DESCENDING = !me.DESCENDING;
         }
-
-        me.data.sort(function (a, b) {
-            if (me.BY_NAME) {
-                return (me.DESCENDING ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key));
-            } else {
-                return (me.DESCENDING ? a.value - b.value : b.value - a.value);
-            }
-        });
+        me.sortData();
 
         // update ordering of labels
         me.labels = me.data.map(key);
@@ -236,5 +251,124 @@ class Barchart {
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(1000);
+    }
+
+    // NOTE for testing
+    /*genData () {
+        var me = this;
+        var data = me.data;
+
+        var numNew = Math.floor(10 * Math.random());
+        var numRem = Math.floor(10 * Math.random());
+
+        for (var j = 0; j < numRem; j++) {
+            var index = Math.floor(data.length * Math.random());
+            data = data.slice(0, index).concat(data.slice(index + 1, data.length));
+        }
+
+        for (var j = 0; j < numNew; j++) {
+            var firstLetter = 'qwertyuiopasdfghjklzxcvbnm'[Math.floor(26 * Math.random())];
+
+            data.push({
+                key: firstLetter + Math.floor(10000 * Math.random()),
+                value: 2.5 * Math.random() * me.DATA_MAX - me.DATA_MAX
+            });
+        }
+
+        return data;
+    }*/
+
+    updateData (data) {
+        var me = this;
+        me.data = data;
+
+        // nide tooltip in case it's visible
+        me.tooltip.hide();
+
+        // sort data as it previously was sorted
+        me.sortData();
+
+        // update ordering of labels and max abs value
+        me.labels = me.data.map(key);
+        me.DATA_MAX = Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
+
+        // scale updates
+        me.scaleX.domain([-me.DATA_MAX, me.DATA_MAX]);
+        me.scaleY.domain(me.labels);
+        me.scaleWidth.domain([0, me.DATA_MAX]);
+        me.scaleHeight.domain(me.labels);
+        me.scaleFill.domain([-me.DATA_MAX, me.DATA_MAX]);
+
+        // add temporary classes to separate old bars from bars to be kept
+        me.bars.group
+            .selectAll('rect')
+            .data(me.data, key)
+            .exit()
+            .attr('class', 'remove');
+        me.bars.group
+            .selectAll('rect')
+            .filter(function () { return (this.className.baseVal !== 'remove'); })
+            .attr('class', 'keep');
+
+        // add new bars, invisible, with same class as bars to be kept
+        me.bars.group
+            .selectAll('rect')
+            .data(me.data, key)
+            .enter()
+            .append('rect')
+            .attr('class', 'keep')
+            .attr('x', me.scaleX(0))
+            .attr('y', me.bars.attrs.y)
+            .attr('height', 0)
+            .attr('width', 0)
+            .attr('fill', 'white');
+
+        // transition all bars (old bars removed)
+        me.bars.group
+            .selectAll('rect.remove')
+            .transition()
+            .duration(1000)
+            .attr('x', me.scaleX(0))
+            .attr('y', me.marginYChart)
+            .attr('width', 0)
+            .attr('height', 0)
+            .attr('fill', 'white')
+            .remove();
+        me.bars.group
+            .selectAll('rect.keep')
+            .transition()
+            .duration(1000)
+            .attr('x', me.bars.attrs.x)
+            .attr('y', me.bars.attrs.y)
+            .attr('width', me.bars.attrs.width)
+            .attr('height', me.bars.attrs.height)
+            .attr('fill', me.bars.attrs.fill);
+
+        // update bar selection and reattach listeners
+        me.bars.selection = me.bars.group
+            .selectAll('rect.keep')
+            .classed('keep', false)
+            .on('mouseover', function (d) {
+                me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', true);
+                me.tooltip.show(d);
+            })
+            .on('mouseout', function (d) {
+                me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', false);
+                me.tooltip.hide();
+            })
+            .on('click', function () { me.sortBars.call(me); });
+
+        // update labels and reattach ids
+        me.barLabels.updateNames(me.labels);
+        me.barLabels.updateVis(1000);
+        me.barLabels.group
+            .selectAll('text')
+            .attr('id', function (d) { return htmlEscape(d); });
+
+        // update x axis
+        me.xLabels
+            .transition()
+            .duration(1000)
+            .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
     }
 }
