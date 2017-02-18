@@ -36,7 +36,7 @@
     shape-rendering: crispEdges;
 }
 
-.axis .tick {
+.axis .tick, .y-domain {
     stroke: lightgrey;
     stroke-width: 2px;
 }
@@ -50,16 +50,7 @@
     stroke-width: 0.5px;
 }
 
-.x-axis path {
-    stroke-width: 0px;
-}
-
-.y-axis path {
-    stroke: lightgrey;
-    stroke-width: 2px;
-}
-
-.y-axis .domain {
-    stroke: lightgrey;
-    stroke-width: 0px;
+/* should be equivalent to .axis > .domain */
+.axis > path {
+    display: none;
 }

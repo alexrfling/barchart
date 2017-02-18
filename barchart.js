@@ -120,18 +120,16 @@ class Barchart {
         });
         me.bars.addListener('click', function () { me.sortBars.call(me); });
 
+        // vertical line next to textual lables at left
+        me.yAxisLine = me.container.svg
+            .append('path')
+            .attr('class', 'y-domain');
+
         // last setup before initial bar transition
         me.marginsSetup(me.width, me.height);
         me.anchorsSetup(me.width, me.height);
         me.scalesSetup(me.width, me.height);
         me.positionAllElements();
-
-        // vertical line next to textual lables at left
-        me.container.svg
-            .append('g')
-            .attr('class', 'axis y-axis')
-            .append('path')
-            .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.height);
 
         // custom initialization + transition
         me.bars.selection
@@ -182,6 +180,7 @@ class Barchart {
         me.xLabels
             .attr('transform', 'translate(' + (me.marginXLabel + me.AXIS_OFFSET) + ',' + me.marginYLabel + ')')
             .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
+        me.yAxisLine.attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.height);
     }
 
     updateVisAllElements () {
