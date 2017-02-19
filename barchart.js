@@ -18,22 +18,23 @@ marginYChart |            |                                                    |
 */
 class Barchart {
 
-    constructor (id, height, data, negColor, posColor) {
+    constructor (id, height) {
         var me = this;
         me.parentId = id;
         me.height = height;
-        me.data = data;
 
         me.SVG_MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
         me.AXIS_OFFSET = 5;
-        me.DATA_MAX = Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
-        me.BAR_COLORS = interpolateColors(negColor || '#dc3912', 'lightgrey', posColor || '#109618', 256);
         me.BY_NAME = true;
         me.DESCENDING = true;
     }
 
-    initializeVis () {
+    initializeVis (data, negColor, posColor) {
         var me = this;
+        me.data = data;
+
+        me.DATA_MAX = Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
+        me.BAR_COLORS = interpolateColors(negColor || '#dc3912', 'lightgrey', posColor || '#109618', 256);
 
         // clear out old DOM elements
         flushContents(me.parentId);

@@ -19,16 +19,16 @@
   	<div id='parent2'></div>
   	<div id='parent3'></div>
     <script>
-		var barchart1 = new Barchart('parent1', 600, data); // default: red/green
-		barchart1.initializeVis();
+		var barchart1 = new Barchart('parent1', 600); // default: red/green
+		barchart1.initializeVis(data);
     </script>
   	<script>
-		var barchart2 = new Barchart('parent2', 600, data, '#e67300', '#3366cc'); // orange/blue
-		barchart2.initializeVis();
+		var barchart2 = new Barchart('parent2', 600); // orange/blue
+		barchart2.initializeVis(data, '#e67300', '#3366cc');
     </script>
   	<script>
-		var barchart3 = new Barchart('parent3', 600, data, '#ff9900', '#990099'); // yellow/purple
-		barchart3.initializeVis();
+		var barchart3 = new Barchart('parent3', 600); // yellow/purple
+		barchart3.initializeVis(data, '#ff9900', '#990099');
     </script>
 </body>
 </html>
