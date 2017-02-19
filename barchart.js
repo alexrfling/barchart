@@ -260,6 +260,20 @@ class Barchart {
         me.barLabels.updateVis(1000);
     }
 
+    updateColors (negColor, posColor) {
+        var me = this;
+
+        // update colors array and scale
+        me.BAR_COLORS = interpolateColors(negColor, 'lightgrey', posColor, 256);
+        me.scaleFill.range(me.BAR_COLORS);
+
+        // visual update
+        me.bars.selection
+            .transition()
+            .duration(1000)
+            .attr('fill', me.bars.attrs.fill);
+    }
+
     // NOTE for testing
     /*genData () {
         var me = this;
