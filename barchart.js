@@ -32,11 +32,11 @@ class Barchart {
     initializeVis (data, negColor, posColor) {
         var me = this;
         me.data = data;
-        me.negColor = negColor;
-        me.posColor = posColor;
+        me.negColor = negColor || '#dc3912';
+        me.posColor = posColor || '#109618';
 
-        me.DATA_MAX = Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
-        me.BAR_COLORS = interpolateColors(me.negColor || '#dc3912', 'lightgrey', me.posColor || '#109618', 256);
+        me.DATA_MAX = me.getDataMax();
+        me.BAR_COLORS = me.getBarColors();
 
         // clear out old DOM elements
         flushContents(me.parentId);
@@ -234,6 +234,18 @@ class Barchart {
         });
     }
 
+    getDataMax () {
+        var me = this;
+
+        return Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
+    }
+
+    getBarColors () {
+        var me = this;
+
+        return interpolateColors(me.negColor, 'lightgrey', me.posColor, 256);
+    }
+
     sortBars () {
         var me = this;
 
@@ -269,7 +281,7 @@ class Barchart {
         me.posColor = posColor;
 
         // update colors array and scale
-        me.BAR_COLORS = interpolateColors(me.negColor, 'lightgrey', me.posColor, 256);
+        me.BAR_COLORS = me.getBarColors();
         me.scaleFill.range(me.BAR_COLORS);
 
         // visual update
@@ -316,7 +328,7 @@ class Barchart {
 
         // update ordering of labels and max abs value
         me.labels = me.data.map(key);
-        me.DATA_MAX = Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
+        me.DATA_MAX = me.getDataMax();
 
         // scale updates
         me.scaleX.domain([-me.DATA_MAX, me.DATA_MAX]);
