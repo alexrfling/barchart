@@ -32,9 +32,11 @@ class Barchart {
     initializeVis (data, negColor, posColor) {
         var me = this;
         me.data = data;
+        me.negColor = negColor;
+        me.posColor = posColor;
 
         me.DATA_MAX = Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
-        me.BAR_COLORS = interpolateColors(negColor || '#dc3912', 'lightgrey', posColor || '#109618', 256);
+        me.BAR_COLORS = interpolateColors(me.negColor || '#dc3912', 'lightgrey', me.posColor || '#109618', 256);
 
         // clear out old DOM elements
         flushContents(me.parentId);
@@ -263,9 +265,11 @@ class Barchart {
 
     updateColors (negColor, posColor) {
         var me = this;
+        me.negColor = negColor;
+        me.posColor = posColor;
 
         // update colors array and scale
-        me.BAR_COLORS = interpolateColors(negColor, 'lightgrey', posColor, 256);
+        me.BAR_COLORS = interpolateColors(me.negColor, 'lightgrey', me.posColor, 256);
         me.scaleFill.range(me.BAR_COLORS);
 
         // visual update
