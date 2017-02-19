@@ -20,19 +20,26 @@ class Barchart {
 
     constructor (id, height, data, negColor, posColor) {
         var me = this;
+        me.parentId = id;
+        me.height = height;
+        me.data = data;
 
         me.SVG_MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
         me.AXIS_OFFSET = 5;
-        me.DATA_MAX = Math.max(...data.map(function (d) { return Math.abs(d.value); }));
+        me.DATA_MAX = Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
         me.BAR_COLORS = interpolateColors(negColor || '#dc3912', 'lightgrey', posColor || '#109618', 256);
         me.BY_NAME = true;
         me.DESCENDING = true;
+    }
+
+    initializeVis () {
+        var me = this;
 
         // clear out old DOM elements
-        flushContents(id);
+        flushContents(me.parentId);
 
         me.data = data.slice();
-        me.container = new SVGContainer(id, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, height);
+        me.container = new SVGContainer(me.parentId, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, me.height);
         addDropShadowFilter(me.container.SVG, 'shadow');
 
         me.container.resize();
