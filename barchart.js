@@ -25,23 +25,23 @@ class Barchart {
 
         me.SVG_MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
         me.AXIS_OFFSET = 5;
-        me.BY_NAME = true;
-        me.DESCENDING = true;
     }
 
-    initializeVis (data, negColor, posColor) {
+    initializeVis (data, negColor, posColor, byName, descending) {
         var me = this;
-        me.data = data;
+        me.data = data.slice();
         me.negColor = negColor || '#dc3912';
         me.posColor = posColor || '#109618';
+        me.byName = (byName === undefined ? true : byName);
+        me.descending = (byName === undefined ? true : descending);
 
-        me.DATA_MAX = me.getDataMax();
-        me.BAR_COLORS = me.getBarColors();
+        me.sortData();
+        me.dataMax = me.getDataMax();
+        me.barColors = me.getBarColors();
 
         // clear out old DOM elements
         flushContents(me.parentId);
 
-        me.data = data.slice();
         me.container = new SVGContainer(me.parentId, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, me.height);
         addDropShadowFilter(me.container.SVG, 'shadow');
 
@@ -59,13 +59,13 @@ class Barchart {
 
         // scales for bar x, y, width, height, and fill
         me.scaleX = d3.scaleLinear()
-            .domain([-me.DATA_MAX, me.DATA_MAX])
+            .domain([-me.dataMax, me.dataMax])
             .range([0, me.marginXChart]);
         me.scaleY = d3.scaleBand()
             .domain(me.labels)
             .range([0, me.marginYChart]);
         me.scaleWidth = d3.scaleLinear()
-            .domain([0, me.DATA_MAX])
+            .domain([0, me.dataMax])
             .range([0, me.marginXChart / 2]);
         me.scaleHeight = d3.scaleBand()
             .domain(me.labels)
@@ -73,8 +73,8 @@ class Barchart {
             .paddingInner(0.1)
             .paddingOuter(0.05);
         me.scaleFill = d3.scaleQuantize()
-            .domain([-me.DATA_MAX, me.DATA_MAX])
-            .range(me.BAR_COLORS);
+            .domain([-me.dataMax, me.dataMax])
+            .range(me.barColors);
 
         // axes for rows/columns (note that these ARE NOT yet added to the svg)
         me.xAxis = d3.axisTop(me.scaleX);
@@ -128,7 +128,7 @@ class Barchart {
             me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', false);
             me.tooltip.hide();
         });
-        me.bars.addListener('click', function () { me.sortBars.call(me); });
+        me.bars.addListener('click', function () { me.sortBarsOnClickEasterEgg.call(me); });
 
         // vertical line next to textual lables at left
         me.yAxisLine = me.container.svg
@@ -226,10 +226,10 @@ class Barchart {
         var me = this;
 
         me.data.sort(function (a, b) {
-            if (me.BY_NAME) {
-                return (me.DESCENDING ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key));
+            if (me.byName) {
+                return (me.descending ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key));
             } else {
-                return (me.DESCENDING ? a.value - b.value : b.value - a.value);
+                return (me.descending ? a.value - b.value : b.value - a.value);
             }
         });
     }
@@ -246,20 +246,16 @@ class Barchart {
         return interpolateColors(me.negColor, 'lightgrey', me.posColor, 256);
     }
 
-    sortBars () {
+    sortBarsOnClickEasterEgg () {
         var me = this;
 
         // hide the tooltip (visible on the bar that was clicked)
         me.tooltip.hide();
 
-        // switch ordering
-        me.BY_NAME = !me.BY_NAME;
-        if (me.BY_NAME) {
-            me.DESCENDING = !me.DESCENDING;
-        }
+        // update ordering of data and labels
+        me.byName = !me.byName;
+        me.descending = (me.byName ? !me.descending : me.descending);
         me.sortData();
-
-        // update ordering of labels
         me.labels = me.data.map(key);
 
         // scale/visual updates
@@ -269,7 +265,32 @@ class Barchart {
             .transition()
             .duration(1000)
             // TODO find a way to sync bars with labels
-            //.delay(function (d) { return 500 * Math.abs(d.value) / me.DATA_MAX; })
+            //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
+            .attr('y', me.bars.attrs.y);
+        me.barLabels.updateNames(me.labels);
+        me.barLabels.updateVis(1000);
+    }
+
+    updateSort (byName, descending) {
+        var me = this;
+        me.byName = (byName === undefined ? true : byName);
+        me.descending = (byName === undefined ? true : descending);
+
+        // hide the tooltip (visible on the bar that was clicked)
+        me.tooltip.hide();
+
+        // update ordering of data and labels
+        me.sortData();
+        me.labels = me.data.map(key);
+
+        // scale/visual updates
+        me.scaleY.domain(me.labels);
+        me.scaleHeight.domain(me.labels);
+        me.bars.selection
+            .transition()
+            .duration(1000)
+            // TODO find a way to sync bars with labels
+            //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(1000);
@@ -281,8 +302,8 @@ class Barchart {
         me.posColor = posColor;
 
         // update colors array and scale
-        me.BAR_COLORS = me.getBarColors();
-        me.scaleFill.range(me.BAR_COLORS);
+        me.barColors = me.getBarColors();
+        me.scaleFill.range(me.barColors);
 
         // visual update
         me.bars.selection
@@ -309,7 +330,7 @@ class Barchart {
 
             data.push({
                 key: firstLetter + Math.floor(10000 * Math.random()),
-                value: 2.5 * Math.random() * me.DATA_MAX - me.DATA_MAX
+                value: 2.5 * Math.random() * me.dataMax - me.dataMax
             });
         }
 
@@ -328,14 +349,14 @@ class Barchart {
 
         // update ordering of labels and max abs value
         me.labels = me.data.map(key);
-        me.DATA_MAX = me.getDataMax();
+        me.dataMax = me.getDataMax();
 
         // scale updates
-        me.scaleX.domain([-me.DATA_MAX, me.DATA_MAX]);
+        me.scaleX.domain([-me.dataMax, me.dataMax]);
         me.scaleY.domain(me.labels);
-        me.scaleWidth.domain([0, me.DATA_MAX]);
+        me.scaleWidth.domain([0, me.dataMax]);
         me.scaleHeight.domain(me.labels);
-        me.scaleFill.domain([-me.DATA_MAX, me.DATA_MAX]);
+        me.scaleFill.domain([-me.dataMax, me.dataMax]);
 
         // add temporary classes to separate old bars from bars to be kept
         me.bars.group
@@ -394,7 +415,7 @@ class Barchart {
                 me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', false);
                 me.tooltip.hide();
             })
-            .on('click', function () { me.sortBars.call(me); });
+            .on('click', function () { me.sortBarsOnClickEasterEgg.call(me); });
 
         // update labels and reattach ids
         me.barLabels.updateNames(me.labels);
