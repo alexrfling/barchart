@@ -1,4 +1,4 @@
-var data = [
+var data1 = [
   {
     key: 'ARGF_at',
     value: -0.049
@@ -67,3 +67,18 @@ var data = [
     value: -0.005
   },
 ];
+
+var data2 = [
+  {
+    key: ' S p a c e s  o n  S p a c e s ',
+    value: -123
+  }, {
+    key: '"Quotes" on "Quotes"',
+    value: 4.56
+  }, {
+    key: '\'Single\' \'Quotes\'',
+    value: 78.9
+  }
+];
+
+var data3 = [];
