@@ -35,6 +35,10 @@ class Barchart {
         me.byName = (byName === undefined ? true : byName);
         me.descending = (byName === undefined ? true : descending);
 
+        // TODO make these optional parameters in an options hash
+        me.defaultDataMax = 0.75;
+        me.defaultMarginXLabel = 50;
+
         me.sortData();
         me.dataMax = me.getDataMax();
         me.barColors = me.getBarColors();
@@ -52,8 +56,10 @@ class Barchart {
         me.height = me.container.svgHeight;
 
         // margins
-        me.marginXLabel = me.AXIS_OFFSET * 2;
-        me.marginYLabel = me.AXIS_OFFSET * 2;
+        // NOTE marginXLabel and marginYLabel should be >= 10 to start,
+        // otherwise bar labels get positioned badly for some reason...
+        me.marginXLabel = Math.max(me.defaultMarginXLabel, 10);
+        me.marginYLabel = 10; // approx height of text
         me.marginXChart = me.width - me.marginXLabel - me.AXIS_OFFSET;
         me.marginYChart = me.height - me.marginYLabel - me.AXIS_OFFSET;
 
@@ -170,7 +176,7 @@ class Barchart {
     marginsSetup (width, height) {
         var me = this;
 
-        me.marginXLabel = Math.ceil(me.barLabels.getBox().width);
+        me.marginXLabel = (Math.ceil(me.barLabels.getBox().width) || me.marginXLabel);
         me.marginYLabel = 10; // approx height of text
         me.marginXChart = width - me.marginXLabel - me.AXIS_OFFSET;
         me.marginYChart = height - me.marginYLabel - me.AXIS_OFFSET;
@@ -236,6 +242,12 @@ class Barchart {
 
     getDataMax () {
         var me = this;
+
+        // if there's no data, return the previous data max (if it exists), or
+        // the default
+        if (!me.data.length) {
+            return (me.dataMax || me.defaultDataMax);
+        }
 
         return Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
     }
