@@ -104,7 +104,8 @@ class Barchart {
             function (d) { return me.scaleFill(d.value); });
 
         // labels at left
-        me.barLabels = new Labels(me.container.svg, 'labels', 'axis', me.labels, function () { return me.marginYChart; }, me.scaleHeight.step, false, 10, 'left');
+        // HACK add current time to id to give it a high chance of being unique
+        me.barLabels = new Labels(me.container.svg, 'labels' + (new Date()).getTime(), 'axis', me.labels, function () { return me.marginYChart; }, me.scaleHeight.step, false, 10, 'left');
 
         // tooltip for bars
         me.tooltip = d3.tip()
