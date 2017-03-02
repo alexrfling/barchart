@@ -29,6 +29,7 @@ class Barchart {
 
     initializeVis (data, negColor, posColor, byName, descending) {
         var me = this;
+        data = data || [];
         me.data = data.slice();
         me.negColor = negColor || '#dc3912';
         me.posColor = posColor || '#109618';
