@@ -16,15 +16,15 @@
 </head>
 <body>
 	<div id='parent1'></div>
-  	<div id='parent2'></div>
-  	<div id='parent3'></div>
-    <script>
+	<div id='parent2'></div>
+	<div id='parent3'></div>
+	<script>
 		var barchart1 = new Barchart('parent1', 600);
 
 		// default: red/green, A to Z
 		barchart1.initializeVis(data1);
-    </script>
-  	<script>
+	</script>
+	<script>
 		var barchart2 = new Barchart('parent2', 600);
 		var options2 = {
 			negColor: '#e67300',
@@ -35,8 +35,8 @@
 
 		// orange/blue, + to -
 		barchart2.initializeVis(data2, options2);
-    </script>
-  	<script>
+	</script>
+	<script>
 		var barchart3 = new Barchart('parent3', 600);
 		var options3 = {
 			negColor: '#ff9900',
@@ -45,6 +45,6 @@
 
 		// yellow/purple, but no data
 		barchart3.initializeVis(data3, options3);
-    </script>
+	</script>
 </body>
 </html>
