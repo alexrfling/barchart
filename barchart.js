@@ -27,18 +27,17 @@ class Barchart {
         me.AXIS_OFFSET = 5;
     }
 
-    initializeVis (data, negColor, posColor, byName, ascending) {
+    initializeVis (data, options) {
         var me = this;
-        data = data || [];
-        me.data = data.slice();
-        me.negColor = negColor || '#dc3912';
-        me.posColor = posColor || '#109618';
-        me.byName = (byName === undefined ? true : byName);
-        me.ascending = (byName === undefined ? true : ascending);
+        options = options || {};
 
-        // TODO make these optional parameters in an options hash
-        me.defaultDataMax = 0.75;
-        me.defaultMarginXLabel = 50;
+        me.data = (data ? data.slice() : []);
+        me.negColor = options.negColor || '#dc3912';
+        me.posColor = options.posColor || '#109618';
+        me.byName = (options.byName === undefined ? true : options.byName);
+        me.ascending = (options.byName === undefined ? true : options.ascending);
+        me.defaultDataMax = options.defaultDataMax || 0.75;
+        me.defaultMarginXLabel = options.defaultMarginXLabel || 50;
 
         me.sortData();
         me.dataMax = me.getDataMax();
