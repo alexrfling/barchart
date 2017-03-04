@@ -27,14 +27,14 @@ class Barchart {
         me.AXIS_OFFSET = 5;
     }
 
-    initializeVis (data, negColor, posColor, byName, descending) {
+    initializeVis (data, negColor, posColor, byName, ascending) {
         var me = this;
         data = data || [];
         me.data = data.slice();
         me.negColor = negColor || '#dc3912';
         me.posColor = posColor || '#109618';
         me.byName = (byName === undefined ? true : byName);
-        me.descending = (byName === undefined ? true : descending);
+        me.ascending = (byName === undefined ? true : ascending);
 
         // TODO make these optional parameters in an options hash
         me.defaultDataMax = 0.75;
@@ -235,9 +235,9 @@ class Barchart {
 
         me.data.sort(function (a, b) {
             if (me.byName) {
-                return (me.descending ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key));
+                return (me.ascending ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key));
             } else {
-                return (me.descending ? a.value - b.value : b.value - a.value);
+                return (me.ascending ? a.value - b.value : b.value - a.value);
             }
         });
     }
@@ -268,7 +268,7 @@ class Barchart {
 
         // update ordering of data and labels
         me.byName = !me.byName;
-        me.descending = (me.byName ? !me.descending : me.descending);
+        me.ascending = (me.byName ? !me.ascending : me.ascending);
         me.sortData();
         me.labels = me.data.map(key);
 
@@ -285,10 +285,10 @@ class Barchart {
         me.barLabels.updateVis(1000);
     }
 
-    updateSort (byName, descending) {
+    updateSort (byName, ascending) {
         var me = this;
         me.byName = (byName === undefined ? true : byName);
-        me.descending = (byName === undefined ? true : descending);
+        me.ascending = (byName === undefined ? true : ascending);
 
         // hide the tooltip (visible on the bar that was clicked)
         me.tooltip.hide();
