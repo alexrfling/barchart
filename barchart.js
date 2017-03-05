@@ -171,6 +171,7 @@ class Barchart {
             .attr('width', 20)
             .attr('height', 20)
             .attr('fill', 'green')
+            .on('click', function () { me.resize(me.height + 100); });
             .on('click', function () { me.updateData.call(me, me.genData()); });*/
     }
 
@@ -218,13 +219,15 @@ class Barchart {
         me.barLabels.updateVisNT();
     }
 
-    resize () {
+    resize (height) {
         var me = this;
-        var updatedWidth = me.container.resize();
+        var size = me.container.resize(height);
+        me.width = size.svgWidth;
+        me.height = size.svgHeight;
 
-        me.marginsSetup(updatedWidth, me.height);
-        me.anchorsSetup(updatedWidth, me.height);
-        me.scalesSetup(updatedWidth, me.height);
+        me.marginsSetup(me.width, me.height);
+        me.anchorsSetup(me.width, me.height);
+        me.scalesSetup(me.width, me.height);
         me.positionAllElements();
         me.updateVisAllElements();
     }
