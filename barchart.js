@@ -122,9 +122,7 @@ class Barchart {
         me.container.svg.call(me.tooltip);
 
         // add ids to labels so they can be bolded on hover
-        me.barLabels.group
-            .selectAll('text')
-            .attr('id', function (d) { return htmlEscape(d); });
+        me.attachBarLabelIds();
 
         // bind event listeners
         me.bars.addListener('mouseover', function (d) {
@@ -219,6 +217,14 @@ class Barchart {
         me.barLabels.updateVisNT();
     }
 
+    attachBarLabelIds () {
+        var me = this;
+
+        me.barLabels.group
+            .selectAll('text')
+            .attr('id', function (d) { return htmlEscape(d); });
+    }
+
     resize (height) {
         var me = this;
         var size = me.container.resize(height);
@@ -230,6 +236,9 @@ class Barchart {
         me.scalesSetup(me.width, me.height);
         me.positionAllElements();
         me.updateVisAllElements();
+
+        // reattach ids in case new labels appeared
+        me.attachBarLabelIds();
     }
 
     sortData () {
@@ -285,6 +294,9 @@ class Barchart {
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(1000);
+
+        // reattach ids in case new labels appeared
+        me.attachBarLabelIds();
     }
 
     updateSort (byName, ascending) {
@@ -310,6 +322,9 @@ class Barchart {
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(1000);
+
+        // reattach ids in case new labels appeared
+        me.attachBarLabelIds();
     }
 
     updateColors (negColor, posColor) {
@@ -436,9 +451,7 @@ class Barchart {
         // update labels and reattach ids
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(1000);
-        me.barLabels.group
-            .selectAll('text')
-            .attr('id', function (d) { return htmlEscape(d); });
+        me.attachBarLabelIds();
 
         // update x axis
         me.xLabels
