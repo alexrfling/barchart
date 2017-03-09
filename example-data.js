@@ -78,6 +78,12 @@ var data2 = [
     }, {
         key: '\'Single\' \'Quotes\'',
         value: 78.9
+    }, {
+        key: 123456789,
+        value: -20.468
+    }, {
+        key: 0.987654321,
+        value: 13.579
     }
 ];
 
