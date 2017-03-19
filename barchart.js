@@ -73,9 +73,7 @@ class Barchart {
         me.xAxis = d3.axisTop(me.scaleX);
         me.xLabels = me.container.svg
             .append('g')
-            .attr('class', 'axis x-axis')
-            .attr('transform', 'translate(' + me.marginXLabel + ',' + me.marginYLabel + ')')
-            .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
+            .attr('class', 'axis x-axis');
 
         // bars and chart
         me.bars = new Cells(me.container.svg, 'bars', me.data, key,
@@ -206,14 +204,20 @@ class Barchart {
         me.scaleRangeFillSetup();
     }
 
+    formatXLabelsTicks () {
+        var me = this;
+
+        me.xLabels.call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
+    }
+
     positionAllElements () {
         var me = this;
 
         me.bars.position();
         me.barLabels.position();
         me.xLabels
-            .attr('transform', 'translate(' + (me.marginXLabel + me.AXIS_OFFSET) + ',' + me.marginYLabel + ')')
-            .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
+            .attr('transform', 'translate(' + (me.marginXLabel + me.AXIS_OFFSET) + ',' + me.marginYLabel + ')');
+        me.formatXLabelsTicks();
         me.yAxisLine
             .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
     }
@@ -222,7 +226,7 @@ class Barchart {
         var me = this;
 
         me.bars.updateVis(['x', 'y', 'width', 'height', 'fill']);
-        me.xLabels.call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
+        me.formatXLabelsTicks();
         me.barLabels.updateVisNT();
     }
 
@@ -453,6 +457,6 @@ class Barchart {
         me.xLabels
             .transition()
             .duration(1000)
-            .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
+            .call(me.xAxis);
     }
 }
