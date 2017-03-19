@@ -44,7 +44,7 @@ class Barchart {
         me.dataMax = me.getDataMax();
         me.barColors = me.getBarColors();
 
-        // clear out old DOM elements
+        // clear out DOM elements inside parent
         flushContents(me.parentId);
 
         me.container = new SVGContainer(me.parentId, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, me.initialHeight);
@@ -53,7 +53,7 @@ class Barchart {
         // initial setup for margins
         me.marginsSetup();
 
-        // scales for bar x, y, width, height, and fill
+        // scales for bar attributes (x, y, width, height, fill)
         me.scaleX = d3.scaleLinear()
             .domain([-me.dataMax, me.dataMax])
             .range([0, me.marginXChart]);
@@ -72,17 +72,14 @@ class Barchart {
             .domain([-me.dataMax, me.dataMax])
             .range(me.barColors);
 
-        // axes for rows/columns (note that these ARE NOT yet added to the svg)
+        // x-axis labels (add this to the SVG first so the bars will be on top)
         me.xAxis = d3.axisTop(me.scaleX);
-
-        // add the axes to the svg (add these before the bars so the bars will be on top)
         me.xLabels = me.container.svg
             .append('g')
             .attr('class', 'axis x-axis')
             .attr('transform', 'translate(' + me.marginXLabel + ',' + me.marginYLabel + ')')
             .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
 
-        // bars
         me.bars = new Cells(me.container.svg, 'bars', me.data, key,
             // -1 for pos bars -> no overlap on '0' center tick
             function (d) { return me.scaleX(0) - (d.value < 0 ? me.scaleWidth(Math.abs(d.value)) : -1); },
@@ -92,7 +89,7 @@ class Barchart {
             function (d) { return me.scaleHeight.bandwidth(); },
             function (d) { return me.scaleFill(d.value); });
 
-        // labels at left
+        // y-axis labels
         // HACK add current time to id to give it a high chance of being unique
         me.barLabels = new Labels(me.container.svg, 'labels' + (new Date()).getTime(), 'axis', me.labels, function () { return me.marginYChart; }, me.scaleHeight.step, false, 10, 'left');
 
@@ -127,7 +124,7 @@ class Barchart {
         me.scalesSetup();
         me.positionAllElements();
 
-        // custom initialization + transition
+        // initialize and transition bars
         me.bars.selection
             .attr('x', me.scaleX(0))
             .attr('y', me.bars.attrs.y)
