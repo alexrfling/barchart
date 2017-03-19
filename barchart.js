@@ -50,13 +50,8 @@ class Barchart {
         me.container = new SVGContainer(me.parentId, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, me.initialHeight);
         addDropShadowFilter(me.container.SVG, 'shadow');
 
-        // margins
-        // NOTE marginXLabel and marginYLabel should be >= 10 to start,
-        // otherwise bar labels get positioned badly for some reason...
-        me.marginXLabel = Math.max(me.defaultMarginXLabel, 10);
-        me.marginYLabel = 10; // approx height of text
-        me.marginXChart = me.container.svgWidth - me.marginXLabel - me.AXIS_OFFSET;
-        me.marginYChart = me.container.svgHeight - me.marginYLabel - me.AXIS_OFFSET;
+        // initial setup for margins
+        me.marginsSetup();
 
         // scales for bar x, y, width, height, and fill
         me.scaleX = d3.scaleLinear()
@@ -151,7 +146,9 @@ class Barchart {
     marginsSetup () {
         var me = this;
 
-        me.marginXLabel = (Math.ceil(me.barLabels.getBox().width) || me.marginXLabel);
+        // NOTE marginXLabel and marginYLabel should be >= 10 to start,
+        // otherwise bar labels get positioned badly for some reason...
+        me.marginXLabel = (me.barLabels ? (Math.ceil(me.barLabels.getBox().width) || me.marginXLabel) : Math.max(me.defaultMarginXLabel, 10));
         me.marginYLabel = 10; // approx height of text
         me.marginXChart = me.container.svgWidth - me.marginXLabel - me.AXIS_OFFSET;
         me.marginYChart = me.container.svgHeight - me.marginYLabel - me.AXIS_OFFSET;
