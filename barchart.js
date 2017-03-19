@@ -31,7 +31,7 @@ class Barchart {
         var me = this;
         options = (options || {});
 
-        me.data = (data ? data.slice() : []);
+        me.data = (data ? me.clean(data) : []);
         me.negColor = (options.negColor || '#dc3912');
         me.posColor = (options.posColor || '#109618');
         me.byName = (options.byName === undefined ? true : options.byName);
@@ -265,6 +265,15 @@ class Barchart {
         return interpolateColors(me.negColor, 'lightgrey', me.posColor, 256);
     }
 
+    clean (data) {
+        return data.map(function (d) {
+            return {
+                key: String(d.key),
+                value: d.value
+            };
+        });
+    }
+
     sortBarsOnClickEasterEgg () {
         var me = this;
 
@@ -364,7 +373,7 @@ class Barchart {
 
     updateData (data) {
         var me = this;
-        me.data = data;
+        me.data = me.clean(data);
 
         // nide tooltip in case it's visible
         me.tooltip.hide();
