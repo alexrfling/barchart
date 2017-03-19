@@ -146,17 +146,6 @@ class Barchart {
             .attr('x', me.bars.attrs.x)
             .attr('width', me.bars.attrs.width)
             .attr('fill', me.bars.attrs.fill);
-
-        // NOTE for testing
-        /*me.container.svg
-            .append('rect')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', 20)
-            .attr('height', 20)
-            .attr('fill', 'green')
-            .on('click', function () { me.resize(me.container.svgHeight + 100); });
-            .on('click', function () { me.updateData.call(me, me.genData()); });*/
     }
 
     marginsSetup () {
@@ -351,31 +340,6 @@ class Barchart {
             .duration(1000)
             .attr('fill', me.bars.attrs.fill);
     }
-
-    // NOTE for testing
-    /*genData () {
-        var me = this;
-        var data = me.data;
-
-        var numNew = Math.floor(10 * Math.random());
-        var numRem = Math.floor(10 * Math.random());
-
-        for (var j = 0; j < numRem; j++) {
-            var index = Math.floor(data.length * Math.random());
-            data = data.slice(0, index).concat(data.slice(index + 1, data.length));
-        }
-
-        for (var j = 0; j < numNew; j++) {
-            var firstLetter = 'qwertyuiopasdfghjklzxcvbnm'[Math.floor(26 * Math.random())];
-
-            data.push({
-                key: firstLetter + Math.floor(10000 * Math.random()),
-                value: 2.5 * Math.random() * me.dataMax - me.dataMax
-            });
-        }
-
-        return data;
-    }*/
 
     updateData (data) {
         var me = this;
