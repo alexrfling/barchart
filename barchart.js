@@ -58,22 +58,21 @@ class Barchart {
 
         // scales for bar attributes (x, y, width, height, fill)
         me.scaleX = d3.scaleLinear()
-            .domain([-me.dataMax, me.dataMax])
-            .range([0, me.marginXChart]);
+            .domain([-me.dataMax, me.dataMax]);
         me.scaleY = d3.scaleBand()
-            .domain(me.labels)
-            .range([0, me.marginYChart]);
+            .domain(me.labels);
         me.scaleWidth = d3.scaleLinear()
-            .domain([0, me.dataMax])
-            .range([0, me.marginXChart / 2]);
+            .domain([0, me.dataMax]);
         me.scaleHeight = d3.scaleBand()
             .domain(me.labels)
-            .range([0, me.marginYChart])
             .paddingInner(0.1)
             .paddingOuter(0.05);
         me.scaleFill = d3.scaleQuantize()
             .domain([-me.dataMax, me.dataMax])
             .range(me.barColors);
+
+        // initalize scale ranges
+        me.scalesSetup();
 
         // x-axis labels (add this to the SVG first so the bars will be on top)
         me.xAxis = d3.axisTop(me.scaleX);
