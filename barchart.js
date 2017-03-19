@@ -217,7 +217,7 @@ class Barchart {
 
         me.barLabels.group
             .selectAll('text')
-            .attr('id', function (d) { return htmlEscape(d); });
+            .attr('id', htmlEscape);
     }
 
     resize (height) {
