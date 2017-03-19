@@ -93,6 +93,11 @@ class Barchart {
         // HACK add current time to id to give it a high chance of being unique
         me.barLabels = new Labels(me.container.svg, 'labels' + (new Date()).getTime(), 'axis', me.labels, function () { return me.marginYChart; }, me.scaleHeight.step, false, 10, 'left');
 
+        // vertical line next to textual lables at left
+        me.yAxisLine = me.container.svg
+            .append('path')
+            .attr('class', 'y-domain');
+
         // tooltip for bars
         me.tooltip = d3.tip()
             .attr('class', 'd3-tip')
@@ -112,11 +117,6 @@ class Barchart {
         // bolded on hover
         me.attachBarEventListeners();
         me.attachBarLabelIds();
-
-        // vertical line next to textual lables at left
-        me.yAxisLine = me.container.svg
-            .append('path')
-            .attr('class', 'y-domain');
 
         // last setup before initial bar transition
         me.marginsSetup();
