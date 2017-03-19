@@ -21,7 +21,7 @@ class Barchart {
     constructor (id, height) {
         var me = this;
         me.parentId = id;
-        me.height = height;
+        me.initialHeight = height;
 
         me.SVG_MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
         me.AXIS_OFFSET = 5;
@@ -40,28 +40,23 @@ class Barchart {
         me.defaultMarginXLabel = options.defaultMarginXLabel || 50;
 
         me.sortData();
+        me.labels = me.data.map(key);
         me.dataMax = me.getDataMax();
         me.barColors = me.getBarColors();
 
         // clear out old DOM elements
         flushContents(me.parentId);
 
-        me.container = new SVGContainer(me.parentId, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, me.height);
+        me.container = new SVGContainer(me.parentId, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, me.initialHeight);
         addDropShadowFilter(me.container.SVG, 'shadow');
-
-        me.container.resize();
-
-        me.labels = me.data.map(key);
-        me.width = me.container.svgWidth;
-        me.height = me.container.svgHeight;
 
         // margins
         // NOTE marginXLabel and marginYLabel should be >= 10 to start,
         // otherwise bar labels get positioned badly for some reason...
         me.marginXLabel = Math.max(me.defaultMarginXLabel, 10);
         me.marginYLabel = 10; // approx height of text
-        me.marginXChart = me.width - me.marginXLabel - me.AXIS_OFFSET;
-        me.marginYChart = me.height - me.marginYLabel - me.AXIS_OFFSET;
+        me.marginXChart = me.container.svgWidth - me.marginXLabel - me.AXIS_OFFSET;
+        me.marginYChart = me.container.svgHeight - me.marginYLabel - me.AXIS_OFFSET;
 
         // scales for bar x, y, width, height, and fill
         me.scaleX = d3.scaleLinear()
@@ -141,9 +136,9 @@ class Barchart {
             .attr('class', 'y-domain');
 
         // last setup before initial bar transition
-        me.marginsSetup(me.width, me.height);
-        me.anchorsSetup(me.width, me.height);
-        me.scalesSetup(me.width, me.height);
+        me.marginsSetup();
+        me.anchorsSetup();
+        me.scalesSetup();
         me.positionAllElements();
 
         // custom initialization + transition
@@ -169,27 +164,27 @@ class Barchart {
             .attr('width', 20)
             .attr('height', 20)
             .attr('fill', 'green')
-            .on('click', function () { me.resize(me.height + 100); });
+            .on('click', function () { me.resize(me.container.svgHeight + 100); });
             .on('click', function () { me.updateData.call(me, me.genData()); });*/
     }
 
-    marginsSetup (width, height) {
+    marginsSetup () {
         var me = this;
 
         me.marginXLabel = (Math.ceil(me.barLabels.getBox().width) || me.marginXLabel);
         me.marginYLabel = 10; // approx height of text
-        me.marginXChart = width - me.marginXLabel - me.AXIS_OFFSET;
-        me.marginYChart = height - me.marginYLabel - me.AXIS_OFFSET;
+        me.marginXChart = me.container.svgWidth - me.marginXLabel - me.AXIS_OFFSET;
+        me.marginYChart = me.container.svgHeight - me.marginYLabel - me.AXIS_OFFSET;
     }
 
-    anchorsSetup (width, height) {
+    anchorsSetup () {
         var me = this;
 
         me.bars.anchor = [me.marginXLabel + me.AXIS_OFFSET, me.marginYLabel + me.AXIS_OFFSET];
         me.barLabels.anchor = [me.marginXLabel, me.marginYLabel + me.AXIS_OFFSET];
     }
 
-    scalesSetup (width, height) {
+    scalesSetup () {
         var me = this;
 
         me.scaleX.range([0, me.marginXChart]);
@@ -206,7 +201,7 @@ class Barchart {
         me.xLabels
             .attr('transform', 'translate(' + (me.marginXLabel + me.AXIS_OFFSET) + ',' + me.marginYLabel + ')')
             .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
-        me.yAxisLine.attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.height);
+        me.yAxisLine.attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
     }
 
     updateVisAllElements () {
@@ -227,13 +222,11 @@ class Barchart {
 
     resize (height) {
         var me = this;
-        var size = me.container.resize(height);
-        me.width = size.svgWidth;
-        me.height = size.svgHeight;
+        me.container.resize(height);
 
-        me.marginsSetup(me.width, me.height);
-        me.anchorsSetup(me.width, me.height);
-        me.scalesSetup(me.width, me.height);
+        me.marginsSetup();
+        me.anchorsSetup();
+        me.scalesSetup();
         me.positionAllElements();
         me.updateVisAllElements();
 
