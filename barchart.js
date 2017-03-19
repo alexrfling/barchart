@@ -201,7 +201,8 @@ class Barchart {
         me.xLabels
             .attr('transform', 'translate(' + (me.marginXLabel + me.AXIS_OFFSET) + ',' + me.marginYLabel + ')')
             .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
-        me.yAxisLine.attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
+        me.yAxisLine
+            .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
     }
 
     updateVisAllElements () {
