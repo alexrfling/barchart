@@ -249,7 +249,7 @@ class Barchart {
 
         me.bars.updateVis(['x', 'y', 'width', 'height', 'fill']);
         me.formatXLabelsTicks();
-        me.barLabels.updateVisNT();
+        me.barLabels.updateVis();
     }
 
     attachBarEventListeners () {
