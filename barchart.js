@@ -48,7 +48,14 @@ class Barchart {
         flushContents(me.parentId);
 
         // holds all HTML and SVG elements
-        me.container = new SVGContainer(me.parentId, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, me.initialHeight);
+        me.container = new SVGContainer(
+            me.parentId,
+            'barchart',
+            'barchartSVG',
+            function () { me.resize.call(me); },
+            me.SVG_MARGINS,
+            me.initialHeight
+        );
 
         // gives bars a drop shadow effect on hover
         addDropShadowFilter(me.container.SVG, 'shadow');
@@ -76,18 +83,33 @@ class Barchart {
             .attr('class', 'axis x-axis');
 
         // bars and chart
-        me.bars = new Cells(me.container.svg, 'bars', me.data, key,
+        me.bars = new Cells(
+            me.container.svg,
+            'bars',
+            me.data,
+            key,
             // -1 for pos bars -> no overlap on '0' center tick
             function (d) { return me.scaleX(0) - (d.value < 0 ? me.scaleWidth(Math.abs(d.value)) : -1); },
             // add half of (step - bandwidth) to account for paddingInner/Outer
             function (d) { return me.scaleY(d.key) + (me.scaleHeight.step() - me.scaleHeight.bandwidth()) / 2; },
             function (d) { return me.scaleWidth(Math.abs(d.value)); },
             function (d) { return me.scaleHeight.bandwidth(); },
-            function (d) { return me.scaleFill(d.value); });
+            function (d) { return me.scaleFill(d.value); }
+        );
 
         // y-axis labels
         // HACK add current time to id to give it a high chance of being unique
-        me.barLabels = new Labels(me.container.svg, 'labels' + (new Date()).getTime(), 'axis', me.labels, function () { return me.marginYChart; }, me.scaleHeight.step, false, 10, 'left');
+        me.barLabels = new Labels(
+            me.container.svg,
+            'labels' + (new Date()).getTime(),
+            'axis',
+            me.labels,
+            function () { return me.marginYChart; },
+            me.scaleHeight.step,
+            false,
+            10,
+            'left'
+        );
 
         // vertical line next to textual lables at left
         me.yAxisLine = me.container.svg
