@@ -29,15 +29,15 @@ class Barchart {
 
     initializeVis (data, options) {
         var me = this;
-        options = options || {};
+        options = (options || {});
 
         me.data = (data ? data.slice() : []);
-        me.negColor = options.negColor || '#dc3912';
-        me.posColor = options.posColor || '#109618';
+        me.negColor = (options.negColor || '#dc3912');
+        me.posColor = (options.posColor || '#109618');
         me.byName = (options.byName === undefined ? true : options.byName);
         me.ascending = (options.byName === undefined ? true : options.ascending);
-        me.defaultDataMax = options.defaultDataMax || 0.75;
-        me.defaultMarginXLabel = options.defaultMarginXLabel || 50;
+        me.defaultDataMax = (options.defaultDataMax || 0.75);
+        me.defaultMarginXLabel = (options.defaultMarginXLabel || 50);
 
         me.sortData();
         me.labels = me.data.map(key);
