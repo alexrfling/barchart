@@ -99,10 +99,11 @@ class Barchart {
             .direction(function (d) { return (d.value < 0 ? 'e' : 'w'); })
             .offset(function (d) { return (d.value < 0 ? [0, 10] : [0, -10]); })
             .html(function (d) {
-                return '<table>' +
+                return
+                    '<table>' +
                         '<tr><td>Variable</td><td>' + d.key + '</td></tr>' +
                         '<tr><td>Coefficient</td><td>' + round(d.value, 7) + '</td></tr>' +
-                       '</table>';
+                    '</table>';
             });
 
         // invoke tooltip
