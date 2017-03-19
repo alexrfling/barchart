@@ -170,6 +170,34 @@ class Barchart {
         me.scaleHeight.range([0, me.marginYChart]);
     }
 
+    scaleDomainsHorizontalSetup () {
+        var me = this;
+
+        me.scaleX.domain([-me.dataMax, me.dataMax]);
+        me.scaleWidth.domain([0, me.dataMax]);
+    }
+
+    scaleDomainsVerticalSetup () {
+        var me = this;
+
+        me.scaleY.domain(me.labels);
+        me.scaleHeight.domain(me.labels);
+    }
+
+    scaleDomainFillSetup () {
+        var me = this;
+
+        me.scaleFill.domain([-me.dataMax, me.dataMax]);
+    }
+
+    scaleDomainsSetup () {
+        var me = this;
+
+        me.scaleDomainsHorizontalSetup();
+        me.scaleDomainsVerticalSetup();
+        me.scaleDomainFillSetup();
+    }
+
     positionAllElements () {
         var me = this;
 
@@ -278,9 +306,10 @@ class Barchart {
         me.sortData();
         me.labels = me.data.map(key);
 
-        // scale/visual updates
-        me.scaleY.domain(me.labels);
-        me.scaleHeight.domain(me.labels);
+        // scale updates
+        me.scaleDomainsVerticalSetup();
+
+        // visual updates
         me.bars.selection
             .transition()
             .duration(1000)
@@ -306,9 +335,10 @@ class Barchart {
         me.sortData();
         me.labels = me.data.map(key);
 
-        // scale/visual updates
-        me.scaleY.domain(me.labels);
-        me.scaleHeight.domain(me.labels);
+        // scale updates
+        me.scaleDomainsVerticalSetup();
+
+        // visual updates
         me.bars.selection
             .transition()
             .duration(1000)
@@ -353,11 +383,7 @@ class Barchart {
         me.dataMax = me.getDataMax();
 
         // scale updates
-        me.scaleX.domain([-me.dataMax, me.dataMax]);
-        me.scaleY.domain(me.labels);
-        me.scaleWidth.domain([0, me.dataMax]);
-        me.scaleHeight.domain(me.labels);
-        me.scaleFill.domain([-me.dataMax, me.dataMax]);
+        me.scaleDomainsSetup();
 
         // add temporary classes to separate old bars from bars to be kept
         me.bars.group
