@@ -47,7 +47,10 @@ class Barchart {
         // clear out DOM elements inside parent
         flushContents(me.parentId);
 
+        // holds all HTML and SVG elements
         me.container = new SVGContainer(me.parentId, 'barchart', 'barchartSVG', function () { me.resize.call(me); }, me.SVG_MARGINS, me.initialHeight);
+
+        // gives bars a drop shadow effect on hover
         addDropShadowFilter(me.container.SVG, 'shadow');
 
         // initial setup for margins
@@ -80,6 +83,7 @@ class Barchart {
             .attr('transform', 'translate(' + me.marginXLabel + ',' + me.marginYLabel + ')')
             .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
 
+        // bars and chart
         me.bars = new Cells(me.container.svg, 'bars', me.data, key,
             // -1 for pos bars -> no overlap on '0' center tick
             function (d) { return me.scaleX(0) - (d.value < 0 ? me.scaleWidth(Math.abs(d.value)) : -1); },
@@ -412,7 +416,7 @@ class Barchart {
         me.attachBarEventListeners();
         me.attachBarLabelIds();
 
-        // update x axis
+        // update x-axis
         me.xLabels
             .transition()
             .duration(1000)
