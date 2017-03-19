@@ -116,19 +116,10 @@ class Barchart {
         // invoke tooltip
         me.container.svg.call(me.tooltip);
 
-        // add ids to labels so they can be bolded on hover
+        // bind event listeners to bars and add ids to labels so they can be
+        // bolded on hover
+        me.attachBarEventListeners();
         me.attachBarLabelIds();
-
-        // bind event listeners
-        me.bars.addListener('mouseover', function (d) {
-            me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', true);
-            me.tooltip.show(d);
-        });
-        me.bars.addListener('mouseout', function (d) {
-            me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', false);
-            me.tooltip.hide();
-        });
-        me.bars.addListener('click', function () { me.sortBarsOnClickEasterEgg.call(me); });
 
         // vertical line next to textual lables at left
         me.yAxisLine = me.container.svg
@@ -211,6 +202,21 @@ class Barchart {
         me.bars.updateVis(['x', 'y', 'width', 'height', 'fill']);
         me.xLabels.call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
         me.barLabels.updateVisNT();
+    }
+
+    attachBarEventListeners () {
+        var me = this;
+
+        me.bars.selection
+            .on('mouseover', function (d) {
+                me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', true);
+                me.tooltip.show(d);
+            })
+            .on('mouseout', function (d) {
+                me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', false);
+                me.tooltip.hide();
+            })
+            .on('click', function () { me.sortBarsOnClickEasterEgg.call(me); });
     }
 
     attachBarLabelIds () {
@@ -437,23 +443,15 @@ class Barchart {
             .attr('height', me.bars.attrs.height)
             .attr('fill', me.bars.attrs.fill);
 
-        // update bar selection and reattach listeners
+        // update bar selection
         me.bars.selection = me.bars.group
             .selectAll('rect.keep')
-            .classed('keep', false)
-            .on('mouseover', function (d) {
-                me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', true);
-                me.tooltip.show(d);
-            })
-            .on('mouseout', function (d) {
-                me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', false);
-                me.tooltip.hide();
-            })
-            .on('click', function () { me.sortBarsOnClickEasterEgg.call(me); });
+            .classed('keep', false);
 
-        // update labels and reattach ids
+        // update labels and reattach event listeners and ids
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(1000);
+        me.attachBarEventListeners();
         me.attachBarLabelIds();
 
         // update x axis
