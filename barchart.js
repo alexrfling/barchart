@@ -63,12 +63,11 @@ class Barchart {
         me.scaleHeight = d3.scaleBand()
             .paddingInner(0.1)
             .paddingOuter(0.05);
-        me.scaleFill = d3.scaleQuantize()
-            .range(me.barColors);
+        me.scaleFill = d3.scaleQuantize();
 
-        // initalize scale ranges
+        // initalize scales
         me.scaleDomainsSetup();
-        me.scalesSetup();
+        me.scaleRangesSetup();
 
         // x-axis labels (add this to the SVG first so the bars will be on top)
         me.xAxis = d3.axisTop(me.scaleX);
@@ -120,7 +119,7 @@ class Barchart {
         // last setup before initial bar transition
         me.marginsSetup();
         me.anchorsSetup();
-        me.scalesSetup();
+        me.scaleRangesPositionalSetup();
         me.positionAllElements();
 
         // initialize and transition bars
@@ -157,15 +156,6 @@ class Barchart {
         me.barLabels.anchor = [me.marginXLabel, me.marginYLabel + me.AXIS_OFFSET];
     }
 
-    scalesSetup () {
-        var me = this;
-
-        me.scaleX.range([0, me.marginXChart]);
-        me.scaleY.range([0, me.marginYChart]);
-        me.scaleWidth.range([0, me.marginXChart / 2]);
-        me.scaleHeight.range([0, me.marginYChart]);
-    }
-
     scaleDomainsHorizontalSetup () {
         var me = this;
 
@@ -192,6 +182,28 @@ class Barchart {
         me.scaleDomainsHorizontalSetup();
         me.scaleDomainsVerticalSetup();
         me.scaleDomainFillSetup();
+    }
+
+    scaleRangesPositionalSetup () {
+        var me = this;
+
+        me.scaleX.range([0, me.marginXChart]);
+        me.scaleY.range([0, me.marginYChart]);
+        me.scaleWidth.range([0, me.marginXChart / 2]);
+        me.scaleHeight.range([0, me.marginYChart]);
+    }
+
+    scaleRangeFillSetup () {
+        var me = this;
+
+        me.scaleFill.range(me.barColors);
+    }
+
+    scaleRangesSetup () {
+        var me = this;
+
+        me.scaleRangesPositionalSetup();
+        me.scaleRangeFillSetup();
     }
 
     positionAllElements () {
@@ -243,7 +255,7 @@ class Barchart {
 
         me.marginsSetup();
         me.anchorsSetup();
-        me.scalesSetup();
+        me.scaleRangesPositionalSetup();
         me.positionAllElements();
         me.updateVisAllElements();
 
@@ -355,7 +367,7 @@ class Barchart {
 
         // update colors array and scale
         me.barColors = me.getBarColors();
-        me.scaleFill.range(me.barColors);
+        me.scaleRangeFillSetup();
 
         // visual update
         me.bars.selection
