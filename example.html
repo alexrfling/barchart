@@ -6,7 +6,6 @@
 	<script src='d3-helpers/addDropShadowFilter.js'></script>
 	<script src='d3-helpers/graphicalElement.js'></script>
 	<script src='d3-helpers/cells.js'></script>
-	<script src='d3-helpers/flushContents.js'></script>
 	<script src='d3-helpers/htmlEscape.js'></script>
 	<script src='d3-helpers/identity.js'></script>
 	<script src='d3-helpers/interpolateColors.js'></script>
@@ -15,6 +14,7 @@
 	<script src='d3-helpers/round.js'></script>
 	<script src='d3-helpers/sample.js'></script>
 	<script src='d3-helpers/svgContainer.js'></script>
+	<script src='d3-helpers/widget.js'></script>
 	<script src='barchart.js'></script>
 	<script src='example-data.js'></script>
 	<link rel='stylesheet' type='text/css' href='d3-helpers/d3-tip/examples/example-styles.css'>
@@ -26,10 +26,13 @@
 	<div id='parent3'></div>
 	<script>
 		var TESTING = true;
-		var barchart1 = new Barchart('parent1', 600);
+		var barchart1 = new Barchart('parent1');
+		var options1 = {
+			height: 600
+		};
 
 		// default: red/green, A to Z
-		barchart1.initializeVis(data1);
+		barchart1.initializeVis(data1, options1);
 
 		if (TESTING) {
 			function genData (barchart) {
@@ -74,8 +77,9 @@
 		}
 	</script>
 	<script>
-		var barchart2 = new Barchart('parent2', 600);
+		var barchart2 = new Barchart('parent2');
 		var options2 = {
+			height: 600,
 			negColor: '#e67300',
 			posColor: '#3366cc',
 			byName: false,
@@ -86,8 +90,9 @@
 		barchart2.initializeVis(data2, options2);
 	</script>
 	<script>
-		var barchart3 = new Barchart('parent3', 600);
+		var barchart3 = new Barchart('parent3');
 		var options3 = {
+			height: 600,
 			negColor: '#ff9900',
 			posColor: '#990099'
 		};

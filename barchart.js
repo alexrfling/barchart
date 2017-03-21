@@ -16,15 +16,21 @@ marginYChart |            |                                                    |
              |            |                                                    |
              +------------+----------------------------------------------------+
 */
-class Barchart {
+class Barchart extends Widget {
 
-    constructor (id, height) {
-        var me = this;
-        me.parentId = id;
-        me.initialHeight = height;
-
-        me.SVG_MARGINS = { top: 10, bottom: 10, left: 10, right: 10 };
-        me.AXIS_OFFSET = 5;
+    constructor (id) {
+        super(id, {
+            SVG_MARGINS: {
+                top: 10,
+                bottom: 10,
+                left: 10,
+                right: 10
+            },
+            ANIM_DURATION: 1000,
+            AXIS_OFFSET: 5,
+            DEFAULT_HEIGHT: 400,
+            FONT_SIZE: 10
+        });
     }
 
     initializeVis (data, options) {
@@ -45,16 +51,16 @@ class Barchart {
         me.barColors = me.getBarColors();
 
         // clear out DOM elements inside parent
-        flushContents(me.parentId);
+        me.destroy();
 
         // holds all HTML and SVG elements
         me.container = new SVGContainer(
-            me.parentId,
+            me.id,
             'barchart',
             'barchartSVG',
             function () { me.resize.call(me); },
-            me.SVG_MARGINS,
-            me.initialHeight
+            me.options.SVG_MARGINS,
+            (options.height || me.options.DEFAULT_HEIGHT)
         );
 
         // gives bars a drop shadow effect on hover
@@ -105,7 +111,7 @@ class Barchart {
             function () { return me.marginYChart; },
             me.scaleHeight.step,
             false,
-            10,
+            me.options.FONT_SIZE,
             'left'
         );
 
@@ -149,7 +155,7 @@ class Barchart {
             .attr('fill', 'white'); // NOTE 'none' also looks pretty good
         me.bars.selection
             .transition()
-            .duration(1000)
+            .duration(me.options.ANIM_DURATION)
             .delay(function (d, i) { return i * 25; })
             .attr('x', me.bars.attrs.x)
             .attr('width', me.bars.attrs.width)
@@ -162,16 +168,16 @@ class Barchart {
         // NOTE marginXLabel and marginYLabel should be >= 10 to start,
         // otherwise bar labels get positioned badly for some reason...
         me.marginXLabel = (me.barLabels ? (Math.ceil(me.barLabels.getBox().width) || me.marginXLabel) : Math.max(me.defaultMarginXLabel, 10));
-        me.marginYLabel = 10; // approx height of text
-        me.marginXChart = me.container.svgWidth - me.marginXLabel - me.AXIS_OFFSET;
-        me.marginYChart = me.container.svgHeight - me.marginYLabel - me.AXIS_OFFSET;
+        me.marginYLabel = me.options.FONT_SIZE;
+        me.marginXChart = me.container.svgWidth - me.marginXLabel - me.options.AXIS_OFFSET;
+        me.marginYChart = me.container.svgHeight - me.marginYLabel - me.options.AXIS_OFFSET;
     }
 
     anchorsSetup () {
         var me = this;
 
-        me.bars.anchor = [me.marginXLabel + me.AXIS_OFFSET, me.marginYLabel + me.AXIS_OFFSET];
-        me.barLabels.anchor = [me.marginXLabel, me.marginYLabel + me.AXIS_OFFSET];
+        me.bars.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel + me.options.AXIS_OFFSET];
+        me.barLabels.anchor = [me.marginXLabel, me.marginYLabel + me.options.AXIS_OFFSET];
     }
 
     scaleDomainsHorizontalSetup () {
@@ -228,7 +234,7 @@ class Barchart {
         var me = this;
 
         me.xLabels
-            .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
+            .call(me.xAxis.tickSize(-me.marginYChart - me.options.AXIS_OFFSET, 0, 0));
     }
 
     positionAllElements () {
@@ -237,7 +243,7 @@ class Barchart {
         me.bars.position();
         me.barLabels.position();
         me.xLabels
-            .attr('transform', 'translate(' + (me.marginXLabel + me.AXIS_OFFSET) + ',' + me.marginYLabel + ')');
+            .attr('transform', 'translate(' + (me.marginXLabel + me.options.AXIS_OFFSET) + ',' + me.marginYLabel + ')');
         me.formatXLabelsTicks();
         me.yAxisLine
             .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
@@ -345,12 +351,12 @@ class Barchart {
         // visual updates
         me.bars.selection
             .transition()
-            .duration(1000)
-            // TODO find a way to sync bars with labels
+            .duration(me.options.ANIM_DURATION)
+            // TODO find a way to sync delayed bars with labels
             //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateNames(me.labels);
-        me.barLabels.updateVis(1000);
+        me.barLabels.updateVis(me.options.ANIM_DURATION);
 
         // reattach ids in case new labels appeared
         me.attachBarLabelIds();
@@ -374,12 +380,12 @@ class Barchart {
         // visual updates
         me.bars.selection
             .transition()
-            .duration(1000)
-            // TODO find a way to sync bars with labels
+            .duration(me.options.ANIM_DURATION)
+            // TODO find a way to sync delayed bars with labels
             //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateNames(me.labels);
-        me.barLabels.updateVis(1000);
+        me.barLabels.updateVis(me.options.ANIM_DURATION);
 
         // reattach ids in case new labels appeared
         me.attachBarLabelIds();
@@ -397,7 +403,7 @@ class Barchart {
         // visual update
         me.bars.selection
             .transition()
-            .duration(1000)
+            .duration(me.options.ANIM_DURATION)
             .attr('fill', me.bars.attrs.fill);
     }
 
@@ -446,7 +452,7 @@ class Barchart {
         me.bars.group
             .selectAll('rect.remove')
             .transition()
-            .duration(1000)
+            .duration(me.options.ANIM_DURATION)
             .attr('x', me.scaleX(0))
             .attr('y', me.marginYChart)
             .attr('width', 0)
@@ -456,7 +462,7 @@ class Barchart {
         me.bars.group
             .selectAll('rect.keep')
             .transition()
-            .duration(1000)
+            .duration(me.options.ANIM_DURATION)
             .attr('x', me.bars.attrs.x)
             .attr('y', me.bars.attrs.y)
             .attr('width', me.bars.attrs.width)
@@ -470,14 +476,14 @@ class Barchart {
 
         // update labels and reattach event listeners and ids
         me.barLabels.updateNames(me.labels);
-        me.barLabels.updateVis(1000);
+        me.barLabels.updateVis(me.options.ANIM_DURATION);
         me.attachBarEventListeners();
         me.attachBarLabelIds();
 
         // update x-axis
         me.xLabels
             .transition()
-            .duration(1000)
+            .duration(me.options.ANIM_DURATION)
             .call(me.xAxis);
     }
 }
