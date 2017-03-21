@@ -98,10 +98,8 @@ class Barchart {
         );
 
         // y-axis labels
-        // HACK add current time to id to give it a high chance of being unique
         me.barLabels = new Labels(
             me.container.svg,
-            'labels' + (new Date()).getTime(),
             'axis',
             me.labels,
             function () { return me.marginYChart; },
@@ -229,7 +227,8 @@ class Barchart {
     formatXLabelsTicks () {
         var me = this;
 
-        me.xLabels.call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
+        me.xLabels
+            .call(me.xAxis.tickSize(-me.marginYChart - me.AXIS_OFFSET, 0, 0));
     }
 
     positionAllElements () {
