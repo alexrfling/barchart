@@ -1,5 +1,4 @@
 .barchart {
-    /* border: solid 1px; */
     margin: 0px; /* set margin/border/padding to 0 so that */
     border: 0px; /* the size of the entire widget is just */
     padding: 0px; /* the size of the SVG */
@@ -36,21 +35,11 @@
     shape-rendering: crispEdges;
 }
 
-.axis .tick, .y-domain {
+.axis .tick line, .y-domain {
     stroke: lightgrey;
     stroke-width: 2px;
 }
 
-.axis line {
-    stroke: lightgrey;
-}
-
-.axis text {
-    stroke: gray;
-    stroke-width: 0.5px;
-}
-
-/* should be equivalent to .axis > .domain */
-.axis > path {
+.axis .domain {
     display: none;
 }
