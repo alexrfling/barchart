@@ -63,9 +63,6 @@ class Barchart extends Widget {
             (options.height || me.options.DEFAULT_HEIGHT)
         );
 
-        // gives bars a drop shadow effect on hover
-        addDropShadowFilter(me.container.SVG, 'shadow');
-
         // initial setup for margins
         me.marginsSetup();
 
@@ -262,14 +259,29 @@ class Barchart extends Widget {
 
         me.bars.selection
             .on('mouseover', function (d) {
-                me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', true);
+                d3.select(this)
+                    .style('opacity', 0.5);
+                me.barLabels.group
+                    .select('#' + htmlEscape(d.key))
+                    .classed('bold', true);
                 me.tooltip.show(d);
             })
             .on('mouseout', function (d) {
-                me.barLabels.group.select('#' + htmlEscape(d.key)).classed('bold', false);
+                d3.select(this)
+                    .style('opacity', 1);
+                me.barLabels.group
+                    .select('#' + htmlEscape(d.key))
+                    .classed('bold', false);
                 me.tooltip.hide();
             })
-            .on('click', function () { me.sortBarsOnClickEasterEgg.call(me); });
+            .on('click', function (d) {
+                d3.select(this)
+                    .style('opacity', 1);
+                me.barLabels.group
+                    .select('#' + htmlEscape(d.key))
+                    .classed('bold', false);
+                me.sortBarsOnClickEasterEgg.call(me);
+            });
     }
 
     attachBarLabelIds () {

@@ -29,10 +29,6 @@
     font-weight: normal;
 }
 
-.barchart rect:hover { /* bars */
-    filter: url('#shadow');
-}
-
 .bold {
     font-weight: bold;
 }
