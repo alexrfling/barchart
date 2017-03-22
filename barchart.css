@@ -1,6 +1,5 @@
 .barchart {
     /* border: solid 1px; */
-    font-size: 10px;
     margin: 0px; /* set margin/border/padding to 0 so that */
     border: 0px; /* the size of the entire widget is just */
     padding: 0px; /* the size of the SVG */
