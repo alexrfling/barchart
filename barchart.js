@@ -56,8 +56,8 @@ class Barchart extends Widget {
         // holds all HTML and SVG elements
         me.container = new SVGContainer(
             me.id,
-            'barchart',
-            'barchartSVG',
+            'd3-helpers-widget-div',
+            'd3-helpers-widget-svg',
             function () { me.resize.call(me); },
             me.options.SVG_MARGINS,
             (options.height || me.options.DEFAULT_HEIGHT)
