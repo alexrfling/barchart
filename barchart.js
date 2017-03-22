@@ -83,7 +83,7 @@ class Barchart extends Widget {
         me.xAxis = d3.axisTop(me.scaleX);
         me.xLabels = me.container.svg
             .append('g')
-            .attr('class', 'axis x-axis')
+            .attr('class', 'axis')
             .style('font-size', me.options.FONT_SIZE);
 
         // bars and chart
