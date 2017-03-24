@@ -46,7 +46,7 @@ class Barchart extends Widget {
         me.defaultMarginXLabel = (options.defaultMarginXLabel || 50);
 
         me.sortData();
-        me.labels = me.data.map(key);
+        me.labels = me.data.map(me.key);
         me.dataMax = me.getDataMax();
         me.barColors = me.getBarColors();
 
@@ -91,7 +91,7 @@ class Barchart extends Widget {
             me.container.svg,
             'bars',
             me.data,
-            key,
+            me.key,
             // -1 for pos bars -> no overlap on '0' center tick
             function (d) { return me.scaleX(0) - (d.value < 0 ? me.scaleWidth(Math.abs(d.value)) : -1); },
             // add half of (step - bandwidth) to account for paddingInner/Outer
@@ -116,7 +116,7 @@ class Barchart extends Widget {
         // vertical line next to textual lables at left
         me.yAxisLine = me.container.svg
             .append('path')
-            .attr('class', 'y-domain');
+            .attr('class', 'axis-tick-line');
 
         // tooltip for bars
         me.tooltip = d3.tip()
@@ -126,7 +126,7 @@ class Barchart extends Widget {
             .html(function (d) {
                 return '<table>' +
                     '<tr><td>Variable</td><td>' + d.key + '</td></tr>' +
-                    '<tr><td>Coefficient</td><td>' + round(d.value, 7) + '</td></tr>' +
+                    '<tr><td>Coefficient</td><td>' + me.round(d.value, 7) + '</td></tr>' +
                     '</table>';
             });
 
@@ -263,7 +263,7 @@ class Barchart extends Widget {
                 d3.select(this)
                     .style('opacity', 0.5);
                 me.barLabels.group
-                    .select('#' + htmlEscape(d.key))
+                    .select('#' + me.htmlEscape(d.key))
                     .classed('bold', true);
                 me.tooltip.show(d);
             })
@@ -271,7 +271,7 @@ class Barchart extends Widget {
                 d3.select(this)
                     .style('opacity', 1);
                 me.barLabels.group
-                    .select('#' + htmlEscape(d.key))
+                    .select('#' + me.htmlEscape(d.key))
                     .classed('bold', false);
                 me.tooltip.hide();
             })
@@ -279,7 +279,7 @@ class Barchart extends Widget {
                 d3.select(this)
                     .style('opacity', 1);
                 me.barLabels.group
-                    .select('#' + htmlEscape(d.key))
+                    .select('#' + me.htmlEscape(d.key))
                     .classed('bold', false);
                 me.sortBarsOnClickEasterEgg.call(me);
             });
@@ -290,7 +290,7 @@ class Barchart extends Widget {
 
         me.barLabels.group
             .selectAll('text')
-            .attr('id', htmlEscape);
+            .attr('id', me.htmlEscape);
     }
 
     resize (height) {
@@ -334,7 +334,7 @@ class Barchart extends Widget {
     getBarColors () {
         var me = this;
 
-        return interpolateColors(me.negColor, 'lightgrey', me.posColor, 256);
+        return me.interpolateColors(me.negColor, 'lightgrey', me.posColor, 256);
     }
 
     clean (data) {
@@ -356,7 +356,7 @@ class Barchart extends Widget {
         me.byName = !me.byName;
         me.ascending = (me.byName ? !me.ascending : me.ascending);
         me.sortData();
-        me.labels = me.data.map(key);
+        me.labels = me.data.map(me.key);
 
         // scale updates
         me.scaleDomainsVerticalSetup();
@@ -385,7 +385,7 @@ class Barchart extends Widget {
 
         // update ordering of data and labels
         me.sortData();
-        me.labels = me.data.map(key);
+        me.labels = me.data.map(me.key);
 
         // scale updates
         me.scaleDomainsVerticalSetup();
@@ -431,7 +431,7 @@ class Barchart extends Widget {
         me.sortData();
 
         // update ordering of labels and max abs value
-        me.labels = me.data.map(key);
+        me.labels = me.data.map(me.key);
         me.dataMax = me.getDataMax();
 
         // scale updates
@@ -440,7 +440,7 @@ class Barchart extends Widget {
         // add temporary classes to separate old bars from bars to be kept
         me.bars.group
             .selectAll('rect')
-            .data(me.data, key)
+            .data(me.data, me.key)
             .exit()
             .attr('class', 'remove');
         me.bars.group
@@ -451,7 +451,7 @@ class Barchart extends Widget {
         // add new bars, invisible, with same class as bars to be kept
         me.bars.group
             .selectAll('rect')
-            .data(me.data, key)
+            .data(me.data, me.key)
             .enter()
             .append('rect')
             .attr('class', 'keep')
