@@ -97,7 +97,7 @@ class Barchart extends Widget {
             // add half of (step - bandwidth) to account for paddingInner/Outer
             function (d) { return me.scaleY(d.key) + (me.scaleHeight.step() - me.scaleHeight.bandwidth()) / 2; },
             function (d) { return me.scaleWidth(Math.abs(d.value)); },
-            function (d) { return me.scaleHeight.bandwidth(); },
+            function () { return me.scaleHeight.bandwidth(); },
             function (d) { return me.scaleFill(d.value); }
         );
 
@@ -144,20 +144,24 @@ class Barchart extends Widget {
         me.scaleRangesPositionalSetup();
         me.positionAllElements();
 
-        // initialize and transition bars
-        me.bars.selection
-            .attr('x', me.scaleX(0))
-            .attr('y', me.bars.attrs.y)
-            .attr('height', me.bars.attrs.height)
-            .attr('width', 0)
-            .attr('fill', 'white'); // NOTE 'none' also looks pretty good
-        me.bars.selection
-            .transition()
-            .duration(me.options.ANIM_DURATION)
-            .delay(function (d, i) { return i * 25; })
-            .attr('x', me.bars.attrs.x)
-            .attr('width', me.bars.attrs.width)
-            .attr('fill', me.bars.attrs.fill);
+        // initialize bars
+        if (options.noTransition) {
+            me.bars.updateVis(['x', 'y', 'width', 'height', 'fill']);
+        } else {
+            me.bars.selection
+                .attr('x', me.scaleX(0))
+                .attr('y', me.bars.attrs.y)
+                .attr('width', 0)
+                .attr('height', me.bars.attrs.height)
+                .attr('fill', 'white'); // NOTE 'none' also looks pretty good
+            me.bars.selection
+                .transition()
+                .duration(me.options.ANIM_DURATION)
+                .delay(function (d, i) { return i * 25; })
+                .attr('x', me.bars.attrs.x)
+                .attr('width', me.bars.attrs.width)
+                .attr('fill', me.bars.attrs.fill);
+        }
     }
 
     marginsSetup () {
