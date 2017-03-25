@@ -33,7 +33,7 @@ class Barchart extends Widget {
         });
     }
 
-    initializeVis (data, options) {
+    initialize (data, options) {
         var me = this;
         options = (options || {});
 
@@ -41,7 +41,7 @@ class Barchart extends Widget {
         me.negColor = (options.negColor || '#dc3912');
         me.posColor = (options.posColor || '#109618');
         me.byName = (options.byName === undefined ? true : options.byName);
-        me.ascending = (options.byName === undefined ? true : options.ascending);
+        me.ascending = (options.ascending === undefined ? true : options.ascending);
         me.defaultDataMax = (options.defaultDataMax || 0.75);
         me.defaultMarginXLabel = (options.defaultMarginXLabel || 50);
 
@@ -377,10 +377,10 @@ class Barchart extends Widget {
 
     updateSort (byName, ascending) {
         var me = this;
-        me.byName = (byName === undefined ? true : byName);
-        me.ascending = (byName === undefined ? true : ascending);
+        me.byName = (byName === null ? me.byName : byName);
+        me.ascending = (ascending === null ? me.ascending : ascending);
 
-        // hide the tooltip (visible on the bar that was clicked)
+        // hide tooltip in case it's visible
         me.tooltip.hide();
 
         // update ordering of data and labels
@@ -406,8 +406,8 @@ class Barchart extends Widget {
 
     updateColors (negColor, posColor) {
         var me = this;
-        me.negColor = negColor;
-        me.posColor = posColor;
+        me.negColor = (negColor || me.negColor);
+        me.posColor = (posColor || me.posColor);
 
         // update colors array and scale
         me.barColors = me.getBarColors();
@@ -424,7 +424,7 @@ class Barchart extends Widget {
         var me = this;
         me.data = me.clean(data);
 
-        // nide tooltip in case it's visible
+        // hide tooltip in case it's visible
         me.tooltip.hide();
 
         // sort data as it previously was sorted

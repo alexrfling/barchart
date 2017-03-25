@@ -14,63 +14,47 @@
 	<link rel='stylesheet' type='text/css' href='d3-helpers/widget.css'>
 </head>
 <body>
+	<button onclick='chart1.updateData(genData(chart1));'>Update Data</button>
+	<button onclick='chart1.resize(chart1.container.divHeight - 50);'>Decrease Height</button>
+	<button onclick='chart1.resize(chart1.container.divHeight + 50);'>Increase Height</button>
+	<select onchange='chart1.updateColors(this.value, null);'>
+		<option value='#dc3912' selected>Red</option>
+		<option value='#e67300'>Orange</option>
+		<option value='#ff9900'>Yellow</option>
+		<option value='#109618'>Green</option>
+		<option value='#3366cc'>Blue</option>
+		<option value='#990099'>Purple</option>
+	</select>
+	<select onchange='chart1.updateColors(null, this.value);'>
+		<option value='#dc3912'>Red</option>
+		<option value='#e67300'>Orange</option>
+		<option value='#ff9900'>Yellow</option>
+		<option value='#109618' selected>Green</option>
+		<option value='#3366cc'>Blue</option>
+		<option value='#990099'>Purple</option>
+	</select>
+	<select onchange='chart1.updateSort(Boolean(Number(this.value)), null);'>
+		<option value='1'>By name</option>
+		<option value='0'>By value</option>
+	</select>
+	<select onchange='chart1.updateSort(null, Boolean(Number(this.value)));'>
+		<option value='1'>Ascending</option>
+		<option value='0'>Descending</option>
+	</select>
 	<div id='parent1'></div>
 	<div id='parent2'></div>
 	<div id='parent3'></div>
 	<script>
-		var TESTING = true;
-		var barchart1 = new Barchart('parent1');
+		var chart1 = new Barchart('parent1');
 		var options1 = {
 			height: 600
 		};
 
 		// default: red/green, A to Z
-		barchart1.initializeVis(data1, options1);
-
-		if (TESTING) {
-			function genData (barchart) {
-		        var data = barchart.data;
-
-		        var numNew = Math.floor(10 * Math.random());
-		        var numRem = Math.floor(10 * Math.random());
-
-		        for (var j = 0; j < numRem; j++) {
-		            var index = Math.floor(data.length * Math.random());
-		            data = data.slice(0, index).concat(data.slice(index + 1, data.length));
-		        }
-
-		        for (var j = 0; j < numNew; j++) {
-		            var firstLetter = 'qwertyuiopasdfghjklzxcvbnm'[Math.floor(26 * Math.random())];
-
-		            data.push({
-		                key: firstLetter + Math.floor(10000 * Math.random()),
-		                value: 2.5 * Math.random() * barchart.dataMax - barchart.dataMax
-		            });
-		        }
-
-		        return data;
-		    }
-
-	        barchart1.container.svg
-	            .append('rect')
-	            .attr('x', 0)
-	            .attr('y', 0)
-	            .attr('width', 20)
-	            .attr('height', 15)
-	            .attr('fill', 'green')
-	            .on('click', function () { barchart1.updateData(genData(barchart1)); });
-			barchart1.container.svg
-				.append('rect')
-				.attr('x', 25)
-	            .attr('y', 0)
-	            .attr('width', 20)
-	            .attr('height', 15)
-	            .attr('fill', 'red')
-				.on('click', function () { barchart1.resize(barchart1.container.svgHeight + 100); });
-		}
+		chart1.initialize(data1, options1);
 	</script>
 	<script>
-		var barchart2 = new Barchart('parent2');
+		var chart2 = new Barchart('parent2');
 		var options2 = {
 			height: 600,
 			negColor: '#e67300',
@@ -80,18 +64,41 @@
 		};
 
 		// orange/blue, + to -
-		barchart2.initializeVis(data2, options2);
+		chart2.initialize(data2, options2);
 	</script>
 	<script>
-		var barchart3 = new Barchart('parent3');
+		var chart3 = new Barchart('parent3');
 		var options3 = {
 			height: 600,
 			negColor: '#ff9900',
 			posColor: '#990099'
 		};
 
-		// yellow/purple, but no data
-		barchart3.initializeVis(data3, options3);
+		// yellow/purple, empty view
+		chart3.initialize(data3, options3);
+	</script>
+	<script>
+		function genData (chart) {
+			var data = chart.data;
+			var numNew = Math.floor(10 * Math.random());
+			var numRem = Math.floor(10 * Math.random());
+
+			for (var j = 0; j < numRem; j++) {
+				var index = Math.floor(data.length * Math.random());
+				data = data.slice(0, index).concat(data.slice(index + 1, data.length));
+			}
+
+			for (var j = 0; j < numNew; j++) {
+				var firstLetter = 'qwertyuiopasdfghjklzxcvbnm'[Math.floor(26 * Math.random())];
+
+				data.push({
+					key: firstLetter + Math.floor(10000 * Math.random()),
+					value: 2.5 * Math.random() * chart.dataMax - chart.dataMax
+				});
+			}
+
+			return data;
+		}
 	</script>
 </body>
 </html>
