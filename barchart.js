@@ -228,7 +228,7 @@ class Barchart extends Widget {
         me.scaleRangeFillSetup();
     }
 
-    formatXLabelsTicks () {
+    xLabelsFormatTicks () {
         var me = this;
 
         me.xLabels
@@ -242,7 +242,7 @@ class Barchart extends Widget {
         me.barLabels.position();
         me.xLabels
             .attr('transform', 'translate(' + (me.marginXLabel + me.options.AXIS_OFFSET) + ',' + me.marginYLabel + ')');
-        me.formatXLabelsTicks();
+        me.xLabelsFormatTicks();
         me.yAxisLine
             .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
     }
@@ -251,7 +251,6 @@ class Barchart extends Widget {
         var me = this;
 
         me.bars.updateVis(['x', 'y', 'width', 'height', 'fill']);
-        me.formatXLabelsTicks();
         me.barLabels.updateVis();
     }
 
