@@ -14,32 +14,32 @@
 	<link rel='stylesheet' type='text/css' href='d3-helpers/widget.css'>
 </head>
 <body>
-	<button onclick='chart1.updateData(genData(chart1));'>Update Data</button>
-	<button onclick='chart1.resize(chart1.container.divHeight - 50);'>Decrease Height</button>
-	<button onclick='chart1.resize(chart1.container.divHeight + 50);'>Increase Height</button>
+	<button onclick='chart1.updateData(genData(chart1));'>update</button>
+	<button onclick='chart1.resize(chart1.container.divHeight - 50);'>taller</button>
+	<button onclick='chart1.resize(chart1.container.divHeight + 50);'>shorter</button>
 	<select onchange='chart1.updateColors(this.value, null);'>
-		<option value='#dc3912' selected>Red</option>
-		<option value='#e67300'>Orange</option>
-		<option value='#ff9900'>Yellow</option>
-		<option value='#109618'>Green</option>
-		<option value='#3366cc'>Blue</option>
-		<option value='#990099'>Purple</option>
+		<option value='#dc3912' selected>red</option>
+		<option value='#e67300'>ora</option>
+		<option value='#ff9900'>yel</option>
+		<option value='#109618'>gre</option>
+		<option value='#3366cc'>blu</option>
+		<option value='#990099'>pur</option>
 	</select>
 	<select onchange='chart1.updateColors(null, this.value);'>
-		<option value='#dc3912'>Red</option>
-		<option value='#e67300'>Orange</option>
-		<option value='#ff9900'>Yellow</option>
-		<option value='#109618' selected>Green</option>
-		<option value='#3366cc'>Blue</option>
-		<option value='#990099'>Purple</option>
+		<option value='#dc3912'>red</option>
+		<option value='#e67300'>ora</option>
+		<option value='#ff9900'>yel</option>
+		<option value='#109618' selected>gre</option>
+		<option value='#3366cc'>blu</option>
+		<option value='#990099'>pur</option>
 	</select>
 	<select onchange='chart1.updateSort(Boolean(Number(this.value)), null);'>
-		<option value='1'>By name</option>
-		<option value='0'>By value</option>
+		<option value='1'>name</option>
+		<option value='0'>value</option>
 	</select>
 	<select onchange='chart1.updateSort(null, Boolean(Number(this.value)));'>
-		<option value='1'>Ascending</option>
-		<option value='0'>Descending</option>
+		<option value='1'>asc</option>
+		<option value='0'>des</option>
 	</select>
 	<div id='parent1'></div>
 	<div id='parent2'></div>
@@ -93,7 +93,7 @@
 				var firstLetter = 'qwertyuiopasdfghjklzxcvbnm'[Math.floor(26 * Math.random())];
 
 				data.push({
-					key: firstLetter + Math.floor(10000 * Math.random()),
+					key: firstLetter + Math.random(),
 					value: 2.5 * Math.random() * chart.dataMax - chart.dataMax
 				});
 			}

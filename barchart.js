@@ -43,7 +43,6 @@ class Barchart extends Widget {
         me.byName = (options.byName === undefined ? true : options.byName);
         me.ascending = (options.ascending === undefined ? true : options.ascending);
         me.defaultDataMax = (options.defaultDataMax || 0.75);
-        me.defaultMarginXLabel = (options.defaultMarginXLabel || 50);
 
         me.sortData();
         me.labels = me.data.map(me.key);
@@ -110,6 +109,7 @@ class Barchart extends Widget {
             me.scaleHeight.step,
             false,
             me.options.FONT_SIZE,
+            function () { return me.marginXLabel - me.options.AXIS_OFFSET; },
             'left'
         );
 
@@ -131,12 +131,11 @@ class Barchart extends Widget {
             });
 
         // invoke tooltip
-        me.container.svg.call(me.tooltip);
+        me.container.svg
+            .call(me.tooltip);
 
-        // bind event listeners to bars and add ids to labels so they can be
-        // bolded on hover
+        // bind event listeners to bars
         me.attachBarEventListeners();
-        me.attachBarLabelIds();
 
         // last setup before initial bar transition
         me.marginsSetup();
@@ -169,7 +168,7 @@ class Barchart extends Widget {
 
         // NOTE marginXLabel and marginYLabel should be >= 10 to start,
         // otherwise bar labels get positioned badly for some reason...
-        me.marginXLabel = (me.barLabels ? (Math.ceil(me.barLabels.getBox().width) || me.marginXLabel) : Math.max(me.defaultMarginXLabel, 10));
+        me.marginXLabel = Math.ceil(0.1 * me.container.svgWidth);
         me.marginYLabel = me.options.FONT_SIZE;
         me.marginXChart = me.container.svgWidth - me.marginXLabel - me.options.AXIS_OFFSET;
         me.marginYChart = me.container.svgHeight - me.marginYLabel - me.options.AXIS_OFFSET;
@@ -255,6 +254,7 @@ class Barchart extends Widget {
         var me = this;
 
         me.bars.updateVis(['x', 'y', 'width', 'height', 'fill']);
+        me.barLabels.updateNames(); // recalculate ellipsing
         me.barLabels.updateVis();
     }
 
@@ -288,14 +288,6 @@ class Barchart extends Widget {
             });
     }
 
-    attachBarLabelIds () {
-        var me = this;
-
-        me.barLabels.group
-            .selectAll('text')
-            .attr('id', me.htmlEscape);
-    }
-
     resize (height) {
         var me = this;
         me.container.resize(height);
@@ -305,9 +297,6 @@ class Barchart extends Widget {
         me.scaleRangesPositionalSetup();
         me.positionAllElements();
         me.updateVisAllElements();
-
-        // reattach ids in case new labels appeared
-        me.attachBarLabelIds();
     }
 
     sortData () {
@@ -373,9 +362,6 @@ class Barchart extends Widget {
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(me.options.ANIM_DURATION);
-
-        // reattach ids in case new labels appeared
-        me.attachBarLabelIds();
     }
 
     updateSort (byName, ascending) {
@@ -402,9 +388,6 @@ class Barchart extends Widget {
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(me.options.ANIM_DURATION);
-
-        // reattach ids in case new labels appeared
-        me.attachBarLabelIds();
     }
 
     updateColors (negColor, posColor) {
@@ -490,11 +473,10 @@ class Barchart extends Widget {
             .selectAll('rect.keep')
             .classed('keep', false);
 
-        // update labels and reattach event listeners and ids
+        // update labels and reattach event listeners
         me.barLabels.updateNames(me.labels);
         me.barLabels.updateVis(me.options.ANIM_DURATION);
         me.attachBarEventListeners();
-        me.attachBarLabelIds();
 
         // update x-axis
         me.xLabels
