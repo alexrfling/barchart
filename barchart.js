@@ -254,7 +254,7 @@ class Barchart extends Widget {
         var me = this;
 
         me.bars.updateVis(['x', 'y', 'width', 'height', 'fill']);
-        me.barLabels.updateNames(); // recalculate ellipsing
+        me.barLabels.updateLabels(); // recalculate ellipsing
         me.barLabels.updateVis();
     }
 
@@ -360,7 +360,7 @@ class Barchart extends Widget {
             // TODO find a way to sync delayed bars with labels
             //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
             .attr('y', me.bars.attrs.y);
-        me.barLabels.updateNames(me.labels);
+        me.barLabels.updateLabels(me.labels);
         me.barLabels.updateVis(me.options.ANIM_DURATION);
     }
 
@@ -386,7 +386,7 @@ class Barchart extends Widget {
             // TODO find a way to sync delayed bars with labels
             //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
             .attr('y', me.bars.attrs.y);
-        me.barLabels.updateNames(me.labels);
+        me.barLabels.updateLabels(me.labels);
         me.barLabels.updateVis(me.options.ANIM_DURATION);
     }
 
@@ -474,7 +474,7 @@ class Barchart extends Widget {
             .classed('keep', false);
 
         // update labels and reattach event listeners
-        me.barLabels.updateNames(me.labels);
+        me.barLabels.updateLabels(me.labels);
         me.barLabels.updateVis(me.options.ANIM_DURATION);
         me.attachBarEventListeners();
 
