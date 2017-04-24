@@ -84,7 +84,10 @@ class Barchart extends Widget {
             'labels',
             me.scaleX,
             me.options.FONT_SIZE,
-            'top'
+            'top',
+            {
+                tickSize: function () { return -me.marginYChart - me.options.AXIS_OFFSET; }
+            }
         );
 
         // bars and chart
@@ -237,20 +240,13 @@ class Barchart extends Widget {
         me.scaleRangeFillSetup();
     }
 
-    xAxisFormatTicks () {
-        var me = this;
-
-        me.xAxis.group
-            .call(me.xAxis.axis.tickSize(-me.marginYChart - me.options.AXIS_OFFSET, 0, 0));
-    }
-
     positionAllElements () {
         var me = this;
 
         me.bars.position();
         me.barLabels.position();
         me.xAxis.position();
-        me.xAxisFormatTicks();
+        me.xAxis.updateTicks();
         me.yAxisLine
             .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
     }
