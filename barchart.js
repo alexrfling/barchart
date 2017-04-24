@@ -153,7 +153,7 @@ class Barchart extends Widget {
 
         // initialize bars
         if (options.noTransition) {
-            me.bars.updateVis(['x', 'y', 'width', 'height', 'fill']);
+            me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
         } else {
             me.bars.selection
                 .attr('x', me.scaleX(0))
@@ -254,7 +254,7 @@ class Barchart extends Widget {
     updateVisAllElements () {
         var me = this;
 
-        me.bars.updateVis(['x', 'y', 'width', 'height', 'fill']);
+        me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
         me.barLabels.updateLabels(); // recalculate ellipsing
         me.barLabels.updateVis();
     }
