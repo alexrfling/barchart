@@ -86,18 +86,21 @@ class Barchart extends Widget {
             .style('font-size', me.options.FONT_SIZE);
 
         // bars and chart
-        me.bars = new Cells(
+        me.bars = new ElementCollection(
             me.container.svg,
             'bars',
+            'rect',
+            {
+                // -1 for pos bars -> no overlap on '0' center tick
+                x: function (d) { return me.scaleX(0) - (d.value < 0 ? me.scaleWidth(Math.abs(d.value)) : -1); },
+                // add half of (step - bandwidth) to account for paddingInner/Outer
+                y: function (d) { return me.scaleY(d.key) + (me.scaleHeight.step() - me.scaleHeight.bandwidth()) / 2; },
+                width: function (d) { return me.scaleWidth(Math.abs(d.value)); },
+                height: function () { return me.scaleHeight.bandwidth(); },
+                fill: function (d) { return me.scaleFill(d.value); }
+            },
             me.data,
-            me.key,
-            // -1 for pos bars -> no overlap on '0' center tick
-            function (d) { return me.scaleX(0) - (d.value < 0 ? me.scaleWidth(Math.abs(d.value)) : -1); },
-            // add half of (step - bandwidth) to account for paddingInner/Outer
-            function (d) { return me.scaleY(d.key) + (me.scaleHeight.step() - me.scaleHeight.bandwidth()) / 2; },
-            function (d) { return me.scaleWidth(Math.abs(d.value)); },
-            function () { return me.scaleHeight.bandwidth(); },
-            function (d) { return me.scaleFill(d.value); }
+            me.key
         );
 
         // y-axis labels
