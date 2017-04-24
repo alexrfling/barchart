@@ -79,11 +79,13 @@ class Barchart extends Widget {
         me.scaleRangesSetup();
 
         // x-axis labels (add this to the SVG first so the bars will be on top)
-        me.xAxis = d3.axisTop(me.scaleX);
-        me.xLabels = me.container.svg
-            .append('g')
-            .attr('class', 'labels')
-            .style('font-size', me.options.FONT_SIZE);
+        me.xAxis = new Axis(
+            me.container.svg,
+            'labels',
+            me.scaleX,
+            me.options.FONT_SIZE,
+            'top'
+        );
 
         // bars and chart
         me.bars = new ElementCollection(
@@ -182,6 +184,7 @@ class Barchart extends Widget {
 
         me.bars.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel + me.options.AXIS_OFFSET];
         me.barLabels.anchor = [me.marginXLabel, me.marginYLabel + me.options.AXIS_OFFSET];
+        me.xAxis.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel];
     }
 
     scaleDomainsHorizontalSetup () {
@@ -234,11 +237,11 @@ class Barchart extends Widget {
         me.scaleRangeFillSetup();
     }
 
-    xLabelsFormatTicks () {
+    xAxisFormatTicks () {
         var me = this;
 
-        me.xLabels
-            .call(me.xAxis.tickSize(-me.marginYChart - me.options.AXIS_OFFSET, 0, 0));
+        me.xAxis.group
+            .call(me.xAxis.axis.tickSize(-me.marginYChart - me.options.AXIS_OFFSET, 0, 0));
     }
 
     positionAllElements () {
@@ -246,9 +249,8 @@ class Barchart extends Widget {
 
         me.bars.position();
         me.barLabels.position();
-        me.xLabels
-            .attr('transform', 'translate(' + (me.marginXLabel + me.options.AXIS_OFFSET) + ',' + me.marginYLabel + ')');
-        me.xLabelsFormatTicks();
+        me.xAxis.position();
+        me.xAxisFormatTicks();
         me.yAxisLine
             .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
     }
@@ -482,9 +484,6 @@ class Barchart extends Widget {
         me.attachBarEventListeners();
 
         // update x-axis
-        me.xLabels
-            .transition()
-            .duration(me.options.ANIM_DURATION)
-            .call(me.xAxis);
+        me.xAxis.updateVis(me.options.ANIM_DURATION);
     }
 }
