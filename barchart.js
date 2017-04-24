@@ -82,7 +82,7 @@ class Barchart extends Widget {
         me.xAxis = d3.axisTop(me.scaleX);
         me.xLabels = me.container.svg
             .append('g')
-            .attr('class', 'axis')
+            .attr('class', 'labels')
             .style('font-size', me.options.FONT_SIZE);
 
         // bars and chart
@@ -106,7 +106,7 @@ class Barchart extends Widget {
         // y-axis labels
         me.barLabels = new Labels(
             me.container.svg,
-            'axis',
+            'labels',
             me.labels,
             function () { return me.marginYChart; },
             me.scaleHeight.step,
@@ -119,7 +119,7 @@ class Barchart extends Widget {
         // vertical line next to textual lables at left
         me.yAxisLine = me.container.svg
             .append('path')
-            .attr('class', 'axis-tick-line');
+            .attr('class', 'labels-tick-line');
 
         // tooltip for bars
         me.tooltip = d3.tip()
