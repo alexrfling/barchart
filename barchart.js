@@ -43,6 +43,8 @@ class Barchart extends Widget {
         me.byName = (options.byName === undefined ? true : options.byName);
         me.ascending = (options.ascending === undefined ? true : options.ascending);
         me.defaultDataMax = (options.defaultDataMax || 0.75);
+        me.keyTooltipLabel = (options.keyTooltipLabel || 'Variable');
+        me.valueTooltipLabel = (options.valueTooltipLabel || 'Coefficient');
 
         me.sortData();
         me.labels = me.data.map(me.key);
@@ -133,8 +135,8 @@ class Barchart extends Widget {
             .offset(function (d) { return (d.value < 0 ? [0, 10] : [0, -10]); })
             .html(function (d) {
                 return '<table>' +
-                    '<tr><td>Variable</td><td>' + d.key + '</td></tr>' +
-                    '<tr><td>Coefficient</td><td>' + me.round(d.value, 7) + '</td></tr>' +
+                    '<tr><td>' + me.keyTooltipLabel + '</td><td>' + d.key + '</td></tr>' +
+                    '<tr><td>' + me.valueTooltipLabel + '</td><td>' + me.round(d.value, 7) + '</td></tr>' +
                     '</table>';
             });
 
