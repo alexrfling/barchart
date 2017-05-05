@@ -358,7 +358,7 @@ class Barchart extends Widget {
         me.bars.selection
             .transition()
             .duration(me.options.ANIM_DURATION)
-            // TODO find a way to sync delayed bars with labels
+            // TODO find a way to sync labels with delayed bars
             //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateLabels(me.labels);
@@ -384,7 +384,7 @@ class Barchart extends Widget {
         me.bars.selection
             .transition()
             .duration(me.options.ANIM_DURATION)
-            // TODO find a way to sync delayed bars with labels
+            // TODO find a way to sync labels with delayed bars
             //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
             .attr('y', me.bars.attrs.y);
         me.barLabels.updateLabels(me.labels);
