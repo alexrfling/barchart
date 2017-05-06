@@ -1,4 +1,4 @@
 # barchart
 Interactive bar chart with d3.js
 
-![alt text](https://github.com/alexrfling/barchart/img/example.png)
+![alt text](https://raw.githubusercontent.com/alexrfling/barchart/master/img/example.png)
