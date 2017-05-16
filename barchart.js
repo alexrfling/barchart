@@ -46,6 +46,7 @@ class Barchart extends Widget {
         me.defaultDataMax = (options.defaultDataMax || 0.75);
         me.keyTooltipLabel = (options.keyTooltipLabel || 'Variable');
         me.valueTooltipLabel = (options.valueTooltipLabel || 'Coefficient');
+        me.tooltipFormat = (options.tooltipFormat || d3.format('.7'));
 
         me.sortData();
         me.labels = me.data.map(me.key);
@@ -138,7 +139,7 @@ class Barchart extends Widget {
             .html(function (d) {
                 return '<table>' +
                     '<tr><td>' + me.keyTooltipLabel + '</td><td>' + d.key + '</td></tr>' +
-                    '<tr><td>' + me.valueTooltipLabel + '</td><td>' + me.round(d.value, 7) + '</td></tr>' +
+                    '<tr><td>' + me.valueTooltipLabel + '</td><td>' + me.tooltipFormat(d.value) + '</td></tr>' +
                     '</table>';
             });
 
