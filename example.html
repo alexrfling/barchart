@@ -45,6 +45,7 @@
 	<div id='parent1'></div>
 	<div id='parent2'></div>
 	<div id='parent3'></div>
+	<div id='parent4'></div>
 	<script>
 		var chart1 = new Barchart('parent1');
 		var options1 = {
@@ -78,6 +79,14 @@
 
 		// yellow/purple, empty view
 		chart3.initialize(data3, options3);
+	</script>
+	<script>
+		var chart4 = new Barchart('parent4');
+		var options4 = {
+			height: 600
+		};
+
+		chart4.initialize(data4, options4);
 	</script>
 	<script>
 		function genData (chart) {

@@ -88,3 +88,25 @@ var data2 = [
 ];
 
 var data3 = [];
+
+// NOTE d3.scaleLinear limits the max value to Number.MAX_VALUE / 2, and
+// d3.scaleQuantize limits the max value even further (depends on range, see
+// https://github.com/d3/d3-scale/blob/master/src/quantize.js#L19)
+var data4 = [
+    {
+        key: 'Number.MAX_VALUE / 256',
+        value: Number.MAX_VALUE / 256
+    },
+    {
+        key: '-Number.MAX_VALUE / 256',
+        value: -Number.MAX_VALUE / 256
+    },
+    {
+        key: '0.0025 * Number.MAX_VALUE',
+        value: 0.0025 * Number.MAX_VALUE
+    },
+    {
+        key: '-0.001 * Number.MAX_VALUE',
+        value: -0.001 * Number.MAX_VALUE
+    }
+];

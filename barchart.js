@@ -324,7 +324,7 @@ class Barchart extends Widget {
             return (me.dataMax || me.defaultDataMax);
         }
 
-        return Math.max(...me.data.map(function (d) { return Math.abs(d.value); }));
+        return d3.max(me.data, function (d) { return Math.abs(d.value); });
     }
 
     getBarColors () {
