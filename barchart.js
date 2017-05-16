@@ -81,7 +81,7 @@ class Barchart extends Widget {
         me.scaleRangesSetup();
 
         // x-axis labels (add this to the SVG first so the bars will be on top)
-        me.xAxis = new Axis(
+        me.axisX = new Axis(
             me.container.svg,
             'labels',
             me.scaleX,
@@ -190,7 +190,7 @@ class Barchart extends Widget {
 
         me.bars.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel + me.options.AXIS_OFFSET];
         me.barLabels.anchor = [me.marginXLabel, me.marginYLabel + me.options.AXIS_OFFSET];
-        me.xAxis.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel];
+        me.axisX.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel];
     }
 
     scaleDomainsHorizontalSetup () {
@@ -248,8 +248,8 @@ class Barchart extends Widget {
 
         me.bars.position();
         me.barLabels.position();
-        me.xAxis.position();
-        me.xAxis.updateTicks();
+        me.axisX.position();
+        me.axisX.updateTicks();
         me.yAxisLine
             .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
     }
@@ -483,6 +483,6 @@ class Barchart extends Widget {
         me.attachBarEventListeners();
 
         // update x-axis
-        me.xAxis.updateVis(me.options.ANIM_DURATION);
+        me.axisX.updateVis(me.options.ANIM_DURATION);
     }
 }
