@@ -127,7 +127,7 @@ class Barchart extends Widget {
         );
 
         // vertical line next to textual lables at left
-        me.yAxisLine = me.container.svg
+        me.axisYLine = me.container.svg
             .append('path')
             .attr('class', 'labels-tick-line');
 
@@ -252,7 +252,7 @@ class Barchart extends Widget {
         me.barLabels.position();
         me.axisX.position();
         me.axisX.updateTicks();
-        me.yAxisLine
+        me.axisYLine
             .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
     }
 
