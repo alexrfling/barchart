@@ -29,7 +29,8 @@ class Barchart extends Widget {
             ANIM_DURATION: 1000,
             AXIS_OFFSET: 5,
             DEFAULT_HEIGHT: 400,
-            FONT_SIZE: 10
+            FONT_SIZE: 10,
+            PADDING: 10
         });
     }
 
@@ -181,7 +182,7 @@ class Barchart extends Widget {
         // otherwise bar labels get positioned badly for some reason...
         me.marginXLabel = Math.ceil(0.1 * me.container.svgWidth);
         me.marginYLabel = me.options.FONT_SIZE;
-        me.marginXChart = me.container.svgWidth - me.marginXLabel - me.options.AXIS_OFFSET;
+        me.marginXChart = me.container.svgWidth - me.marginXLabel - me.options.AXIS_OFFSET - me.options.PADDING;
         me.marginYChart = me.container.svgHeight - me.marginYLabel - me.options.AXIS_OFFSET;
     }
 
