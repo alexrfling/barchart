@@ -88,6 +88,7 @@ class Barchart extends Widget {
             me.options.FONT_SIZE,
             'top',
             {
+                tickFormat: d3.format('.1'),
                 tickSize: function () { return -me.marginYChart - me.options.AXIS_OFFSET; }
             }
         );
