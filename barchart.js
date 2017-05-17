@@ -67,7 +67,7 @@ class Barchart extends Widget {
         );
 
         // initial setup for margins
-        me.marginsSetup();
+        me.setMargins();
 
         // scales for bar attributes (x, y, width, height, fill)
         me.scaleX = d3.scaleLinear();
@@ -79,8 +79,8 @@ class Barchart extends Widget {
         me.scaleFill = d3.scaleQuantize();
 
         // initalize scales
-        me.scaleDomainsSetup();
-        me.scaleRangesSetup();
+        me.setScaleDomains();
+        me.setScaleRanges();
 
         // x-axis labels (add this to the SVG first so the bars will be on top)
         me.axisX = new Axis(
@@ -151,9 +151,9 @@ class Barchart extends Widget {
         me.attachBarEventListeners();
 
         // last setup before initial bar transition
-        me.marginsSetup();
-        me.anchorsSetup();
-        me.scaleRangesPositionalSetup();
+        me.setMargins();
+        me.setAnchors();
+        me.setScaleRangesPositional();
         me.positionAllElements();
 
         // initialize bars
@@ -176,7 +176,7 @@ class Barchart extends Widget {
         }
     }
 
-    marginsSetup () {
+    setMargins () {
         var me = this;
 
         // NOTE marginXLabel and marginYLabel should be >= 10 to start,
@@ -187,7 +187,7 @@ class Barchart extends Widget {
         me.marginYChart = me.container.svgHeight - me.marginYLabel - me.options.AXIS_OFFSET;
     }
 
-    anchorsSetup () {
+    setAnchors () {
         var me = this;
 
         me.bars.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel + me.options.AXIS_OFFSET];
@@ -195,35 +195,35 @@ class Barchart extends Widget {
         me.axisX.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel];
     }
 
-    scaleDomainsHorizontalSetup () {
+    setScaleDomainsHorizontal () {
         var me = this;
 
         me.scaleX.domain([-me.dataMax, me.dataMax]);
         me.scaleWidth.domain([0, me.dataMax]);
     }
 
-    scaleDomainsVerticalSetup () {
+    setScaleDomainsVertical () {
         var me = this;
 
         me.scaleY.domain(me.labels);
         me.scaleHeight.domain(me.labels);
     }
 
-    scaleDomainFillSetup () {
+    setScaleDomainFill () {
         var me = this;
 
         me.scaleFill.domain([-me.dataMax, me.dataMax]);
     }
 
-    scaleDomainsSetup () {
+    setScaleDomains () {
         var me = this;
 
-        me.scaleDomainsHorizontalSetup();
-        me.scaleDomainsVerticalSetup();
-        me.scaleDomainFillSetup();
+        me.setScaleDomainsHorizontal();
+        me.setScaleDomainsVertical();
+        me.setScaleDomainFill();
     }
 
-    scaleRangesPositionalSetup () {
+    setScaleRangesPositional () {
         var me = this;
 
         me.scaleX.range([0, me.marginXChart]);
@@ -232,17 +232,17 @@ class Barchart extends Widget {
         me.scaleHeight.range([0, me.marginYChart]);
     }
 
-    scaleRangeFillSetup () {
+    setScaleRangeFill () {
         var me = this;
 
         me.scaleFill.range(me.barColors);
     }
 
-    scaleRangesSetup () {
+    setScaleRanges () {
         var me = this;
 
-        me.scaleRangesPositionalSetup();
-        me.scaleRangeFillSetup();
+        me.setScaleRangesPositional();
+        me.setScaleRangeFill();
     }
 
     positionAllElements () {
@@ -298,9 +298,9 @@ class Barchart extends Widget {
         var me = this;
         me.container.resize(height);
 
-        me.marginsSetup();
-        me.anchorsSetup();
-        me.scaleRangesPositionalSetup();
+        me.setMargins();
+        me.setAnchors();
+        me.setScaleRangesPositional();
         me.positionAllElements();
         me.updateVisAllElements();
     }
@@ -357,7 +357,7 @@ class Barchart extends Widget {
         me.labels = me.data.map(me.key);
 
         // scale updates
-        me.scaleDomainsVerticalSetup();
+        me.setScaleDomainsVertical();
 
         // visual updates
         me.bars.selection
@@ -383,7 +383,7 @@ class Barchart extends Widget {
         me.labels = me.data.map(me.key);
 
         // scale updates
-        me.scaleDomainsVerticalSetup();
+        me.setScaleDomainsVertical();
 
         // visual updates
         me.bars.selection
@@ -403,7 +403,7 @@ class Barchart extends Widget {
 
         // update colors array and scale
         me.barColors = me.getBarColors();
-        me.scaleRangeFillSetup();
+        me.setScaleRangeFill();
 
         // visual update
         me.bars.selection
@@ -427,7 +427,7 @@ class Barchart extends Widget {
         me.dataMax = me.getDataMax();
 
         // scale updates
-        me.scaleDomainsSetup();
+        me.setScaleDomains();
 
         // add temporary classes to separate old bars from bars to be kept
         me.bars.group
