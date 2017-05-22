@@ -61,9 +61,12 @@ class Barchart extends Widget {
             me.id,
             'd3-helpers-widget-div',
             'd3-helpers-widget-svg',
-            function () { me.resize.call(me); },
             me.options.SVG_MARGINS,
-            (options.height || me.options.DEFAULT_HEIGHT)
+            options.width,
+            (options.height || me.options.DEFAULT_HEIGHT),
+            {
+                onWindowResize: (options.width ? null : function () { me.resize.call(me); })
+            }
         );
 
         // initial setup for margins
@@ -294,9 +297,9 @@ class Barchart extends Widget {
             });
     }
 
-    resize (height) {
+    resize (width, height) {
         var me = this;
-        me.container.resize(height);
+        me.container.resize(width, height);
 
         me.setMargins();
         me.setAnchors();
