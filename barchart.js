@@ -1,14 +1,14 @@
 /*
-              marginXLabel                      marginXChart
+              marginLabelX                      marginChartX
              +------------+----------------------------------------------------+
-marginYLabel |            |                                                    |
+marginLabelY |            |                                                    |
              +------------+----------------------------------------------------+
              |            |                                                    |
              |            |                                                    |
              |            |                                                    |
              |            |                                                    |
              |            |                                                    |
-marginYChart |            |                                                    |
+marginChartY |            |                                                    |
              |            |                                                    |
              |            |                                                    |
              |            |                                                    |
@@ -94,7 +94,7 @@ class Barchart extends Widget {
             'top',
             {
                 tickFormat: d3.format('.1'),
-                tickSize: function () { return -me.marginYChart - me.options.AXIS_OFFSET; }
+                tickSize: function () { return -me.marginChartY - me.options.AXIS_OFFSET; }
             }
         );
 
@@ -121,11 +121,11 @@ class Barchart extends Widget {
             me.container.svg,
             'labels',
             me.labels,
-            function () { return me.marginYChart; },
+            function () { return me.marginChartY; },
             me.scaleHeight.step,
             false,
             me.options.FONT_SIZE,
-            function () { return me.marginXLabel - me.options.AXIS_OFFSET; },
+            function () { return me.marginLabelX - me.options.AXIS_OFFSET; },
             'left'
         );
 
@@ -182,20 +182,20 @@ class Barchart extends Widget {
     setMargins () {
         var me = this;
 
-        // NOTE marginXLabel and marginYLabel should be >= 10 to start,
+        // NOTE marginLabelX and marginLabelY should be >= 10 to start,
         // otherwise bar labels get positioned badly for some reason...
-        me.marginXLabel = Math.ceil(0.1 * me.container.svgWidth);
-        me.marginYLabel = me.options.FONT_SIZE;
-        me.marginXChart = me.container.svgWidth - me.marginXLabel - me.options.AXIS_OFFSET - me.options.PADDING;
-        me.marginYChart = me.container.svgHeight - me.marginYLabel - me.options.AXIS_OFFSET;
+        me.marginLabelX = Math.ceil(0.1 * me.container.svgWidth);
+        me.marginLabelY = me.options.FONT_SIZE;
+        me.marginChartX = me.container.svgWidth - me.marginLabelX - me.options.AXIS_OFFSET - me.options.PADDING;
+        me.marginChartY = me.container.svgHeight - me.marginLabelY - me.options.AXIS_OFFSET;
     }
 
     setAnchors () {
         var me = this;
 
-        me.bars.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel + me.options.AXIS_OFFSET];
-        me.barLabels.anchor = [me.marginXLabel, me.marginYLabel + me.options.AXIS_OFFSET];
-        me.axisX.anchor = [me.marginXLabel + me.options.AXIS_OFFSET, me.marginYLabel];
+        me.bars.anchor = [me.marginLabelX + me.options.AXIS_OFFSET, me.marginLabelY + me.options.AXIS_OFFSET];
+        me.barLabels.anchor = [me.marginLabelX, me.marginLabelY + me.options.AXIS_OFFSET];
+        me.axisX.anchor = [me.marginLabelX + me.options.AXIS_OFFSET, me.marginLabelY];
     }
 
     setScaleDomainsHorizontal () {
@@ -229,10 +229,10 @@ class Barchart extends Widget {
     setScaleRangesPositional () {
         var me = this;
 
-        me.scaleX.range([0, me.marginXChart]);
-        me.scaleY.range([0, me.marginYChart]);
-        me.scaleWidth.range([0, me.marginXChart / 2]);
-        me.scaleHeight.range([0, me.marginYChart]);
+        me.scaleX.range([0, me.marginChartX]);
+        me.scaleY.range([0, me.marginChartY]);
+        me.scaleWidth.range([0, me.marginChartX / 2]);
+        me.scaleHeight.range([0, me.marginChartY]);
     }
 
     setScaleRangeFill () {
@@ -462,7 +462,7 @@ class Barchart extends Widget {
             .transition()
             .duration(me.options.ANIM_DURATION)
             .attr('x', me.scaleX(0))
-            .attr('y', me.marginYChart)
+            .attr('y', me.marginChartY)
             .attr('width', 0)
             .attr('height', 0)
             .attr('fill', 'white')
