@@ -151,7 +151,7 @@ class Barchart extends Widget {
             .call(me.tooltip);
 
         // bind event listeners to bars
-        me.attachBarEventListeners();
+        me.bindEventListeners();
 
         // last setup before initial bar transition
         me.setMargins();
@@ -267,7 +267,7 @@ class Barchart extends Widget {
         me.barLabels.updateVis();
     }
 
-    attachBarEventListeners () {
+    bindEventListeners () {
         var me = this;
 
         me.bars.selection
@@ -485,7 +485,7 @@ class Barchart extends Widget {
         // update labels and reattach event listeners
         me.barLabels.updateLabels(me.labels);
         me.barLabels.updateVis(me.options.ANIM_DURATION);
-        me.attachBarEventListeners();
+        me.bindEventListeners();
 
         // update x-axis
         me.axisX.updateVis(me.options.ANIM_DURATION);
