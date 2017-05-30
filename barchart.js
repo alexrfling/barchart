@@ -157,7 +157,7 @@ class Barchart extends Widget {
         me.setMargins();
         me.setAnchors();
         me.setScaleRangesPositional();
-        me.positionAllElements();
+        me.positionElements();
 
         // initialize bars
         if (options.noTransition) {
@@ -248,7 +248,7 @@ class Barchart extends Widget {
         me.setScaleRangeFill();
     }
 
-    positionAllElements () {
+    positionElements () {
         var me = this;
 
         me.bars.position();
@@ -304,7 +304,7 @@ class Barchart extends Widget {
         me.setMargins();
         me.setAnchors();
         me.setScaleRangesPositional();
-        me.positionAllElements();
+        me.positionElements();
         me.updateVisAllElements();
     }
 
