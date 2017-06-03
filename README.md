@@ -25,7 +25,7 @@ In the head of your HTML document, include:
 ## Usage
 
 ### Constructor
-new **Barchart**(_id_)  
+<a name='constructor' href='#constructor'>#</a> new **Barchart**(_id_)  
 Constructs a new Barchart widget with parent element set to the HTML element in the DOM with id _id_. Note that this does not modify the DOM.
 
 ### Methods
