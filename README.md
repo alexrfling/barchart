@@ -32,13 +32,13 @@ Constructs a new Barchart widget with parent element set to the HTML element in 
 <a name='initialize' href='#initialize'>#</a> _chart_.**initialize**(_data_[, _options_])
 
 Binds _data_ to _chart_ and renders a bar chart inside the widget's parent element.
-* _data_ - an array of objects, each containing a unique `key` field and a numerical `value` field
+* _data_ - an array of objects, each containing a unique `key` field and a numerical `value` field. Each object in _data_ will have a bar in the bar chart, with its label determined by its `key` field and its size determined by its `value` field
 * _options_ - an object specifying various attributes of the rendering and widget
   * **width** - the width, in pixels, of the widget. If falsy, the width of the widget will be the same as the width of the widget's parent element
   * **height** - the height, in pixels, of the widget (default: `400`)
-  * **negColor** - string representing the color for bars with negative values (default: `'#dc3912'`)
-  * **posColor** - string representing the color for bars with positive values (default: `'#109618'`)
-  * **byName** - if truthy, determines bar ordering by comparing the `key` fields of each object; otherwise, the `value` fields are compared (default: `true`)
+  * **negColor** - the color of bars with negative `value` fields (default: `'#dc3912'`)
+  * **posColor** - the color of bars with positive `value` fields (default: `'#109618'`)
+  * **byName** - if truthy, determines bar ordering by comparing their `key` fields; otherwise, their `value` fields are compared (default: `true`)
   * **ascending** - if truthy, sorts the bars ascending; otherwise, they are sorted descending (default: `true`)
   * **defaultDataMax** - if `data` is empty, this value will be used to set the range of the x-axis (default: `0.75`)
   * **keyTooltipLabel** - the label that describes the `key` field in the tooltip (default: `'Variable'`)
@@ -47,13 +47,13 @@ Binds _data_ to _chart_ and renders a bar chart inside the widget's parent eleme
 
 <a name='resize' href='#resize'>#</a> _chart_.**resize**([_width_[, _height_]])
 
-If _width_ is truthy, sets the width (in pixels) of the widget to be _width_, otherwise the width of the widget doesn't change.  
-If _height_ is truthy, sets the height (in pixels) of the widget to be _height_, otherwise the height of the widget doesn't change.
+If _width_ is truthy, sets the width (in pixels) of the widget to be _width_. Otherwise, the width of the widget doesn't change.  
+If _height_ is truthy, sets the height (in pixels) of the widget to be _height_. Otherwise, the height of the widget doesn't change.
 
 <a name='updateColors' href='#updateColors'>#</a> _chart_.**updateColors**([_negColor_[, _posColor_]])
 
-If _negColor_ is truthy, updates the color of bars with negative associated `value` fields to be _negColor_. Otherwise, the color of bars with negative associated `value` fields doesn't change.  
-If _posColor_ is truthy, updates the color of bars with positive associated `value` fields to be _posColor_. Otherwise, the color of bars with positive associated `value` fields doesn't change.
+If _negColor_ is truthy, updates the color of bars with negative `value` fields to be _negColor_. Otherwise, the color of bars with negative `value` fields doesn't change.  
+If _posColor_ is truthy, updates the color of bars with positive `value` fields to be _posColor_. Otherwise, the color of bars with positive `value` fields doesn't change.
 
 <a name='updateData' href='#updateData'>#</a> _chart_.**updateData**(_data_)
 
@@ -61,8 +61,8 @@ Binds _data_ to _chart_ and updates the bar chart accordingly. _data_ should be 
 
 <a name='updateSort' href='#updateSort'>#</a> _chart_.**updateSort**([_byName_[, _ascending_]])
 
-If _byName_ is truthy, sorts the bars in the widget by their associated `key` fields. If _byName_ is falsy and not `null`, sorts the bars in the widget by their associated `value` fields. Otherwise if _byName_ is `null`, the sorting of the bars in the widget doesn't change.  
-If _ascending_ is truthy, the bars in the widget are sorted in ascending order. If _ascending_ is falsy and not `null`, the bars in the widget are sorted in descending order. Otherwise if _ascending_ is `null`, the ordering of the bars in the widget doesn't change.
+If _byName_ is truthy, sorts the bars by their `key` fields. If _byName_ is falsy and not `null`, sorts the bars by their `value` fields. Otherwise if _byName_ is `null`, the sorting of the bars doesn't change.  
+If _ascending_ is truthy, the bars are sorted in ascending order. If _ascending_ is falsy and not `null`, the bars are sorted in descending order. Otherwise if _ascending_ is `null`, the ordering of the bars doesn't change.
 
 ### Example
 HTML element in the DOM:
