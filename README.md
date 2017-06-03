@@ -50,11 +50,6 @@ Binds _data_ to _chart_ and renders a bar chart inside the widget's parent eleme
 If _width_ is truthy, sets the width (in pixels) of the widget to be _width_, otherwise the width of the widget doesn't change.  
 If _height_ is truthy, sets the height (in pixels) of the widget to be _height_, otherwise the height of the widget doesn't change.
 
-<a name='updateSort' href='#updateSort'>#</a> _chart_.**updateSort**([_byName_[, _ascending_]])
-
-If _byName_ is truthy, sorts the bars in the widget by their associated `key` fields. If _byName_ is falsy and not `null`, sorts the bars in the widget by their associated `value` fields. Otherwise if _byName_ is `null`, the sorting of the bars in the widget doesn't change.  
-If _ascending_ is truthy, the bars in the widget are sorted in ascending order. If _ascending_ is falsy and not `null`, the bars in the widget are sorted in descending order. Otherwise if _ascending_ is `null`, the ordering of the bars in the widget doesn't change.
-
 <a name='updateColors' href='#updateColors'>#</a> _chart_.**updateColors**([_negColor_[, _posColor_]])
 
 If _negColor_ is truthy, updates the color of bars with negative associated `value` fields to be _negColor_. Otherwise, the color of bars with negative associated `value` fields doesn't change.  
@@ -63,6 +58,11 @@ If _posColor_ is truthy, updates the color of bars with positive associated `val
 <a name='updateData' href='#updateData'>#</a> _chart_.**updateData**(_data_)
 
 Binds _data_ to _chart_ and updates the bar chart accordingly. _data_ should be of the same form as described in <a href='#initialize'>initialize</a>.
+
+<a name='updateSort' href='#updateSort'>#</a> _chart_.**updateSort**([_byName_[, _ascending_]])
+
+If _byName_ is truthy, sorts the bars in the widget by their associated `key` fields. If _byName_ is falsy and not `null`, sorts the bars in the widget by their associated `value` fields. Otherwise if _byName_ is `null`, the sorting of the bars in the widget doesn't change.  
+If _ascending_ is truthy, the bars in the widget are sorted in ascending order. If _ascending_ is falsy and not `null`, the bars in the widget are sorted in descending order. Otherwise if _ascending_ is `null`, the ordering of the bars in the widget doesn't change.
 
 ### Example
 HTML element in the DOM:
