@@ -4,9 +4,7 @@ Interactive bar chart with d3.js
 ![alt text](https://raw.githubusercontent.com/alexrfling/barchart/master/img/example.png)
 
 ## Overview
-`Barchart` takes the id of an HTML element, an array of data, and optional
-parameters, and generates an interactive bar chart of the data appended to the
-HTML element.
+`Barchart` takes the id of an HTML element, an array of data, and optional parameters, and generates an interactive bar chart of the data appended to the HTML element.
 
 ## Boilerplate
 In the head of your HTML document, include:
