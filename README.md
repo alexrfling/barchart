@@ -31,18 +31,18 @@ new **Barchart**(_id_)
 Constructs a new Barchart widget with parent element set to the HTML element in the DOM with id _id_. Note that this does not modify the DOM.
 
 ### Methods
-_chart_.**initialize**(_data_[, _options_])
+<a name='initialize' href='#initialize'>#</a> _chart_.**initialize**(_data_[, _options_])
 
 Renders a bar chart of _data_ inside _chart_'s parent element.
 * _data_ - an array of objects, each containing a unique `key` field and a numerical `value` field
 * _options_ - an object specifying various attributes of the rendering and widget
 
-_chart_.**resize**([_width_[, _height_]])
+<a name='resize' href='#resize'>#</a> _chart_.**resize**([_width_[, _height_]])
 
 If _width_ is truthy, sets the width (in pixels) of the widget to be _width_, otherwise the width of the widget doesn't change.  
 If _height_ is truthy, sets the height (in pixels) of the widget to be _height_, otherwise the height of the widget doesn't change.
 
-_chart_.**updateSort**([_byName_[, _ascending_]])
+<a name='updateSort' href='#updateSort'>#</a> _chart_.**updateSort**([_byName_[, _ascending_]])
 
 If _byName_ is truthy, sorts the bars in the widget by their associated `key` fields. If _byName_ is falsy and not `null`, sorts the bars in the widget by their associated `value` fields. Otherwise if _byName_ is `null`, the sorting of the bars in the widget doesn't change.  
 If _ascending_ is truthy, the bars in the widget are sorted in ascending order. If _ascending_ is falsy and not `null`, the bars in the widget are sorted in descending order. Otherwise if _ascending_ is `null`, the ordering of the bars in the widget doesn't change.
