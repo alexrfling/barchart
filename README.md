@@ -33,7 +33,7 @@ Constructs a new Barchart widget with parent element set to the HTML element in 
 ### Methods
 <a name='initialize' href='#initialize'>#</a> _chart_.**initialize**(_data_[, _options_])
 
-Renders a bar chart of _data_ inside _chart_'s parent element.
+Binds _data_ to _chart_ and renders a bar chart inside the widget's parent element.
 * _data_ - an array of objects, each containing a unique `key` field and a numerical `value` field
 * _options_ - an object specifying various attributes of the rendering and widget
 
@@ -46,6 +46,15 @@ If _height_ is truthy, sets the height (in pixels) of the widget to be _height_,
 
 If _byName_ is truthy, sorts the bars in the widget by their associated `key` fields. If _byName_ is falsy and not `null`, sorts the bars in the widget by their associated `value` fields. Otherwise if _byName_ is `null`, the sorting of the bars in the widget doesn't change.  
 If _ascending_ is truthy, the bars in the widget are sorted in ascending order. If _ascending_ is falsy and not `null`, the bars in the widget are sorted in descending order. Otherwise if _ascending_ is `null`, the ordering of the bars in the widget doesn't change.
+
+<a name='updateColors' href='#updateColors'>#</a> _chart_.**updateColors**([_negColor_[, _posColor_]])
+
+If _negColor_ is truthy, updates the color of bars with negative associated `value` fields to be _negColor_. Otherwise, the color of bars with negative associated `value` fields doesn't change.  
+If _posColor_ is truthy, updates the color of bars with positive associated `value` fields to be _posColor_. Otherwise, the color of bars with positive associated `value` fields doesn't change.
+
+<a name='updateData' href='#updateData'>#</a> _chart_.**updateData**(_data_)
+
+Binds _data_ to _chart_ and updates the bar chart accordingly. _data_ should be of the same form as described in <a href='#initialize'>initialize</a>.
 
 ### Call
 ```js
