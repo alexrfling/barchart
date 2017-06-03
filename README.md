@@ -36,16 +36,16 @@ Constructs a new Barchart widget with parent element set to the HTML element in 
 Binds _data_ to _chart_ and renders a bar chart inside the widget's parent element.
 * _data_ - an array of objects, each containing a unique `key` field and a numerical `value` field
 * _options_ - an object specifying various attributes of the rendering and widget
-..* **width** - the width, in pixels, of the widget. If falsy, the width of the widget will be the same as the width of the widget's parent element
-..* **height** - the height, in pixels, of the widget (default: `400`)
-..* **negColor** - string representing the color for data with negative values (default: `'#dc3912'`)
-..* **posColor** - string representing the color for data with positive values (default: `'#109618'`)
-..* **byName** - if truthy, determines bar ordering by comparing the `key` fields of each object; otherwise, the `value` fields are compared (default: `true`)
-..* **ascending** - if truthy, sorts the bars ascending; otherwise, they are sorted descending (default: `true`)
-..* **defaultDataMax** - if `data` is empty, this value will be used to set the range of the x-axis (default: `0.75`)
-..* **keyTooltipLabel** - the label that describes the `key` field in the tooltip (default: `'Variable'`)
-..* **valueTooltipLabel** - the label that describes the `value` field in the tooltip (default: `'Coefficient'`)
-..* **tooltipFormat** - the function used to format the `value` field in the tooltip (default: `d3.format('.7')`)
+  * **width** - the width, in pixels, of the widget. If falsy, the width of the widget will be the same as the width of the widget's parent element
+  * **height** - the height, in pixels, of the widget (default: `400`)
+  * **negColor** - string representing the color for data with negative values (default: `'#dc3912'`)
+  * **posColor** - string representing the color for data with positive values (default: `'#109618'`)
+  * **byName** - if truthy, determines bar ordering by comparing the `key` fields of each object; otherwise, the `value` fields are compared (default: `true`)
+  * **ascending** - if truthy, sorts the bars ascending; otherwise, they are sorted descending (default: `true`)
+  * **defaultDataMax** - if `data` is empty, this value will be used to set the range of the x-axis (default: `0.75`)
+  * **keyTooltipLabel** - the label that describes the `key` field in the tooltip (default: `'Variable'`)
+  * **valueTooltipLabel** - the label that describes the `value` field in the tooltip (default: `'Coefficient'`)
+  * **tooltipFormat** - the function used to format the `value` field in the tooltip (default: `d3.format('.7')`)
 
 <a name='resize' href='#resize'>#</a> _chart_.**resize**([_width_[, _height_]])
 
