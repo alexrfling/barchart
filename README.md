@@ -66,12 +66,6 @@ If _posColor_ is truthy, updates the color of bars with positive associated `val
 
 Binds _data_ to _chart_ and updates the bar chart accordingly. _data_ should be of the same form as described in <a href='#initialize'>initialize</a>.
 
-### Call
-```js
-var chart = new Barchart(id);
-chart.initialize(data, options);
-```
-
 ### Example
 Element in the HTML document:
 ```html
