@@ -96,42 +96,4 @@ Create an interactive bar chart of `data`:
 var chart = new Barchart('barchart');
 chart.initialize(data);
 ```
-See example.html for more example usage.
-
-## Parameters
-
-### Required
-<b>id</b> - the 'id' attribute of the HTML element to which the bar chart will
-be appended
-
-<b>data</b> - an array of objects, each with a `key` and `value` field
-
-### Optional
-<b>width</b> - the width, in pixels, of the widget. If not given, the width
-of the widget will be the same as the width of the HTML element with id `id`
-
-<b>height</b> - the height, in pixels, of the widget (default: `400`)
-
-<b>negColor</b> - string representing the color for data with negative values
-(default: `'#dc3912'`)
-
-<b>posColor</b> - string representing the color for data with positive values
-(default: `'#109618'`)
-
-<b>byName</b> - if truthy, determines bar ordering by comparing the `key` fields
-of each object; otherwise, the `value` fields are compared (default: `true`)
-
-<b>ascending</b> - if truthy, sorts the bars ascending; otherwise, they are
-sorted descending (default: `true`)
-
-<b>defaultDataMax</b> - if `data` is empty, this value will be used to set the
-range of the x-axis (default: `0.75`)
-
-<b>keyTooltipLabel</b> - the label that describes the `key` field in the tooltip
-(default: `'Variable'`)
-
-<b>valueTooltipLabel</b> - the label that describes the `value` field in the
-tooltip (default: `'Coefficient'`)
-
-<b>tooltipFormat</b> - the function used to format the `value` field in the
-tooltip (default: `d3.format('.7')`)
+See <a href='https://github.com/alexrfling/barchart/blob/master/example.html'>example.html</a> for more example usage.
