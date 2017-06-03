@@ -67,9 +67,9 @@ If _posColor_ is truthy, updates the color of bars with positive associated `val
 Binds _data_ to _chart_ and updates the bar chart accordingly. _data_ should be of the same form as described in <a href='#initialize'>initialize</a>.
 
 ### Example
-Element in the HTML document:
+HTML element in the DOM:
 ```html
-<div id='barchart'></div>
+<div id='parent'></div>
 ```
 Data in JavaScript:
 ```js
@@ -87,7 +87,7 @@ var data = [
 ```
 Create an interactive bar chart of `data`:
 ```js
-var chart = new Barchart('barchart');
+var chart = new Barchart('parent');
 chart.initialize(data);
 ```
 See <a href='https://github.com/alexrfling/barchart/blob/master/example.html'>example.html</a> for more example usage.
