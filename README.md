@@ -27,9 +27,14 @@ In the head of your HTML document, include:
 ## Usage
 
 ### Constructor
-**Barchart**(_id_)  
-Constructs a new Barchart widget with parent element set to the HTML element in
-the DOM with id _id_. Note that this does not modify the DOM.
+new **Barchart**(_id_)  
+Constructs a new Barchart widget with parent element set to the HTML element in the DOM with id _id_. Note that this does not modify the DOM.
+
+### Methods
+_chart_.**initialize**(_data_[, _options_])  
+Renders a bar chart of _data_ inside _chart_'s parent element.
+* _data_ - an array of objects, each containing a unique `key` field and a numerical `value` field
+* _options_ - an object specifying various attributes of the rendering and widget
 
 ### Call
 ```js
