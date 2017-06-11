@@ -47,6 +47,7 @@ class Barchart extends Widget {
         me.keyTooltipLabel = (options.keyTooltipLabel || 'Variable');
         me.valueTooltipLabel = (options.valueTooltipLabel || 'Coefficient');
         me.tooltipFormat = (options.tooltipFormat || d3.format('.7'));
+        me.noTransition = options.noTransition;
 
         me.sortData();
         me.labels = me.data.map(me.key);
@@ -160,7 +161,7 @@ class Barchart extends Widget {
         me.positionElements();
 
         // initialize bars
-        if (options.noTransition) {
+        if (me.noTransition) {
             me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
         } else {
             me.bars.selection
@@ -432,62 +433,69 @@ class Barchart extends Widget {
         // scale updates
         me.setScaleDomains();
 
-        // add temporary classes to separate old bars from bars to be kept
-        me.bars.group
-            .selectAll('rect')
-            .data(me.data, me.key)
-            .exit()
-            .attr('class', 'remove');
-        me.bars.group
-            .selectAll('rect')
-            .filter(function () { return (this.className.baseVal !== 'remove'); })
-            .attr('class', 'keep');
-
-        // add new bars, invisible, with same class as bars to be kept
-        me.bars.group
-            .selectAll('rect')
-            .data(me.data, me.key)
-            .enter()
-            .append('rect')
-            .attr('class', 'keep')
-            .attr('x', me.scaleX(0))
-            .attr('y', me.bars.attrs.y)
-            .attr('height', 0)
-            .attr('width', 0)
-            .attr('fill', 'white');
-
-        // transition all bars (old bars removed)
-        me.bars.group
-            .selectAll('rect.remove')
-            .transition()
-            .duration(me.options.ANIM_DURATION)
-            .attr('x', me.scaleX(0))
-            .attr('y', me.marginChartY)
-            .attr('width', 0)
-            .attr('height', 0)
-            .attr('fill', 'white')
-            .remove();
-        me.bars.group
-            .selectAll('rect.keep')
-            .transition()
-            .duration(me.options.ANIM_DURATION)
-            .attr('x', me.bars.attrs.x)
-            .attr('y', me.bars.attrs.y)
-            .attr('width', me.bars.attrs.width)
-            .attr('height', me.bars.attrs.height)
-            .attr('fill', me.bars.attrs.fill);
-
-        // update bar selection
-        me.bars.selection = me.bars.group
-            .selectAll('rect.keep')
-            .classed('keep', false);
-
-        // update labels and reattach event listeners
+        // visual updates
         me.barLabels.updateLabels(me.labels);
-        me.barLabels.updateVis(me.options.ANIM_DURATION);
-        me.bindEventListeners();
 
-        // update x-axis
-        me.axisX.updateVis(me.options.ANIM_DURATION);
+        if (me.noTransition) {
+            me.barLabels.updateVis();
+            me.axisX.updateVis();
+            me.bars.updateData(me.data, me.key);
+            me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
+        } else {
+            me.barLabels.updateVis(me.options.ANIM_DURATION);
+            me.axisX.updateVis(me.options.ANIM_DURATION);
+
+            // add temporary classes to separate old bars from bars to be kept
+            me.bars.group
+                .selectAll('rect')
+                .data(me.data, me.key)
+                .exit()
+                .attr('class', 'remove');
+            me.bars.group
+                .selectAll('rect')
+                .filter(function () { return (this.className.baseVal !== 'remove'); })
+                .attr('class', 'keep');
+
+            // add new bars, invisible, with same class as bars to be kept
+            me.bars.group
+                .selectAll('rect')
+                .data(me.data, me.key)
+                .enter()
+                .append('rect')
+                .attr('class', 'keep')
+                .attr('x', me.scaleX(0))
+                .attr('y', me.bars.attrs.y)
+                .attr('height', 0)
+                .attr('width', 0)
+                .attr('fill', 'white');
+
+            // transition all bars (old bars removed)
+            me.bars.group
+                .selectAll('rect.remove')
+                .transition()
+                .duration(me.options.ANIM_DURATION)
+                .attr('x', me.scaleX(0))
+                .attr('y', me.marginChartY)
+                .attr('width', 0)
+                .attr('height', 0)
+                .attr('fill', 'white')
+                .remove();
+            me.bars.group
+                .selectAll('rect.keep')
+                .transition()
+                .duration(me.options.ANIM_DURATION)
+                .attr('x', me.bars.attrs.x)
+                .attr('y', me.bars.attrs.y)
+                .attr('width', me.bars.attrs.width)
+                .attr('height', me.bars.attrs.height)
+                .attr('fill', me.bars.attrs.fill);
+
+            // update bar selection
+            me.bars.selection = me.bars.group
+                .selectAll('rect.keep')
+                .classed('keep', false);
+        }
+
+        me.bindEventListeners();
     }
 }
