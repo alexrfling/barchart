@@ -453,13 +453,13 @@ class Barchart extends Widget {
         me.barLabels.updateLabels(me.labels);
 
         if (me.noTransition) {
-            me.barLabels.updateVis();
             me.axisX.updateVis();
+            me.barLabels.updateVis();
             me.bars.updateData(me.data, me.key);
             me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
         } else {
-            me.barLabels.updateVis(me.options.ANIM_DURATION);
             me.axisX.updateVis(me.options.ANIM_DURATION);
+            me.barLabels.updateVis(me.options.ANIM_DURATION);
 
             // add temporary classes to separate old bars from bars to be kept
             me.bars.group
