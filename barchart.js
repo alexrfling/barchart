@@ -410,10 +410,14 @@ class Barchart extends Widget {
         me.setScaleRangeFill();
 
         // visual update
-        me.bars.selection
-            .transition()
-            .duration(me.options.ANIM_DURATION)
-            .attr('fill', me.bars.attrs.fill);
+        if (me.noTransition) {
+            me.bars.updateVis('fill');
+        } else {
+            me.bars.selection
+                .transition()
+                .duration(me.options.ANIM_DURATION)
+                .attr('fill', me.bars.attrs.fill);
+        }
     }
 
     updateData (data) {
