@@ -86,7 +86,7 @@ class Barchart extends Widget {
         me.setScaleDomains();
         me.setScaleRanges();
 
-        // x-axis labels (add this to the SVG first so the bars will be on top)
+        // x-axis (add to the SVG before the bars so the bars will be on top)
         me.axisX = new Axis(
             me.container.svg,
             'labels',
@@ -98,6 +98,11 @@ class Barchart extends Widget {
                 tickSize: function () { return -me.marginChartY - me.options.AXIS_OFFSET; }
             }
         );
+
+        // y-axis line
+        me.axisYLine = me.container.svg
+            .append('path')
+            .attr('class', 'labels-tick-line');
 
         // y-axis labels
         me.barLabels = new Labels(
@@ -111,11 +116,6 @@ class Barchart extends Widget {
             function () { return me.marginLabelX - me.options.AXIS_OFFSET; },
             'left'
         );
-
-        // vertical line next to textual lables at left
-        me.axisYLine = me.container.svg
-            .append('path')
-            .attr('class', 'labels-tick-line');
 
         me.bars = new ElementCollection(
             me.container.svg,
