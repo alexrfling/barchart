@@ -251,20 +251,20 @@ class Barchart extends Widget {
     positionElements () {
         var me = this;
 
-        me.bars.position();
-        me.barLabels.position();
         me.axisX.position();
         me.axisX.updateTicks();
         me.axisYLine
             .attr('d', 'M ' + me.barLabels.anchor[0] + ' ' + me.barLabels.anchor[1] + ' L ' + me.barLabels.anchor[0] + ' ' + me.container.svgHeight);
+        me.barLabels.position();
+        me.bars.position();
     }
 
     updateVisAllElements () {
         var me = this;
 
-        me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
         me.barLabels.updateLabels(); // recalculate ellipsing
         me.barLabels.updateVis();
+        me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
     }
 
     bindEventListeners () {
