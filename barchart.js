@@ -99,24 +99,6 @@ class Barchart extends Widget {
             }
         );
 
-        // bars and chart
-        me.bars = new ElementCollection(
-            me.container.svg,
-            'bars',
-            'rect',
-            {
-                // -1 for pos bars -> no overlap on '0' center tick
-                x: function (d) { return me.scaleX(0) - (d.value < 0 ? me.scaleWidth(Math.abs(d.value)) : -1); },
-                // add half of (step - bandwidth) to account for paddingInner/Outer
-                y: function (d) { return me.scaleY(d.key) + (me.scaleHeight.step() - me.scaleHeight.bandwidth()) / 2; },
-                width: function (d) { return me.scaleWidth(Math.abs(d.value)); },
-                height: function () { return me.scaleHeight.bandwidth(); },
-                fill: function (d) { return me.scaleFill(d.value); }
-            },
-            me.data,
-            me.key
-        );
-
         // y-axis labels
         me.barLabels = new Labels(
             me.container.svg,
@@ -134,6 +116,23 @@ class Barchart extends Widget {
         me.axisYLine = me.container.svg
             .append('path')
             .attr('class', 'labels-tick-line');
+
+        me.bars = new ElementCollection(
+            me.container.svg,
+            'bars',
+            'rect',
+            {
+                // -1 for pos bars -> no overlap on '0' center tick
+                x: function (d) { return me.scaleX(0) - (d.value < 0 ? me.scaleWidth(Math.abs(d.value)) : -1); },
+                // add half of (step - bandwidth) to account for paddingInner/Outer
+                y: function (d) { return me.scaleY(d.key) + (me.scaleHeight.step() - me.scaleHeight.bandwidth()) / 2; },
+                width: function (d) { return me.scaleWidth(Math.abs(d.value)); },
+                height: function () { return me.scaleHeight.bandwidth(); },
+                fill: function (d) { return me.scaleFill(d.value); }
+            },
+            me.data,
+            me.key
+        );
 
         // tooltip for bars
         me.tooltip = d3.tip()
