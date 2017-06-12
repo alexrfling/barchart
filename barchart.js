@@ -364,14 +364,20 @@ class Barchart extends Widget {
         me.setScaleDomainsVertical();
 
         // visual updates
-        me.bars.selection
-            .transition()
-            .duration(me.options.ANIM_DURATION)
-            // TODO find a way to sync labels with delayed bars
-            //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
-            .attr('y', me.bars.attrs.y);
         me.barLabels.updateLabels(me.labels);
-        me.barLabels.updateVis(me.options.ANIM_DURATION);
+
+        if (me.noTransition) {
+            me.barLabels.updateVis();
+            me.bars.updateVis('y');
+        } else {
+            me.barLabels.updateVis(me.options.ANIM_DURATION);
+            me.bars.selection
+                .transition()
+                .duration(me.options.ANIM_DURATION)
+                // TODO find a way to sync labels with delayed bars
+                //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
+                .attr('y', me.bars.attrs.y);
+        }
     }
 
     updateSort (byName, ascending) {
@@ -390,14 +396,20 @@ class Barchart extends Widget {
         me.setScaleDomainsVertical();
 
         // visual updates
-        me.bars.selection
-            .transition()
-            .duration(me.options.ANIM_DURATION)
-            // TODO find a way to sync labels with delayed bars
-            //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
-            .attr('y', me.bars.attrs.y);
         me.barLabels.updateLabels(me.labels);
-        me.barLabels.updateVis(me.options.ANIM_DURATION);
+
+        if (me.noTransition) {
+            me.barLabels.updateVis();
+            me.bars.updateVis('y');
+        } else {
+            me.barLabels.updateVis(me.options.ANIM_DURATION);
+            me.bars.selection
+                .transition()
+                .duration(me.options.ANIM_DURATION)
+                // TODO find a way to sync labels with delayed bars
+                //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
+                .attr('y', me.bars.attrs.y);
+        }
     }
 
     updateColors (negColor, posColor) {
