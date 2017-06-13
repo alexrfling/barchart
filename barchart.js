@@ -54,7 +54,7 @@ class Barchart extends Widget {
         me.sortData();
         me.labels = me.data.map(me.key);
         me.dataMax = me.getDataMax();
-        me.barColors = me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors);
+        me.colors = me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors);
 
         // clear out DOM elements inside parent
         me.destroy();
@@ -240,7 +240,7 @@ class Barchart extends Widget {
     setScaleRangeFill () {
         var me = this;
 
-        me.scaleFill.range(me.barColors);
+        me.scaleFill.range(me.colors);
     }
 
     setScaleRanges () {
@@ -413,7 +413,7 @@ class Barchart extends Widget {
         me.posColor = (posColor || me.posColor);
 
         // update colors array and scale
-        me.barColors = me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors);
+        me.colors = me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors);
         me.setScaleRangeFill();
 
         // visual update
