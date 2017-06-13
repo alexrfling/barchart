@@ -40,7 +40,9 @@ class Barchart extends Widget {
 
         me.data = (data ? me.clean(data) : []);
         me.negColor = (options.negColor || '#dc3912');
+        me.midColor = (options.midColor || 'lightgrey');
         me.posColor = (options.posColor || '#109618');
+        me.numColors = (options.numColors || 256);
         me.byName = (options.byName === undefined ? true : options.byName);
         me.ascending = (options.ascending === undefined ? true : options.ascending);
         me.defaultDataMax = (options.defaultDataMax || 0.75);
@@ -52,7 +54,7 @@ class Barchart extends Widget {
         me.sortData();
         me.labels = me.data.map(me.key);
         me.dataMax = me.getDataMax();
-        me.barColors = me.getBarColors();
+        me.barColors = me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors);
 
         // clear out DOM elements inside parent
         me.destroy();
@@ -332,12 +334,6 @@ class Barchart extends Widget {
         return d3.max(me.data, function (d) { return Math.abs(d.value); });
     }
 
-    getBarColors () {
-        var me = this;
-
-        return me.interpolateColors(me.negColor, 'lightgrey', me.posColor, 256);
-    }
-
     clean (data) {
         return data.map(function (d) {
             return {
@@ -417,7 +413,7 @@ class Barchart extends Widget {
         me.posColor = (posColor || me.posColor);
 
         // update colors array and scale
-        me.barColors = me.getBarColors();
+        me.barColors = me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors);
         me.setScaleRangeFill();
 
         // visual update
