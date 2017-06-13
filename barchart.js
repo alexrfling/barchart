@@ -38,6 +38,7 @@ class Barchart extends Widget {
         var me = this;
         options = (options || {});
 
+        // required
         me.data = (data ? me.clean(data) : []);
 
         // color options
