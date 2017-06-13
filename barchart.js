@@ -43,6 +43,7 @@ class Barchart extends Widget {
         me.midColor = (options.midColor || 'lightgrey');
         me.posColor = (options.posColor || '#109618');
         me.numColors = (options.numColors || 256);
+        me.colors = (options.colors || me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors));
         me.byName = (options.byName === undefined ? true : options.byName);
         me.ascending = (options.ascending === undefined ? true : options.ascending);
         me.defaultDataMax = (options.defaultDataMax || 0.75);
@@ -54,7 +55,6 @@ class Barchart extends Widget {
         me.sortData();
         me.labels = me.data.map(me.key);
         me.dataMax = me.getDataMax();
-        me.colors = me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors);
 
         // clear out DOM elements inside parent
         me.destroy();
