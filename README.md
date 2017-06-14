@@ -35,16 +35,20 @@ Constructs a new Barchart widget with parent element set to the HTML element in 
 Binds _data_ to _chart_ and renders a bar chart inside the widget's parent element.
 * _data_ - an array of objects, each containing a unique `key` field and a numerical `value` field. Each object in _data_ will have a bar in the bar chart, with its label determined by its `key` field and its size determined by its `value` field
 * _options_ - an object specifying various attributes of the rendering and widget
-  * __width__ - the width, in pixels, of the widget. If falsy, the width of the widget will be the same as the width of the widget's parent element
+  * __width__ - the width, in pixels, of the widget. If falsy, the width of the widget will be the same as the width of the widget's parent element (default: `undefined`)
   * __height__ - the height, in pixels, of the widget (default: `400`)
   * __negColor__ - the color of bars with negative `value` fields (default: `'#dc3912'`)
+  * __midColor__ - the color of bars with `value` fields near zero (default: `'lightgrey'`)
   * __posColor__ - the color of bars with positive `value` fields (default: `'#109618'`)
+  * __numColors__ - the number of colors in the interpolation of __negColor__, __midColor__, and __posColor__
+  * __colors__ - an array of colors for the bars (default: an interpolation from __negColor__ to __midColor__ to __posColor__ consisting of __numColors__ strings)
   * __byName__ - if truthy, determines bar ordering by comparing their `key` fields; otherwise, their `value` fields are compared (default: `true`)
   * __ascending__ - if truthy, sorts the bars ascending; otherwise, they are sorted descending (default: `true`)
   * __defaultDataMax__ - if `data` is empty, this value will be used to set the range of the x-axis (default: `0.75`)
   * __keyTooltipLabel__ - the label that describes the `key` field in the tooltip (default: `'Variable'`)
   * __valueTooltipLabel__ - the label that describes the `value` field in the tooltip (default: `'Coefficient'`)
   * __tooltipFormat__ - the function used to format the `value` field in the tooltip (default: `d3.format('.7')`)
+  * __noTransition__ - if truthy, the widget will render/update without transitions. Otherwise, the widget will render/update with transitions (default: `false`)
 
 <a name='resize' href='#resize'>#</a> _chart_.__resize__([_width_[, _height_]])
 
