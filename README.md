@@ -40,7 +40,7 @@ Binds _data_ to _chart_ and renders a bar chart inside the widget's parent eleme
   * __negColor__ - the color of bars with negative `value` fields (default: `'#dc3912'`)
   * __midColor__ - the color of bars with `value` fields near zero (default: `'lightgrey'`)
   * __posColor__ - the color of bars with positive `value` fields (default: `'#109618'`)
-  * __numColors__ - the number of colors in the interpolation of __negColor__, __midColor__, and __posColor__
+  * __numColors__ - the number of colors in the interpolation of __negColor__, __midColor__, and __posColor__ (default: `256`)
   * __colors__ - an array of colors for the bars (default: an interpolation from __negColor__ to __midColor__ to __posColor__ consisting of __numColors__ strings)
   * __byName__ - if truthy, determines bar ordering by comparing their `key` fields; otherwise, their `value` fields are compared (default: `true`)
   * __ascending__ - if truthy, sorts the bars ascending; otherwise, they are sorted descending (default: `true`)
