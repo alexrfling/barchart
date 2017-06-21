@@ -271,7 +271,7 @@ class Barchart extends Widget {
         me.bars.position();
     }
 
-    updateVisAllElements () {
+    updateVisElements () {
         var me = this;
 
         me.barLabels.updateLabels(); // recalculate ellipsing
@@ -317,7 +317,7 @@ class Barchart extends Widget {
         me.setAnchors();
         me.setScaleRangesPositional();
         me.positionElements();
-        me.updateVisAllElements();
+        me.updateVisElements();
     }
 
     sortData () {
