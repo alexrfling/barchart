@@ -87,9 +87,8 @@ class Barchart extends Widget {
 
         // scales for bar attributes (x, y, width, height, fill)
         me.scaleX = d3.scaleLinear();
-        me.scaleY = d3.scaleBand();
         me.scaleWidth = d3.scaleLinear();
-        me.scaleHeight = d3.scaleBand()
+        me.scaleYHeight = d3.scaleBand()
             .paddingInner(0.1)
             .paddingOuter(0.05);
         me.scaleFill = d3.scaleQuantize();
@@ -122,7 +121,7 @@ class Barchart extends Widget {
             'labels',
             me.labels,
             function () { return me.marginChartY; },
-            me.scaleHeight.step,
+            me.scaleYHeight.step,
             false,
             me.options.FONT_SIZE,
             function () { return me.marginLabelX - me.options.AXIS_OFFSET; },
@@ -136,10 +135,9 @@ class Barchart extends Widget {
             {
                 // -1 for pos bars -> no overlap on '0' center tick
                 x: function (d) { return me.scaleX(0) - (d.value < 0 ? me.scaleWidth(Math.abs(d.value)) : -1); },
-                // add half of (step - bandwidth) to account for paddingInner/Outer
-                y: function (d) { return me.scaleY(d.key) + (me.scaleHeight.step() - me.scaleHeight.bandwidth()) / 2; },
+                y: function (d) { return me.scaleYHeight(d.key); },
                 width: function (d) { return me.scaleWidth(Math.abs(d.value)); },
-                height: function () { return me.scaleHeight.bandwidth(); },
+                height: function () { return me.scaleYHeight.bandwidth(); },
                 fill: function (d) { return me.scaleFill(d.value); }
             },
             me.data,
@@ -220,8 +218,7 @@ class Barchart extends Widget {
     setScaleDomainsVertical () {
         var me = this;
 
-        me.scaleY.domain(me.labels);
-        me.scaleHeight.domain(me.labels);
+        me.scaleYHeight.domain(me.labels);
     }
 
     setScaleDomainFill () {
@@ -242,9 +239,8 @@ class Barchart extends Widget {
         var me = this;
 
         me.scaleX.range([0, me.marginChartX]);
-        me.scaleY.range([0, me.marginChartY]);
         me.scaleWidth.range([0, me.marginChartX / 2]);
-        me.scaleHeight.range([0, me.marginChartY]);
+        me.scaleYHeight.range([0, me.marginChartY]);
     }
 
     setScaleRangeFill () {
