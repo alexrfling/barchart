@@ -71,7 +71,7 @@ marginChartY |            |                                                    |
 
             // standard options
             me.tooltipFormat = (options.tooltipFormat || d3.format('.7'));
-            me.noTransition = (options.noTransition === undefined ? false : options.noTransition);
+            me.enableTransitions = (options.enableTransitions === undefined ? true : options.enableTransitions);
 
             // sort data before mapping labels
             me.sortData();
@@ -182,9 +182,7 @@ marginChartY |            |                                                    |
             me.positionElements();
 
             // initialize bars
-            if (me.noTransition) {
-                me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
-            } else {
+            if (me.enableTransitions) {
                 me.bars.selection
                     .attr('x', me.scaleX(0))
                     .attr('y', me.bars.attrs.y)
@@ -198,6 +196,8 @@ marginChartY |            |                                                    |
                     .attr('x', me.bars.attrs.x)
                     .attr('width', me.bars.attrs.width)
                     .attr('fill', me.bars.attrs.fill);
+            } else {
+                me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
             }
         }
 
@@ -379,10 +379,7 @@ marginChartY |            |                                                    |
             // visual updates
             me.barLabels.updateLabels(me.labels);
 
-            if (me.noTransition) {
-                me.barLabels.updateVis();
-                me.bars.updateVis('y');
-            } else {
+            if (me.enableTransitions) {
                 me.barLabels.updateVis(me.options.ANIM_DURATION);
                 me.bars.selection
                     .transition()
@@ -390,6 +387,9 @@ marginChartY |            |                                                    |
                     // TODO find a way to sync labels with delayed bars
                     //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
                     .attr('y', me.bars.attrs.y);
+            } else {
+                me.barLabels.updateVis();
+                me.bars.updateVis('y');
             }
         }
 
@@ -411,10 +411,7 @@ marginChartY |            |                                                    |
             // visual updates
             me.barLabels.updateLabels(me.labels);
 
-            if (me.noTransition) {
-                me.barLabels.updateVis();
-                me.bars.updateVis('y');
-            } else {
+            if (me.enableTransitions) {
                 me.barLabels.updateVis(me.options.ANIM_DURATION);
                 me.bars.selection
                     .transition()
@@ -422,6 +419,9 @@ marginChartY |            |                                                    |
                     // TODO find a way to sync labels with delayed bars
                     //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
                     .attr('y', me.bars.attrs.y);
+            } else {
+                me.barLabels.updateVis();
+                me.bars.updateVis('y');
             }
         }
 
@@ -435,13 +435,13 @@ marginChartY |            |                                                    |
             me.setScaleRangeFill();
 
             // visual update
-            if (me.noTransition) {
-                me.bars.updateVis('fill');
-            } else {
+            if (me.enableTransitions) {
                 me.bars.selection
                     .transition()
                     .duration(me.options.ANIM_DURATION)
                     .attr('fill', me.bars.attrs.fill);
+            } else {
+                me.bars.updateVis('fill');
             }
         }
 
@@ -465,12 +465,7 @@ marginChartY |            |                                                    |
             // visual updates
             me.barLabels.updateLabels(me.labels);
 
-            if (me.noTransition) {
-                me.axisX.updateVis();
-                me.barLabels.updateVis();
-                me.bars.updateData(me.data, me.key);
-                me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
-            } else {
+            if (me.enableTransitions) {
                 me.axisX.updateVis(me.options.ANIM_DURATION);
                 me.barLabels.updateVis(me.options.ANIM_DURATION);
 
@@ -523,6 +518,11 @@ marginChartY |            |                                                    |
                 me.bars.selection = me.bars.group
                     .selectAll('rect.keep')
                     .classed('keep', false);
+            } else {
+                me.axisX.updateVis();
+                me.barLabels.updateVis();
+                me.bars.updateData(me.data, me.key);
+                me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
             }
 
             me.bindEventListeners();

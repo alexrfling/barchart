@@ -43,7 +43,7 @@ Binds _data_ to _chart_ and renders a bar chart inside the widget's parent eleme
   * __keyTooltipLabel__ - the label that describes the `key` field in the tooltip (default: `'Variable'`)
   * __valueTooltipLabel__ - the label that describes the `value` field in the tooltip (default: `'Coefficient'`)
   * __tooltipFormat__ - the function used to format the `value` field in the tooltip (default: `d3.format('.7')`)
-  * __noTransition__ - if truthy, the widget will render/update without transitions. Otherwise, the widget will render/update with transitions (default: `false`)
+  * __enableTransitions__ - if truthy, the widget will render/update with transitions; otherwise, the widget will render/update without transitions (default: `true`)
 
 <a name='resize' href='#resize'>#</a> _chart_.__resize__([_width_[, _height_]])
 
