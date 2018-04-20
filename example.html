@@ -1,110 +1,110 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src='d3-helpers/d3/d3.min.js'></script>
-	<script src='d3-helpers/d3-tip/index.js'></script>
-	<script src='d3-helpers/d3-helpers.js'></script>
-	<script src='barchart.js'></script>
-	<script src='example-data.js'></script>
-	<link rel='stylesheet' type='text/css' href='d3-helpers/d3-tip/examples/example-styles.css'>
-	<link rel='stylesheet' type='text/css' href='d3-helpers/widget.css'>
+    <script src='d3-helpers/d3/d3.min.js'></script>
+    <script src='d3-helpers/d3-tip/index.js'></script>
+    <script src='d3-helpers/d3-helpers.js'></script>
+    <script src='barchart.js'></script>
+    <script src='example-data.js'></script>
+    <link rel='stylesheet' type='text/css' href='d3-helpers/d3-tip/examples/example-styles.css'>
+    <link rel='stylesheet' type='text/css' href='d3-helpers/widget.css'>
 </head>
 <body>
-	<button onclick='chart1.updateData(genData(chart1));'>update</button>
-	<button onclick='chart1.resize(null, chart1.container.divHeight - 50);'>shorter</button>
-	<button onclick='chart1.resize(null, chart1.container.divHeight + 50);'>taller</button>
-	<select onchange='chart1.updateColors(this.value, null);'>
-		<option value='#dc3912' selected>red</option>
-		<option value='#e67300'>ora</option>
-		<option value='#ff9900'>yel</option>
-		<option value='#109618'>gre</option>
-		<option value='#3366cc'>blu</option>
-		<option value='#990099'>pur</option>
-	</select>
-	<select onchange='chart1.updateColors(null, this.value);'>
-		<option value='#dc3912'>red</option>
-		<option value='#e67300'>ora</option>
-		<option value='#ff9900'>yel</option>
-		<option value='#109618' selected>gre</option>
-		<option value='#3366cc'>blu</option>
-		<option value='#990099'>pur</option>
-	</select>
-	<select onchange='chart1.updateSort(Boolean(Number(this.value)), null);'>
-		<option value='1'>name</option>
-		<option value='0'>value</option>
-	</select>
-	<select onchange='chart1.updateSort(null, Boolean(Number(this.value)));'>
-		<option value='1'>asc</option>
-		<option value='0'>des</option>
-	</select>
-	<div id='parent1'></div>
-	<div id='parent2'></div>
-	<div id='parent3'></div>
-	<div id='parent4'></div>
-	<script>
-		var chart1 = new d3.Barchart('parent1');
-		var options1 = {
-			height: 600
-		};
+    <button onclick='chart1.updateData(genData(chart1));'>update</button>
+    <button onclick='chart1.resize(null, chart1.container.divHeight - 50);'>shorter</button>
+    <button onclick='chart1.resize(null, chart1.container.divHeight + 50);'>taller</button>
+    <select onchange='chart1.updateColors(this.value, null);'>
+        <option value='#dc3912' selected>red</option>
+        <option value='#e67300'>ora</option>
+        <option value='#ff9900'>yel</option>
+        <option value='#109618'>gre</option>
+        <option value='#3366cc'>blu</option>
+        <option value='#990099'>pur</option>
+    </select>
+    <select onchange='chart1.updateColors(null, this.value);'>
+        <option value='#dc3912'>red</option>
+        <option value='#e67300'>ora</option>
+        <option value='#ff9900'>yel</option>
+        <option value='#109618' selected>gre</option>
+        <option value='#3366cc'>blu</option>
+        <option value='#990099'>pur</option>
+    </select>
+    <select onchange='chart1.updateSort(Boolean(Number(this.value)), null);'>
+        <option value='1'>name</option>
+        <option value='0'>value</option>
+    </select>
+    <select onchange='chart1.updateSort(null, Boolean(Number(this.value)));'>
+        <option value='1'>asc</option>
+        <option value='0'>des</option>
+    </select>
+    <div id='parent1'></div>
+    <div id='parent2'></div>
+    <div id='parent3'></div>
+    <div id='parent4'></div>
+    <script>
+        var chart1 = new d3.Barchart('parent1');
+        var options1 = {
+            height: 600
+        };
 
-		// default: red/green, A to Z
-		chart1.initialize(data1, options1);
-	</script>
-	<script>
-		var chart2 = new d3.Barchart('parent2');
-		var options2 = {
-			height: 600,
-			negColor: '#e67300',
-			posColor: '#3366cc',
-			byName: false,
-			ascending: false,
-			noTransition: true
-		};
+        // default: red/green, A to Z
+        chart1.initialize(data1, options1);
+    </script>
+    <script>
+        var chart2 = new d3.Barchart('parent2');
+        var options2 = {
+            height: 600,
+            negColor: '#e67300',
+            posColor: '#3366cc',
+            byName: false,
+            ascending: false,
+            noTransition: true
+        };
 
-		// orange/blue, + to -
-		chart2.initialize(data2, options2);
-	</script>
-	<script>
-		var chart3 = new d3.Barchart('parent3');
-		var options3 = {
-			height: 600,
-			negColor: '#ff9900',
-			posColor: '#990099'
-		};
+        // orange/blue, + to -
+        chart2.initialize(data2, options2);
+    </script>
+    <script>
+        var chart3 = new d3.Barchart('parent3');
+        var options3 = {
+            height: 600,
+            negColor: '#ff9900',
+            posColor: '#990099'
+        };
 
-		// yellow/purple, empty view
-		chart3.initialize(data3, options3);
-	</script>
-	<script>
-		var chart4 = new d3.Barchart('parent4');
-		var options4 = {
-			height: 600
-		};
+        // yellow/purple, empty view
+        chart3.initialize(data3, options3);
+    </script>
+    <script>
+        var chart4 = new d3.Barchart('parent4');
+        var options4 = {
+            height: 600
+        };
 
-		chart4.initialize(data4, options4);
-	</script>
-	<script>
-		function genData (chart) {
-			var data = chart.data;
-			var numNew = Math.floor(10 * Math.random());
-			var numRem = Math.floor(10 * Math.random());
+        chart4.initialize(data4, options4);
+    </script>
+    <script>
+        function genData (chart) {
+            var data = chart.data;
+            var numNew = Math.floor(10 * Math.random());
+            var numRem = Math.floor(10 * Math.random());
 
-			for (var j = 0; j < numRem; j++) {
-				var index = Math.floor(data.length * Math.random());
-				data = data.slice(0, index).concat(data.slice(index + 1, data.length));
-			}
+            for (var j = 0; j < numRem; j++) {
+                var index = Math.floor(data.length * Math.random());
+                data = data.slice(0, index).concat(data.slice(index + 1, data.length));
+            }
 
-			for (var j = 0; j < numNew; j++) {
-				var firstLetter = 'qwertyuiopasdfghjklzxcvbnm'[Math.floor(26 * Math.random())];
+            for (var j = 0; j < numNew; j++) {
+                var firstLetter = 'qwertyuiopasdfghjklzxcvbnm'[Math.floor(26 * Math.random())];
 
-				data.push({
-					key: firstLetter + Math.random(),
-					value: 2.5 * Math.random() * chart.dataMax - chart.dataMax
-				});
-			}
+                data.push({
+                    key: firstLetter + Math.random(),
+                    value: 2.5 * Math.random() * chart.dataMax - chart.dataMax
+                });
+            }
 
-			return data;
-		}
-	</script>
+            return data;
+        }
+    </script>
 </body>
 </html>
