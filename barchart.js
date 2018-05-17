@@ -152,8 +152,32 @@ marginChartY |            |                                                    |
                     height: function () { return me.scaleYHeight.bandwidth(); },
                     fill: function (d) { return me.scaleFill(d.value); }
                 },
-                me.data,
-                me.key
+                {
+                    mouseover: function (d) {
+                        d3.select(this)
+                            .style('opacity', 0.5);
+                        me.barLabels.group
+                            .select('#' + d3.htmlEscape(d.key))
+                            .classed('bold', true);
+                        me.tooltip.show(d);
+                    },
+                    mouseout: function (d) {
+                        d3.select(this)
+                            .style('opacity', 1);
+                        me.barLabels.group
+                            .select('#' + d3.htmlEscape(d.key))
+                            .classed('bold', false);
+                        me.tooltip.hide();
+                    },
+                    click: function (d) {
+                        d3.select(this)
+                            .style('opacity', 1);
+                        me.barLabels.group
+                            .select('#' + d3.htmlEscape(d.key))
+                            .classed('bold', false);
+                        me.sortBarsOnClickEasterEgg.call(me);
+                    }
+                }
             );
 
             // tooltip for bars
@@ -172,9 +196,6 @@ marginChartY |            |                                                    |
             me.container.svg
                 .call(me.tooltip);
 
-            // bind event listeners to bars
-            me.bindEventListeners();
-
             // last setup before initial bar transition
             me.setMargins();
             me.setAnchors();
@@ -182,6 +203,7 @@ marginChartY |            |                                                    |
             me.positionElements();
 
             // initialize bars
+            me.bars.updateDataWithDomIds(me.data, me.key);
             if (me.enableTransitions) {
                 me.bars.selection
                     .attr('x', me.scaleX(0))
@@ -285,36 +307,6 @@ marginChartY |            |                                                    |
             me.barLabels.updateLabels(); // recalculate ellipsing
             me.barLabels.updateVis();
             me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
-        }
-
-        bindEventListeners () {
-            var me = this;
-
-            me.bars.selection
-                .on('mouseover', function (d) {
-                    d3.select(this)
-                        .style('opacity', 0.5);
-                    me.barLabels.group
-                        .select('#' + d3.htmlEscape(d.key))
-                        .classed('bold', true);
-                    me.tooltip.show(d);
-                })
-                .on('mouseout', function (d) {
-                    d3.select(this)
-                        .style('opacity', 1);
-                    me.barLabels.group
-                        .select('#' + d3.htmlEscape(d.key))
-                        .classed('bold', false);
-                    me.tooltip.hide();
-                })
-                .on('click', function (d) {
-                    d3.select(this)
-                        .style('opacity', 1);
-                    me.barLabels.group
-                        .select('#' + d3.htmlEscape(d.key))
-                        .classed('bold', false);
-                    me.sortBarsOnClickEasterEgg.call(me);
-                });
         }
 
         resize (width, height) {
@@ -518,14 +510,13 @@ marginChartY |            |                                                    |
                 me.bars.selection = me.bars.group
                     .selectAll('rect.keep')
                     .classed('keep', false);
+                me.bars.bindEventListeners();
             } else {
                 me.axisX.updateVis();
                 me.barLabels.updateVis();
-                me.bars.updateData(me.data, me.key);
+                me.bars.updateDataWithDomIds(me.data, me.key);
                 me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
             }
-
-            me.bindEventListeners();
         }
     }
 
