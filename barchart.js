@@ -131,7 +131,6 @@ marginChartY |            |                                                    |
             me.barLabels = new d3.Labels(
                 me.container.svg,
                 'labels',
-                me.labels,
                 function () { return me.marginChartY; },
                 me.scaleYHeight.step,
                 false,
@@ -224,8 +223,8 @@ marginChartY |            |                                                    |
 
             // initialize bars and labels
             me.bars.updateDataWithDomIds(me.data, me.key);
-            me.bars.bindEventListeners();
-            me.barLabels.bindEventListeners();
+            me.barLabels.updateLabels(me.labels);
+
             if (me.enableTransitions) {
                 me.bars.selection
                     .attr('x', me.scaleX(0))
@@ -240,9 +239,14 @@ marginChartY |            |                                                    |
                     .attr('x', me.bars.attrs.x)
                     .attr('width', me.bars.attrs.width)
                     .attr('fill', me.bars.attrs.fill);
+                me.barLabels.updateVis(me.options.ANIM_DURATION);
             } else {
                 me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
+                me.barLabels.updateVis();
             }
+
+            me.bars.bindEventListeners();
+            me.barLabels.bindEventListeners();
         }
 
         setMargins () {
