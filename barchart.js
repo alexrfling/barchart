@@ -332,6 +332,7 @@ marginChartY |            |                                                    |
 
             me.barLabels.updateLabels(); // recalculate ellipsing
             me.barLabels.updateVis();
+            me.barLabels.bindEventListeners(); // ellipsing may affect text elements
             me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
         }
 
