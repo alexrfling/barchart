@@ -137,7 +137,25 @@ marginChartY |            |                                                    |
                 false,
                 me.options.FONT_SIZE,
                 function () { return me.marginLabelX - me.options.AXIS_OFFSET; },
-                'left'
+                'left',
+                {
+                    callbacks: {
+                        mouseover: function (d) {
+                            d3.select(this)
+                                .classed('bold', true);
+                            me.bars.group
+                                .select('#' + me.barLabels.getLabelId(d))
+                                .style('opacity', 0.5);
+                        },
+                        mouseout: function (d) {
+                            d3.select(this)
+                                .classed('bold', false);
+                            me.bars.group
+                                .select('#' + me.barLabels.getLabelId(d))
+                                .style('opacity', 1);
+                        }
+                    }
+                }
             );
 
             me.bars = new d3.ElementCollection(
@@ -153,29 +171,31 @@ marginChartY |            |                                                    |
                     fill: function (d) { return me.scaleFill(d.value); }
                 },
                 {
-                    mouseover: function (d) {
-                        d3.select(this)
-                            .style('opacity', 0.5);
-                        me.barLabels.group
-                            .select('#' + d3.htmlEscape(d.key))
-                            .classed('bold', true);
-                        me.tooltip.show(d);
-                    },
-                    mouseout: function (d) {
-                        d3.select(this)
-                            .style('opacity', 1);
-                        me.barLabels.group
-                            .select('#' + d3.htmlEscape(d.key))
-                            .classed('bold', false);
-                        me.tooltip.hide();
-                    },
-                    click: function (d) {
-                        d3.select(this)
-                            .style('opacity', 1);
-                        me.barLabels.group
-                            .select('#' + d3.htmlEscape(d.key))
-                            .classed('bold', false);
-                        me.sortBarsOnClickEasterEgg.call(me);
+                    callbacks: {
+                        mouseover: function (d) {
+                            d3.select(this)
+                                .style('opacity', 0.5);
+                            me.barLabels.group
+                                .select('#' + d3.htmlEscape(d.key))
+                                .classed('bold', true);
+                            me.tooltip.show(d);
+                        },
+                        mouseout: function (d) {
+                            d3.select(this)
+                                .style('opacity', 1);
+                            me.barLabels.group
+                                .select('#' + d3.htmlEscape(d.key))
+                                .classed('bold', false);
+                            me.tooltip.hide();
+                        },
+                        click: function (d) {
+                            d3.select(this)
+                                .style('opacity', 1);
+                            me.barLabels.group
+                                .select('#' + d3.htmlEscape(d.key))
+                                .classed('bold', false);
+                            me.sortBarsOnClickEasterEgg.call(me);
+                        }
                     }
                 }
             );
@@ -202,8 +222,10 @@ marginChartY |            |                                                    |
             me.setScaleRangesPositional();
             me.positionElements();
 
-            // initialize bars
+            // initialize bars and labels
             me.bars.updateDataWithDomIds(me.data, me.key);
+            me.bars.bindEventListeners();
+            me.barLabels.bindEventListeners();
             if (me.enableTransitions) {
                 me.bars.selection
                     .attr('x', me.scaleX(0))
@@ -509,14 +531,17 @@ marginChartY |            |                                                    |
                 // update bar selection
                 me.bars.selection = me.bars.group
                     .selectAll('rect.keep')
-                    .classed('keep', false);
-                me.bars.bindEventListeners();
+                    .classed('keep', false)
+                    .attr('id', function (d) { return d3.htmlEscape(me.key(d)); });
             } else {
                 me.axisX.updateVis();
                 me.barLabels.updateVis();
                 me.bars.updateDataWithDomIds(me.data, me.key);
                 me.bars.updateVis('x', 'y', 'width', 'height', 'fill');
             }
+
+            me.bars.bindEventListeners();
+            me.barLabels.bindEventListeners();
         }
     }
 
