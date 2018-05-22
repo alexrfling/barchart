@@ -53,25 +53,23 @@ marginChartY |            |                                                    |
             // required
             me.data = (data ? me.clean(data) : []);
 
-            // color options
-            me.negColor = (options.negColor || '#dc3912');
-            me.midColor = (options.midColor || 'lightgrey');
-            me.posColor = (options.posColor || '#109618');
-            me.numColors = (options.numColors || 256);
+            d3.setDefaultPropertiesFalsy(me, options, {
+                negColor: '#dc3912',
+                midColor: 'lightgrey',
+                posColor: '#109618',
+                numColors: 256,
+                defaultDataMax: 0.75,
+                keyTooltipLabel: 'Variable',
+                valueTooltipLabel: 'Coefficient',
+                tooltipFormat: d3.format('.7')
+            });
+            d3.setDefaultPropertiesUndefined(me, options, {
+                byName: true,
+                ascending: true,
+                enableTransitions: true
+            });
+
             me.colors = (options.colors || me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors));
-
-            // sort/order options
-            me.byName = (options.byName === undefined ? true : options.byName);
-            me.ascending = (options.ascending === undefined ? true : options.ascending);
-
-            // miscellaneous options
-            me.defaultDataMax = (options.defaultDataMax || 0.75);
-            me.keyTooltipLabel = (options.keyTooltipLabel || 'Variable');
-            me.valueTooltipLabel = (options.valueTooltipLabel || 'Coefficient');
-
-            // standard options
-            me.tooltipFormat = (options.tooltipFormat || d3.format('.7'));
-            me.enableTransitions = (options.enableTransitions === undefined ? true : options.enableTransitions);
 
             // sort data before mapping labels
             me.sortData();
