@@ -51,7 +51,7 @@ marginChartY |            |                                                    |
             options = (options || {});
 
             // required
-            me.data = (data ? me.clean(data) : []);
+            me.data = me.clean(data);
 
             d3.setDefaultPropertiesFalsy(me, options, {
                 negColor: '#dc3912',
@@ -370,12 +370,12 @@ marginChartY |            |                                                    |
         }
 
         clean (data) {
-            return data.map(function (d) {
+            return (data ? data.map(function (d) {
                 return {
                     key: String(d.key),
                     value: d.value
                 };
-            });
+            }) : []);
         }
 
         sortBarsOnClickEasterEgg () {
