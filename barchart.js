@@ -48,11 +48,8 @@ marginChartY |            |                                                    |
 
         initialize (data, options) {
             var me = this;
-            options = (options || {});
-
-            // required
             me.data = me.clean(data);
-
+            options = (options || {});
             d3.setDefaultPropertiesFalsy(me, options, {
                 negColor: '#dc3912',
                 midColor: 'lightgrey',
