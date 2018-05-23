@@ -83,10 +83,6 @@ marginChartY |            |                                                    |
                 .paddingOuter(0.05);
             me.scaleFill = d3.scaleQuantize();
 
-            // initalize scales
-            me.setScaleDomains();
-            me.setScaleRanges();
-
             // x-axis (add to the SVG before the bars so the bars will be on top)
             me.axisX = new d3.Axis(
                 me.container.svg,
@@ -196,7 +192,8 @@ marginChartY |            |                                                    |
             // last setup before initial bar transition
             me.setMargins();
             me.setAnchors();
-            me.setScaleRangesPositional();
+            me.setScaleDomains();
+            me.setScaleRanges();
             me.positionElements();
 
             // initialize bars and labels
