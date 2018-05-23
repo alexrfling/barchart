@@ -73,8 +73,6 @@ marginChartY |            |                                                    |
             me.labels = me.data.map(me.key);
             me.dataMax = me.getDataMax();
 
-            me.container = me.newDefaultSVGContainer(options);
-
             // scales for bar attributes (x, y, width, height, fill)
             me.scaleX = d3.scaleLinear();
             me.scaleWidth = d3.scaleLinear();
@@ -82,6 +80,9 @@ marginChartY |            |                                                    |
                 .paddingInner(0.1)
                 .paddingOuter(0.05);
             me.scaleFill = d3.scaleQuantize();
+
+            // container to hold all visual elements
+            me.container = me.newDefaultSVGContainer(options);
 
             // x-axis (add to the SVG before the bars so the bars will be on top)
             me.axisX = new d3.Axis(
