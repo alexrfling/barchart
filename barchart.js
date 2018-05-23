@@ -75,9 +75,6 @@ marginChartY |            |                                                    |
 
             me.container = me.newDefaultSVGContainer(options);
 
-            // initial setup for margins
-            me.setMargins();
-
             // scales for bar attributes (x, y, width, height, fill)
             me.scaleX = d3.scaleLinear();
             me.scaleWidth = d3.scaleLinear();
