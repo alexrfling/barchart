@@ -66,13 +66,6 @@ marginChartY |            |                                                    |
                 enableTransitions: true
             });
 
-            me.colors = (options.colors || me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors));
-
-            // sort data before mapping labels
-            me.sortData();
-            me.labels = me.data.map(me.key);
-            me.dataMax = me.getDataMax();
-
             // scales for bar attributes (x, y, width, height, fill)
             me.scaleX = d3.scaleLinear();
             me.scaleWidth = d3.scaleLinear();
@@ -189,6 +182,13 @@ marginChartY |            |                                                    |
             // invoke tooltip
             me.container.svg
                 .call(me.tooltip);
+
+            me.colors = (options.colors || me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors));
+
+            // sort data before mapping labels
+            me.sortData();
+            me.labels = me.data.map(me.key);
+            me.dataMax = me.getDataMax();
 
             // last setup before initial bar transition
             me.setMargins();
