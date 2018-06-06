@@ -186,8 +186,7 @@ marginChartY |            |                                                    |
             me.colors = (options.colors || me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors));
 
             // sort data before mapping labels
-            me.sortData();
-            me.labels = me.data.map(me.key);
+            me.labels = me.sortData();
             me.dataMax = me.getDataMax();
 
             // last setup before initial bar transition
@@ -326,13 +325,13 @@ marginChartY |            |                                                    |
         sortData () {
             var me = this;
 
-            me.data.sort(function (a, b) {
+            return me.data.sort(function (a, b) {
                 if (me.byName) {
                     return (me.ascending ? a.key.localeCompare(b.key) : b.key.localeCompare(a.key));
                 } else {
                     return (me.ascending ? a.value - b.value : b.value - a.value);
                 }
-            });
+            }).map(me.key);
         }
 
         getDataMax () {
@@ -365,8 +364,7 @@ marginChartY |            |                                                    |
             // update ordering of data and labels
             me.byName = !me.byName;
             me.ascending = (me.byName ? !me.ascending : me.ascending);
-            me.sortData();
-            me.labels = me.data.map(me.key);
+            me.labels = me.sortData();
 
             // scale updates
             me.setScaleDomainsVertical();
@@ -397,8 +395,7 @@ marginChartY |            |                                                    |
             me.tooltip.hide();
 
             // update ordering of data and labels
-            me.sortData();
-            me.labels = me.data.map(me.key);
+            me.labels = me.sortData();
 
             // scale updates
             me.setScaleDomainsVertical();
@@ -448,10 +445,9 @@ marginChartY |            |                                                    |
             me.tooltip.hide();
 
             // sort data as it previously was sorted
-            me.sortData();
+            me.labels = me.sortData();
 
             // update ordering of labels and max abs value
-            me.labels = me.data.map(me.key);
             me.dataMax = me.getDataMax();
 
             // scale updates
