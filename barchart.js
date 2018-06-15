@@ -186,7 +186,7 @@ marginChartY |            |                                                    |
             me.container.svg
                 .call(me.tooltip);
 
-            // sort data before mapping labels
+            // sort data and get labels and max value
             me.labels = me.sortData();
             me.dataMax = me.getDataMax();
 
@@ -395,10 +395,8 @@ marginChartY |            |                                                    |
             // hide tooltip in case it's visible
             me.tooltip.hide();
 
-            // update ordering of data and labels
+            // sort data, then update vertical scale with reordered labels
             me.labels = me.sortData();
-
-            // scale updates
             me.setScaleDomainsVertical();
 
             // visual updates
@@ -423,7 +421,7 @@ marginChartY |            |                                                    |
             me.negColor = (negColor || me.negColor);
             me.posColor = (posColor || me.posColor);
 
-            // update colors array and scale
+            // update fill scale with new colors
             me.colors = me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors);
             me.setScaleRangeFill();
 
@@ -445,13 +443,9 @@ marginChartY |            |                                                    |
             // hide tooltip in case it's visible
             me.tooltip.hide();
 
-            // sort data as it previously was sorted
+            // sort new data, then update scales with new labels and max value
             me.labels = me.sortData();
-
-            // update ordering of labels and max abs value
             me.dataMax = me.getDataMax();
-
-            // scale updates
             me.setScaleDomains();
 
             // visual updates
