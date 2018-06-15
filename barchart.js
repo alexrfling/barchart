@@ -60,6 +60,9 @@ marginChartY |            |                                                    |
                 valueTooltipLabel: 'Coefficient',
                 tooltipFormat: d3.format('.7')
             });
+            d3.setDefaultPropertiesFalsy(me, options, {
+                colors: me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors)
+            });
             d3.setDefaultPropertiesUndefined(me, options, {
                 byName: true,
                 ascending: true,
@@ -182,8 +185,6 @@ marginChartY |            |                                                    |
             // invoke tooltip
             me.container.svg
                 .call(me.tooltip);
-
-            me.colors = (options.colors || me.interpolateColors(me.negColor, me.midColor, me.posColor, me.numColors));
 
             // sort data before mapping labels
             me.labels = me.sortData();
