@@ -164,7 +164,7 @@ marginChartY |            |                                                    |
                             me.barLabels.group
                                 .select('#' + d3.htmlEscape(d.key))
                                 .classed('bold', false);
-                            me.sortBarsOnClickEasterEgg.call(me);
+                            me.updateSort.call(me, !me.byName, (me.byName ? me.ascending : !me.ascending));
                         }
                     }
                 }
@@ -354,37 +354,6 @@ marginChartY |            |                                                    |
                     value: d.value
                 };
             }) : []);
-        }
-
-        sortBarsOnClickEasterEgg () {
-            var me = this;
-
-            // hide the tooltip (visible on the bar that was clicked)
-            me.tooltip.hide();
-
-            // update ordering of data and labels
-            me.byName = !me.byName;
-            me.ascending = (me.byName ? !me.ascending : me.ascending);
-            me.labels = me.sortData();
-
-            // scale updates
-            me.setScaleDomainsVertical();
-
-            // visual updates
-            me.barLabels.updateLabels(me.labels);
-
-            if (me.enableTransitions) {
-                me.barLabels.updateVis(me.options.ANIM_DURATION);
-                me.bars.selection
-                    .transition()
-                    .duration(me.options.ANIM_DURATION)
-                    // TODO find a way to sync labels with delayed bars
-                    //.delay(function (d) { return 500 * Math.abs(d.value) / me.dataMax; })
-                    .attr('y', me.bars.attrs.y);
-            } else {
-                me.barLabels.updateVis();
-                me.bars.updateVis('y');
-            }
         }
 
         updateSort (byName, ascending) {
