@@ -228,8 +228,6 @@ marginChartY |            |                                                    |
         setMargins () {
             var me = this;
 
-            // NOTE marginLabelX and marginLabelY should be >= 10 to start,
-            // otherwise bar labels get positioned badly for some reason...
             me.marginLabelX = Math.ceil(0.1 * me.container.svgWidth);
             me.marginLabelY = me.options.FONT_SIZE;
             me.marginChartX = me.container.svgWidth - me.marginLabelX - me.options.AXIS_OFFSET - me.options.PADDING;
