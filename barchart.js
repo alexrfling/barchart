@@ -190,7 +190,7 @@ marginChartY |            |                                                    |
             me.labels = me.sortData();
             me.dataMax = me.getDataMax();
 
-            // last setup before initial bar transition
+            // set margins, anchors, scales, and position all elements
             me.setMargins();
             me.setAnchors();
             me.setScaleDomains();
@@ -201,6 +201,7 @@ marginChartY |            |                                                    |
             me.bars.updateDataWithDomIds(me.data, me.key);
             me.barLabels.updateLabels(me.labels);
 
+            // visual initialization
             if (me.enableTransitions) {
                 me.bars.selection
                     .attr('x', me.scaleX(0))
