@@ -423,7 +423,8 @@ marginChartY |            |                                                    |
                 me.axisX.updateVis(me.options.ANIM_DURATION);
                 me.barLabels.updateVis(me.options.ANIM_DURATION);
 
-                // add temp classes to separate old bars from bars to be kept
+                // add temporary classes to separate bars to be removed from
+                // bars to be kept
                 me.bars.group
                     .selectAll('rect')
                     .data(me.data, me.key)
