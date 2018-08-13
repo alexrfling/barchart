@@ -80,7 +80,7 @@ marginChartY |            |                                                    |
             // container to hold all visual elements
             me.container = me.newDefaultSVGContainer(options);
 
-            // x-axis (add to the SVG before the bars so the bars will be on top)
+            // x-axis (add to SVG before bars so bars will be on top)
             me.axisX = new d3.Axis(
                 me.container.svg,
                 'labels',
@@ -337,8 +337,8 @@ marginChartY |            |                                                    |
         getDataMax () {
             var me = this;
 
-            // if there's no data, return the previous data max (if it exists), or
-            // the default
+            // if there's no data, return the previous data max (if it exists),
+            // or the default
             if (!me.data.length) {
                 return (me.dataMax || me.defaultDataMax);
             }
@@ -423,7 +423,7 @@ marginChartY |            |                                                    |
                 me.axisX.updateVis(me.options.ANIM_DURATION);
                 me.barLabels.updateVis(me.options.ANIM_DURATION);
 
-                // add temporary classes to separate old bars from bars to be kept
+                // add temp classes to separate old bars from bars to be kept
                 me.bars.group
                     .selectAll('rect')
                     .data(me.data, me.key)
