@@ -424,15 +424,13 @@ marginChartY |            |                                                    |
                 me.barLabels.updateVis(me.options.ANIM_DURATION);
 
                 // add class to separate out bars to be removed
-                me.bars.group
-                    .selectAll('rect')
+                me.bars.selection
                     .data(me.data, me.key)
                     .exit()
                     .attr('class', 'remove');
 
                 // add new bars (invisible)
-                me.bars.group
-                    .selectAll('rect')
+                me.bars.selection
                     .data(me.data, me.key)
                     .enter()
                     .append('rect')
