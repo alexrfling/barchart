@@ -423,27 +423,14 @@ marginChartY |            |                                                    |
                 me.axisX.updateVis(me.options.ANIM_DURATION);
                 me.barLabels.updateVis(me.options.ANIM_DURATION);
 
-                // add class to separate out bars to be removed
+                // update bar data and selection (selection = updated bars,
+                // selection.exit = old bars, selection.enter = new bars)
+                me.bars.selection = me.bars.selection
+                    .data(me.data, me.key);
+
+                // transition and remove old bars
                 me.bars.selection
-                    .data(me.data, me.key)
                     .exit()
-                    .attr('class', 'remove');
-
-                // add new bars (invisible)
-                me.bars.selection
-                    .data(me.data, me.key)
-                    .enter()
-                    .append('rect')
-                    .attr('x', me.scaleX(0))
-                    .attr('y', me.bars.attrs.y)
-                    .attr('height', 0)
-                    .attr('width', 0)
-                    .attr('fill', 'white')
-                    .attr('id', function (d) { return d3.htmlEscape(me.key(d)); });
-
-                // transition all bars (old bars removed)
-                me.bars.group
-                    .selectAll('rect.remove')
                     .transition()
                     .duration(me.options.ANIM_DURATION)
                     .attr('x', me.scaleX(0))
@@ -452,9 +439,21 @@ marginChartY |            |                                                    |
                     .attr('height', 0)
                     .attr('fill', 'white')
                     .remove();
-                me.bars.group
-                    .selectAll('rect')
-                    .filter(function () { return (this.className.baseVal !== 'remove'); })
+
+                // add new bars to the selection
+                me.bars.selection = me.bars.selection
+                    .enter()
+                    .append('rect')
+                    .attr('x', me.scaleX(0))
+                    .attr('y', me.bars.attrs.y)
+                    .attr('height', 0)
+                    .attr('width', 0)
+                    .attr('fill', 'white')
+                    .attr('id', function (d) { return d3.htmlEscape(me.key(d)); })
+                    .merge(me.bars.selection);
+
+                // transition updated bars + new bars
+                me.bars.selection
                     .transition()
                     .duration(me.options.ANIM_DURATION)
                     .attr('x', me.bars.attrs.x)
@@ -462,10 +461,6 @@ marginChartY |            |                                                    |
                     .attr('width', me.bars.attrs.width)
                     .attr('height', me.bars.attrs.height)
                     .attr('fill', me.bars.attrs.fill);
-
-                // update bar selection
-                me.bars.selection = me.bars.group
-                    .selectAll('rect');
             } else {
                 me.axisX.updateVis();
                 me.barLabels.updateVis();
