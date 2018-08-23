@@ -208,8 +208,7 @@ marginChartY |            |                                                    |
                     .attr('y', me.bars.attrs.y)
                     .attr('width', 0)
                     .attr('height', me.bars.attrs.height)
-                    .attr('fill', 'white'); // NOTE 'none' also looks good
-                me.bars.selection
+                    .attr('fill', 'white') // NOTE 'none' also looks good
                     .transition()
                     .duration(me.options.ANIM_DURATION)
                     .delay(function (d, i) { return i * 25; })
