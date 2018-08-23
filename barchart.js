@@ -423,30 +423,25 @@ marginChartY |            |                                                    |
                 me.axisX.updateVis(me.options.ANIM_DURATION);
                 me.barLabels.updateVis(me.options.ANIM_DURATION);
 
-                // add temporary classes to separate bars to be removed from
-                // bars to be kept
+                // add class to separate out bars to be removed
                 me.bars.group
                     .selectAll('rect')
                     .data(me.data, me.key)
                     .exit()
                     .attr('class', 'remove');
-                me.bars.group
-                    .selectAll('rect')
-                    .filter(function () { return (this.className.baseVal !== 'remove'); })
-                    .attr('class', 'keep');
 
-                // add new bars, invisible, with same class as bars to be kept
+                // add new bars (invisible)
                 me.bars.group
                     .selectAll('rect')
                     .data(me.data, me.key)
                     .enter()
                     .append('rect')
-                    .attr('class', 'keep')
                     .attr('x', me.scaleX(0))
                     .attr('y', me.bars.attrs.y)
                     .attr('height', 0)
                     .attr('width', 0)
-                    .attr('fill', 'white');
+                    .attr('fill', 'white')
+                    .attr('id', function (d) { return d3.htmlEscape(me.key(d)); });
 
                 // transition all bars (old bars removed)
                 me.bars.group
@@ -460,7 +455,8 @@ marginChartY |            |                                                    |
                     .attr('fill', 'white')
                     .remove();
                 me.bars.group
-                    .selectAll('rect.keep')
+                    .selectAll('rect')
+                    .filter(function () { return (this.className.baseVal !== 'remove'); })
                     .transition()
                     .duration(me.options.ANIM_DURATION)
                     .attr('x', me.bars.attrs.x)
@@ -471,9 +467,7 @@ marginChartY |            |                                                    |
 
                 // update bar selection
                 me.bars.selection = me.bars.group
-                    .selectAll('rect.keep')
-                    .classed('keep', false)
-                    .attr('id', function (d) { return d3.htmlEscape(me.key(d)); });
+                    .selectAll('rect');
             } else {
                 me.axisX.updateVis();
                 me.barLabels.updateVis();
